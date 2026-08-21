@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASMINA TREDING</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#050505;
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  position:relative;
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  overflow:hidden;
+  padding:60px 24px 35px;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(255,190,0,.18),transparent 32%),
+    linear-gradient(180deg,#080808,#020202);
+}
+
+/* Jonli oltin fon */
+.light{
+  position:absolute;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:#ffb800;
+  filter:blur(100px);
+  opacity:.12;
+  animation:move 7s ease-in-out infinite alternate;
+}
+
+.light.one{
+  top:-80px;
+  left:-100px;
+}
+
+.light.two{
+  bottom:80px;
+  right:-150px;
+  animation-delay:2s;
+}
+
+@keyframes move{
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(80px,50px) scale(1.25);}
+}
+
+/* Brand */
+.brand{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.logo{
+  width:64px;
+  height:64px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:20px;
+  font-size:30px;
+  color:#111;
+  background:linear-gradient(135deg,#ffe786,#d99400);
+  box-shadow:0 0 35px rgba(255,185,0,.22);
+  animation:logoPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes logoPulse{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:0 0 25px rgba(255,185,0,.2);
+  }
+  50%{
+    transform:scale(1.05);
+    box-shadow:0 0 48px rgba(255,185,0,.4);
+  }
+}
+
+.brand h1{
+  margin-top:18px;
+  font-size:27px;
+  letter-spacing:1px;
+  font-weight:800;
+  background:linear-gradient(90deg,#fff0a5,#d99a16,#fff0a5);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 4s linear infinite;
+}
+
+@keyframes shine{
+  to{background-position:200% center;}
+}
+
+.brand p{
+  margin-top:7px;
+  color:#777;
+  font-size:13px;
+}
+
+/* Profil */
+.profile-wrap{
+  position:relative;
+  width:142px;
+  height:142px;
+  margin:25px auto 34px;
+}
+
+.ring{
+  position:absolute;
+  inset:-5px;
+  border-radius:50%;
+  background:conic-gradient(
+    #ffcf40,
+    transparent,
+    #ff9d00,
+    #ffe991,
+    transparent,
+    #ffcf40
+  );
+  animation:rotate 5s linear infinite;
+}
+
+@keyframes rotate{
+  to{transform:rotate(360deg);}
+}
+
+.profile{
+  position:absolute;
+  inset:3px;
+  border-radius:50%;
+  background:#111;
+  border:4px solid #070707;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  color:#dba52e;
+}
+
+/* Rasm yuklangach ishlaydi */
+.profile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Form */
+.card{
+  position:relative;
+  z-index:2;
+  padding:24px 19px;
+  border-radius:27px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,215,90,.12);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 25px 70px rgba(0,0,0,.5);
+}
+
+.card h2{
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.subtitle{
+  color:#777;
+  font-size:13px;
+  margin-bottom:23px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  margin:0 0 8px 4px;
+  font-size:11px;
+  font-weight:700;
+  color:#a98a45;
+  letter-spacing:.7px;
+}
+
+.field input{
+  width:100%;
+  height:56px;
+  padding:0 17px;
+  border-radius:16px;
+  border:1px solid #29251b;
+  outline:none;
+  background:#101010;
+  color:#fff;
+  font-size:16px;
+  transition:.25s;
+}
+
+.field input::placeholder{
+  color:#4f4f4f;
+}
+
+.field input:focus{
+  border-color:#d6a52d;
+  box-shadow:0 0 0 3px rgba(214,165,45,.08);
+}
+
+/* Button */
+.btn{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  height:58px;
+  margin-top:9px;
+  border:0;
+  border-radius:17px;
+  cursor:pointer;
+  color:#171000;
+  font-size:15px;
+  font-weight:800;
+  background:linear-gradient(135deg,#ffe27b,#d99b16);
+  box-shadow:0 12px 35px rgba(218,157,22,.18);
+}
+
+.btn:active{
+  transform:scale(.98);
+}
+
+.btn::after{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-80px;
+  width:45px;
+  height:200%;
+  transform:rotate(20deg);
+  background:rgba(255,255,255,.45);
+  animation:buttonShine 3.8s infinite;
+}
+
+@keyframes buttonShine{
+  0%{left:-80px;}
+  45%,100%{left:120%;}
+}
+
+.safe{
+  margin-top:16px;
+  text-align:center;
+  color:#555;
+  font-size:10px;
+}
+
+.footer{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin-top:25px;
+  font-size:10px;
+  color:#3e3e3e;
+}
+
+/* Sahifa ochilish animatsiyasi */
+.brand,
+.profile-wrap,
+.card{
+  animation:appear .8s ease both;
+}
+
+.profile-wrap{animation-delay:.12s;}
+.card{animation-delay:.22s;}
+
+@keyframes appear{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+  <div class="light one"></div>
+  <div class="light two"></div>
+
+  <div class="brand">
+    <div class="logo">J</div>
+    <h1>JASMINA TREDING</h1>
+    <p>Shaxsiy kabinetingizga xush kelibsiz</p>
+  </div>
+
+  <div class="profile-wrap">
+    <div class="ring"></div>
+
+    <div class="profile">
+      J
+      <!-- Keyin bu yerga profil rasmini ulaymiz -->
+    </div>
+  </div>
+
+  <div class="card">
+
+    <h2>Xush kelibsiz</h2>
+
+    <p class="subtitle">
+      Davom etish uchun ma'lumotlaringizni kiriting
+    </p>
+
+    <div class="field">
+      <label>ISM</label>
+      <input
+        id="name"
+        type="text"
+        placeholder="Ismingiz"
+        autocomplete="given-name"
+      >
+    </div>
+
+    <div class="field">
+      <label>FAMILIYA</label>
+      <input
+        id="surname"
+        type="text"
+        placeholder="Familiyangiz"
+        autocomplete="family-name"
+      >
+    </div>
+
+    <button class="btn" onclick="continueApp()">
+      DAVOM ETISH →
+    </button>
+
+    <div class="safe">
+      🔒 Ma'lumotlaringiz himoyalangan
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 JASMINA TREDING
+  </div>
+
+</main>
+
+<script>
+function continueApp(){
+
+  const name =
+    document.getElementById("name").value.trim();
+
+  const surname =
+    document.getElementById("surname").value.trim();
+
+  if(!name || !surname){
+    alert("Ism va familiyangizni kiriting.");
+    return;
+  }
+
+  localStorage.setItem("name",name);
+  localStorage.setItem("surname",surname);
+
+  alert("Xush kelibsiz, " + name + "!");
+}
+</script>
+
+</body>
+</html>
