@@ -14,12 +14,11 @@
 
 :root{
   --bg:#030405;
-  --card:rgba(15,17,19,.88);
-  --card2:rgba(20,23,26,.82);
+  --card:rgba(15,17,19,.92);
   --line:rgba(255,255,255,.09);
   --white:#f5f7fa;
-  --muted:#8b919a;
-  --green:#33d38e;
+  --muted:#888e96;
+  --green:#34d493;
   --red:#ff5364;
   --gold:#f5bd35;
 }
@@ -31,7 +30,7 @@ html{
 body{
   min-height:100vh;
   background:#000;
-  color:var(--white);
+  color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
@@ -42,77 +41,114 @@ body{
   min-height:100vh;
   margin:auto;
   overflow:hidden;
-  padding:56px 22px 38px;
+  padding:55px 22px 38px;
+
   background:
-    radial-gradient(circle at 15% 4%,rgba(255,190,50,.12),transparent 27%),
-    radial-gradient(circle at 90% 42%,rgba(47,211,142,.06),transparent 28%),
-    linear-gradient(180deg,#090a0b 0%,#030405 60%,#010202 100%);
+    radial-gradient(circle at 20% 5%,rgba(245,189,53,.13),transparent 27%),
+    radial-gradient(circle at 90% 55%,rgba(52,212,147,.06),transparent 28%),
+    linear-gradient(180deg,#090a0b,#020303);
 }
 
-/* Trading uslubidagi xira fon */
 .app::before{
   content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
-  opacity:.20;
-  background:
-    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
-  background-size:36px 36px;
-}
 
-.app::after{
-  content:"";
-  position:absolute;
-  width:600px;
-  height:280px;
-  left:-80px;
-  top:180px;
-  pointer-events:none;
-  opacity:.12;
-  transform:rotate(-8deg);
   background:
-    linear-gradient(
-      135deg,
-      transparent 0 8%,
-      rgba(51,211,142,.45) 8.5% 9%,
-      transparent 9.5% 20%,
-      rgba(51,211,142,.32) 20.5% 21%,
-      transparent 21.5% 34%,
-      rgba(255,83,100,.28) 34.5% 35%,
-      transparent 35.5% 48%,
-      rgba(51,211,142,.40) 48.5% 49%,
-      transparent 49.5%
-    );
-  filter:blur(.2px);
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+
+  background-size:36px 36px;
 }
 
 .content{
   position:relative;
-  z-index:2;
+  z-index:3;
+}
+
+/* TRADING BACKGROUND */
+
+.market-bg{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  overflow:hidden;
+  opacity:.14;
+}
+
+.candle{
+  position:absolute;
+  bottom:-100px;
+  width:5px;
+  min-height:15px;
+  border-radius:3px;
+  animation:candleMove linear forwards;
+}
+
+.candle::before{
+  content:"";
+  position:absolute;
+  left:2px;
+  top:-15px;
+  width:1px;
+  height:45px;
+  background:currentColor;
+}
+
+.candle.up{
+  background:#34d493;
+  color:#34d493;
+}
+
+.candle.down{
+  background:#ff5364;
+  color:#ff5364;
+}
+
+@keyframes candleMove{
+  0%{
+    transform:translateY(100px);
+    opacity:0;
+  }
+
+  15%{
+    opacity:1;
+  }
+
+  100%{
+    transform:translateY(-115vh);
+    opacity:0;
+  }
 }
 
 /* LOGIN */
 
 .brand{
   text-align:center;
-  margin-bottom:26px;
+  margin-bottom:27px;
 }
 
 .logo{
   width:68px;
   height:68px;
   margin:auto;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   border-radius:21px;
-  color:#111;
+
   font-size:31px;
   font-weight:900;
-  background:linear-gradient(145deg,#ffe06d,#eca900);
-  box-shadow:0 0 40px rgba(245,189,53,.19);
+  color:#111;
+
+  background:linear-gradient(145deg,#ffe06d,#e9a600);
+
+  box-shadow:
+    0 0 35px rgba(245,189,53,.18);
 }
 
 .brand h1{
@@ -120,7 +156,6 @@ body{
   color:#fff;
   font-size:27px;
   font-weight:900;
-  letter-spacing:.5px;
 }
 
 .brand p{
@@ -140,27 +175,33 @@ body{
   position:absolute;
   inset:-5px;
   border-radius:50%;
-  background:conic-gradient(
-    #f8d563,
-    #6d571a,
-    #ffc21e,
-    #6d571a,
-    #f8d563
-  );
-  animation:rotateRing 7s linear infinite;
+
+  background:
+    conic-gradient(
+      #ffd95a,
+      #766022,
+      #ffb800,
+      #766022,
+      #ffd95a
+    );
+
+  animation:ringRotate 7s linear infinite;
 }
 
-@keyframes rotateRing{
+@keyframes ringRotate{
   to{transform:rotate(360deg);}
 }
 
 .profile{
   position:absolute;
   inset:3px;
+
   overflow:hidden;
+
   border-radius:50%;
   border:4px solid #080909;
-  background:#101113;
+
+  background:#111;
 }
 
 .profile img{
@@ -172,11 +213,19 @@ body{
 .login-card,
 .panel{
   border:1px solid var(--line);
+
   background:
-    linear-gradient(145deg,rgba(19,21,23,.94),rgba(8,9,10,.94));
-  box-shadow:0 18px 45px rgba(0,0,0,.28);
+    linear-gradient(
+      145deg,
+      rgba(18,20,22,.95),
+      rgba(7,8,9,.95)
+    );
+
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.3);
 }
 
 .login-card{
@@ -196,65 +245,107 @@ body{
 }
 
 .field{
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
 .field label{
   display:block;
+
   margin:0 0 8px 4px;
+
   color:#fff;
+
   font-size:11px;
   font-weight:800;
-  letter-spacing:.8px;
+
+  letter-spacing:.7px;
 }
 
 .field input{
   width:100%;
   height:57px;
+
   padding:0 17px;
-  color:#fff;
-  font-size:16px;
+
   outline:none;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:17px;
+
+  color:#fff;
   background:#0c0e10;
+
+  font-size:16px;
+
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.10);
+
+  transition:.2s;
 }
 
 .field input:focus{
-  border-color:rgba(245,189,53,.65);
-  box-shadow:0 0 0 3px rgba(245,189,53,.06);
+  border-color:var(--gold);
+
+  box-shadow:
+    0 0 0 3px rgba(245,189,53,.06),
+    0 0 20px rgba(245,189,53,.05);
 }
 
 .btn{
   width:100%;
-  min-height:58px;
-  margin-top:9px;
+  min-height:57px;
+
+  margin-top:10px;
   padding:12px;
+
   border:0;
   border-radius:17px;
+
   cursor:pointer;
+
+  color:#111;
+
   font-size:14px;
   font-weight:900;
-  color:#101010;
-  background:linear-gradient(135deg,#ffe36f,#efa900);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffe36f,
+      #efa900
+    );
 }
 
 .btn:active{
   transform:scale(.985);
 }
 
+.register-btn{
+  margin-top:12px;
+
+  color:#fff;
+
+  background:#111315;
+
+  border:
+    1px solid rgba(255,255,255,.14);
+}
+
 .safe{
   margin-top:16px;
-  color:#656a72;
+
   text-align:center;
+
+  color:#646970;
+
   font-size:10px;
 }
 
 .footer{
   margin-top:25px;
-  color:#41454b;
-  font-size:10px;
+
   text-align:center;
+
+  color:#41454b;
+
+  font-size:10px;
 }
 
 /* DASHBOARD */
@@ -263,86 +354,142 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:15px;
+
   margin-bottom:18px;
 }
 
 .top-label{
   color:#fff;
+
   font-size:10px;
-  letter-spacing:1.4px;
+
+  letter-spacing:1.3px;
 }
 
 #fullName{
   margin-top:6px;
+
   color:#fff;
+
   font-size:23px;
+
   line-height:1.15;
 }
 
 .dash-logo{
   width:47px;
   height:47px;
+
   flex-shrink:0;
-  border-radius:15px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  border-radius:15px;
+
   color:#111;
+
   font-size:19px;
   font-weight:900;
-  background:linear-gradient(145deg,#ffe06d,#eca900);
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffe06d,
+      #eca900
+    );
 }
 
 .demo{
   padding:10px 12px;
+
   margin-bottom:15px;
+
   color:#fff;
-  border-radius:13px;
-  border:1px solid rgba(255,255,255,.09);
-  background:rgba(255,255,255,.035);
+
   text-align:center;
+
   font-size:9px;
+
   letter-spacing:.8px;
+
+  border-radius:13px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.09);
 }
 
 .panel{
   padding:19px;
+
   margin-bottom:12px;
+
   border-radius:21px;
 }
 
 .hero-panel{
   padding:22px;
+
   background:
-    radial-gradient(circle at 100% 0%,rgba(245,189,53,.14),transparent 45%),
-    linear-gradient(145deg,rgba(20,20,17,.96),rgba(7,8,9,.96));
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(245,189,53,.16),
+      transparent 44%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(20,20,17,.97),
+      rgba(7,8,9,.97)
+    );
 }
 
 .label{
   color:#fff;
+
   font-size:10px;
+
   letter-spacing:.5px;
+}
+
+.hero-label{
+  color:var(--gold);
 }
 
 .hero-money{
   margin-top:9px;
-  color:#fff;
-  font-size:28px;
+
+  color:var(--gold) !important;
+
+  font-size:23px;
+
   line-height:1.15;
-  font-weight:900;
+
+  font-weight:850;
+
+  text-decoration:none !important;
 }
 
 .subnote{
   margin-top:7px;
+
   color:#92979f;
+
   font-size:11px;
 }
 
 .divider{
   height:1px;
+
   margin:18px 0;
-  background:rgba(255,255,255,.08);
+
+  background:
+    rgba(255,255,255,.08);
 }
 
 .status-row{
@@ -353,93 +500,140 @@ body{
 
 .active{
   margin-top:6px;
+
   color:var(--green);
+
   font-size:14px;
+
   font-weight:800;
 }
 
 .active-badge{
   padding:8px 11px;
+
   border-radius:10px;
+
   color:var(--green);
+
   font-size:10px;
-  background:rgba(51,211,142,.09);
-  border:1px solid rgba(51,211,142,.14);
+
+  background:
+    rgba(52,212,147,.09);
+
+  border:
+    1px solid rgba(52,212,147,.14);
 }
 
 .row{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:15px;
 }
 
 .value{
   display:block;
-  margin-top:7px;
-  color:#fff;
-  font-size:19px;
-  font-weight:800;
-}
 
-.green{
-  color:var(--green);
+  margin-top:7px;
+
+  color:#fff !important;
+
+  font-size:17px;
+
+  font-weight:800;
+
+  text-decoration:none !important;
 }
 
 .icon{
   width:43px;
   height:43px;
+
   flex-shrink:0;
-  border-radius:14px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  border-radius:14px;
+
   color:#fff;
+
   font-size:19px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.05);
+
+  background:
+    rgba(255,255,255,.055);
+
+  border:
+    1px solid rgba(255,255,255,.05);
 }
 
 .investment{
-  overflow:hidden;
-  position:relative;
   background:
-    radial-gradient(circle at 5% 100%,rgba(51,211,142,.11),transparent 45%),
-    linear-gradient(145deg,rgba(13,20,17,.96),rgba(7,9,9,.96));
-  border-color:rgba(51,211,142,.18);
+    radial-gradient(
+      circle at 5% 100%,
+      rgba(52,212,147,.10),
+      transparent 45%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(13,20,17,.96),
+      rgba(7,9,9,.96)
+    );
+
+  border-color:
+    rgba(52,212,147,.18);
 }
 
 .investment .value{
-  font-size:27px;
+  color:#fff !important;
+
+  font-size:21px;
 }
 
 /* VALYUTA */
 
 .currency-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+
+  grid-template-columns:
+    repeat(3,1fr);
+
   gap:8px;
+
   margin-top:14px;
 }
 
 .currency{
   padding:14px 4px;
-  border-radius:15px;
+
   text-align:center;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
+
+  border-radius:15px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.07);
 }
 
 .currency b{
   display:block;
+
   color:#fff;
+
   font-size:14px;
 }
 
 .currency small{
   display:block;
+
   margin-top:5px;
+
   color:#777d85;
+
   font-size:9px;
 }
 
@@ -447,40 +641,62 @@ body{
 
 .crypto-panel{
   padding:0;
+
   overflow:hidden;
+
   background:
-    radial-gradient(circle at 100% 0%,rgba(29,112,255,.08),transparent 34%),
-    linear-gradient(145deg,#15191e,#090b0e);
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(29,112,255,.08),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      #15191e,
+      #090b0e
+    );
 }
 
 .crypto-head{
   padding:19px 18px 13px;
-  border-bottom:1px solid rgba(255,255,255,.07);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.07);
 }
 
 .crypto-title{
   color:#fff;
+
   font-size:17px;
+
   font-weight:850;
 }
 
 .crypto-subtitle{
   margin-top:4px;
+
   color:#727983;
+
   font-size:10px;
 }
 
 .market-head,
 .coin{
   display:grid;
-  grid-template-columns:1.1fr 1fr .65fr;
+
+  grid-template-columns:
+    1.1fr 1fr .65fr;
+
   align-items:center;
+
   column-gap:8px;
 }
 
 .market-head{
   padding:13px 17px 8px;
+
   color:#747b85;
+
   font-size:9px;
 }
 
@@ -491,117 +707,206 @@ body{
 
 .coin{
   padding:15px 17px;
-  border-top:1px solid rgba(255,255,255,.045);
+
+  border-top:
+    1px solid rgba(255,255,255,.045);
 }
 
 .coin-left{
   display:flex;
   align-items:center;
+
   gap:10px;
 }
 
 .coin-logo{
   width:38px;
   height:38px;
+
   flex-shrink:0;
-  border-radius:50%;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  border-radius:50%;
+
   color:#fff;
-  font-weight:900;
+
   font-size:15px;
-  background:#191d22;
+  font-weight:900;
 }
 
-.coin-logo.btc{
-  background:#f7931a;
-}
-
-.coin-logo.eth{
-  background:#627eea;
-}
-
-.coin-logo.bnb{
+.bnb{
   color:#111;
   background:#f3ba2f;
 }
 
-.coin-logo.sol{
-  background:#080808;
+.btc{
+  background:#f7931a;
 }
 
-.coin-logo.doge{
+.eth{
+  background:#627eea;
+}
+
+.sol{
+  background:#111;
+}
+
+.doge{
   background:#b99a38;
 }
 
 .symbol{
   color:#fff;
+
   font-size:14px;
+
   font-weight:800;
 }
 
 .symbol span{
   color:#777e87;
+
   font-weight:500;
 }
 
 .price{
   color:#fff;
+
   text-align:right;
-  font-size:14px;
+
+  font-size:13px;
+
   font-weight:700;
 }
 
 .price small{
   display:block;
+
   margin-top:4px;
+
   color:#707680;
+
   font-size:9px;
+
   font-weight:400;
 }
 
 .change{
   padding:8px 4px;
+
   border-radius:9px;
+
   color:#fff;
+
   text-align:center;
-  font-size:11px;
+
+  font-size:10px;
+
   font-weight:800;
 }
 
 .up{
-  background:rgba(51,211,142,.88);
+  background:
+    rgba(52,212,147,.88);
 }
 
 .down{
-  background:rgba(255,83,100,.92);
+  background:
+    rgba(255,83,100,.92);
 }
 
 .crypto-warning{
   padding:12px 17px 16px;
+
   color:#666d76;
+
   font-size:9px;
+
   line-height:1.5;
+
   text-align:center;
 }
 
-/* HISTORY */
+/* MIJOZLAR */
+
+.locked{
+  margin-top:14px;
+
+  padding:22px 15px;
+
+  text-align:center;
+
+  border-radius:16px;
+
+  border:
+    1px solid rgba(255,255,255,.07);
+
+  background:
+    rgba(255,255,255,.025);
+}
+
+.lock-icon{
+  width:48px;
+  height:48px;
+
+  margin:0 auto 12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:15px;
+
+  font-size:22px;
+
+  background:
+    rgba(255,255,255,.055);
+}
+
+.locked strong{
+  color:#fff;
+
+  font-size:13px;
+
+  letter-spacing:.5px;
+}
+
+.locked p{
+  margin-top:7px;
+
+  color:#777d85;
+
+  font-size:10px;
+
+  line-height:1.5;
+}
+
+/* YUTUQ HOLATI */
 
 .section-title{
-  margin-bottom:7px;
+  margin-bottom:8px;
+
   color:#fff;
+
   font-size:11px;
-  font-weight:800;
+
+  font-weight:850;
 }
 
 .history-item{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+
   gap:15px;
+
   padding:13px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.06);
 }
 
 .history-item:last-child{
@@ -610,51 +915,54 @@ body{
 
 .history-item strong{
   color:#fff;
+
   font-size:12px;
 }
 
 .history-item small{
   display:block;
+
   margin-top:4px;
+
   color:#777d85;
+
   font-size:9px;
 }
 
 .history-value{
-  color:#fff;
+  color:#fff !important;
+
   font-size:12px;
+
   font-weight:800;
+
   text-align:right;
+
+  text-decoration:none !important;
 }
 
-/* SUPPORT */
-
-.support{
-  position:relative;
-  overflow:hidden;
-  text-align:center;
-  background:
-    radial-gradient(circle at 50% 120%,rgba(51,211,142,.11),transparent 55%),
-    linear-gradient(145deg,#111517,#080a0b);
-}
-
-.support h3{
-  color:#fff;
-  font-size:15px;
-  margin-bottom:8px;
-}
-
-.support p{
-  color:#858b93;
-  font-size:11px;
-  line-height:1.6;
+.withdraw-btn{
+  margin-top:7px;
 }
 
 .logout{
   margin-top:12px;
+
   color:#aaa;
+
   background:#0d0e10;
-  border:1px solid rgba(255,255,255,.09);
+
+  border:
+    1px solid rgba(255,255,255,.09);
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active{
+  color:inherit !important;
+  text-decoration:none !important;
 }
 
 </style>
@@ -662,55 +970,130 @@ body{
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<div
+  class="market-bg"
+  id="marketBg"
+></div>
 
-<main class="app" id="loginScreen">
+
+<!-- LOGIN -->
+
+<main
+  class="app"
+  id="loginScreen"
+>
+
   <div class="content">
 
     <div class="brand">
-      <div class="logo">J</div>
-      <h1>JASMINA TREDING</h1>
-      <p>Shaxsiy kabinetingizga xush kelibsiz</p>
+
+      <div class="logo">
+        J
+      </div>
+
+      <h1>
+        JASMINA TREDING
+      </h1>
+
+      <p>
+        Shaxsiy kabinetingizga xush kelibsiz
+      </p>
+
     </div>
 
+
     <div class="profile-wrap">
+
       <div class="ring"></div>
+
       <div class="profile">
-        <img src="IMG_5375.jpeg" alt="JASMINA TREDING">
+
+        <img
+          src="IMG_5375.jpeg"
+          alt="JASMINA TREDING"
+        >
+
       </div>
+
     </div>
+
 
     <div class="login-card">
 
-      <h2>Xush kelibsiz</h2>
+      <h2>
+        Xush kelibsiz
+      </h2>
 
       <p class="subtitle">
         Davom etish uchun ma'lumotlaringizni kiriting
       </p>
 
+
       <div class="field">
-        <label>ISM</label>
+
+        <label>
+          ISM
+        </label>
+
         <input
           id="name"
           type="text"
           placeholder="Ismingiz"
           autocomplete="given-name"
         >
+
       </div>
 
+
       <div class="field">
-        <label>FAMILIYA</label>
+
+        <label>
+          FAMILIYA
+        </label>
+
         <input
           id="surname"
           type="text"
           placeholder="Familiyangiz"
           autocomplete="family-name"
         >
+
       </div>
 
-      <button class="btn" onclick="continueApp()">
+
+      <div class="field">
+
+        <label>
+          KIRISH KODI
+        </label>
+
+        <input
+          id="accessCode"
+          type="password"
+          inputmode="numeric"
+          placeholder="Kirish kodini kiriting"
+        >
+
+      </div>
+
+
+      <button
+        class="btn"
+        type="button"
+        onclick="continueApp()"
+      >
         DAVOM ETISH →
       </button>
+
+
+      <button
+        class="btn register-btn"
+        type="button"
+        onclick="registerUser()"
+      >
+        RO'YXATDAN O'TISH
+      </button>
+
 
       <div class="safe">
         🔒 Ma'lumotlaringiz himoyalangan
@@ -718,22 +1101,30 @@ body{
 
     </div>
 
+
     <div class="footer">
       © 2026 JASMINA TREDING
     </div>
 
   </div>
+
 </main>
 
 
-<!-- ================= DASHBOARD ================= -->
+<!-- DASHBOARD -->
 
-<main class="app" id="dashboard" style="display:none;">
+<main
+  class="app"
+  id="dashboard"
+  style="display:none;"
+>
+
   <div class="content">
 
     <div class="top">
 
       <div>
+
         <div class="top-label">
           SHAXSIY KABINET
         </div>
@@ -741,6 +1132,7 @@ body{
         <h2 id="fullName">
           Diyorbek Chorshanbiyev
         </h2>
+
       </div>
 
       <div class="dash-logo">
@@ -755,11 +1147,11 @@ body{
     </div>
 
 
-    <!-- TO'LANGAN DAROMAD -->
+    <!-- DAROMAD -->
 
     <div class="panel hero-panel">
 
-      <div class="label">
+      <div class="label hero-label">
         TO'LANGAN DAROMADLAR
       </div>
 
@@ -771,11 +1163,14 @@ body{
         kartalarga o'tkazilgan
       </div>
 
+
       <div class="divider"></div>
+
 
       <div class="status-row">
 
         <div>
+
           <div class="label">
             HISOB HOLATI
           </div>
@@ -783,7 +1178,9 @@ body{
           <div class="active">
             ● Faol
           </div>
+
         </div>
+
 
         <div class="active-badge">
           FAOL
@@ -797,9 +1194,11 @@ body{
     <!-- FOYDALANUVCHI -->
 
     <div class="panel">
+
       <div class="row">
 
         <div>
+
           <div class="label">
             FOYDALANUVCHI
           </div>
@@ -807,6 +1206,7 @@ body{
           <strong class="value">
             DIYORBEK CHORSHANBIYEV
           </strong>
+
         </div>
 
         <div class="icon">
@@ -814,15 +1214,18 @@ body{
         </div>
 
       </div>
+
     </div>
 
 
     <!-- YUTUQ -->
 
     <div class="panel">
+
       <div class="row">
 
         <div>
+
           <div class="label">
             YUTUQNI OLISH UCHUN MAVJUD
           </div>
@@ -830,6 +1233,7 @@ body{
           <strong class="value">
             395 000₽
           </strong>
+
         </div>
 
         <div class="icon">
@@ -837,15 +1241,18 @@ body{
         </div>
 
       </div>
+
     </div>
 
 
     <!-- KOMISSIYA -->
 
     <div class="panel">
+
       <div class="row">
 
         <div>
+
           <div class="label">
             KOMISSIYA
           </div>
@@ -853,6 +1260,7 @@ body{
           <strong class="value">
             38 000₽
           </strong>
+
         </div>
 
         <div class="icon">
@@ -860,6 +1268,7 @@ body{
         </div>
 
       </div>
+
     </div>
 
 
@@ -890,6 +1299,7 @@ body{
         VALYUTA
       </div>
 
+
       <div class="currency-grid">
 
         <div class="currency">
@@ -912,11 +1322,12 @@ body{
     </div>
 
 
-    <!-- KRIPTO BOZORI -->
+    <!-- KRIPTO -->
 
     <div class="panel crypto-panel">
 
       <div class="crypto-head">
+
         <div class="crypto-title">
           KRIPTO BOZORI
         </div>
@@ -924,21 +1335,23 @@ body{
         <div class="crypto-subtitle">
           Demo narxlar • real vaqt ma'lumoti emas
         </div>
+
       </div>
 
 
       <div class="market-head">
+
         <div>NOMI</div>
         <div>NARXI</div>
         <div>24 SOAT</div>
+
       </div>
 
-
-      <!-- BNB -->
 
       <div class="coin">
 
         <div class="coin-left">
+
           <div class="coin-logo bnb">
             B
           </div>
@@ -946,6 +1359,7 @@ body{
           <div class="symbol">
             BNB <span>/USDT</span>
           </div>
+
         </div>
 
         <div class="price">
@@ -960,11 +1374,10 @@ body{
       </div>
 
 
-      <!-- BTC -->
-
       <div class="coin">
 
         <div class="coin-left">
+
           <div class="coin-logo btc">
             ₿
           </div>
@@ -972,6 +1385,7 @@ body{
           <div class="symbol">
             BTC <span>/USDT</span>
           </div>
+
         </div>
 
         <div class="price">
@@ -986,11 +1400,10 @@ body{
       </div>
 
 
-      <!-- ETH -->
-
       <div class="coin">
 
         <div class="coin-left">
+
           <div class="coin-logo eth">
             ♦
           </div>
@@ -998,6 +1411,7 @@ body{
           <div class="symbol">
             ETH <span>/USDT</span>
           </div>
+
         </div>
 
         <div class="price">
@@ -1012,11 +1426,10 @@ body{
       </div>
 
 
-      <!-- SOL -->
-
       <div class="coin">
 
         <div class="coin-left">
+
           <div class="coin-logo sol">
             S
           </div>
@@ -1024,6 +1437,7 @@ body{
           <div class="symbol">
             SOL <span>/USDT</span>
           </div>
+
         </div>
 
         <div class="price">
@@ -1038,11 +1452,10 @@ body{
       </div>
 
 
-      <!-- DOGE -->
-
       <div class="coin">
 
         <div class="coin-left">
+
           <div class="coin-logo doge">
             Ð
           </div>
@@ -1050,6 +1463,7 @@ body{
           <div class="symbol">
             DOGE <span>/USDT</span>
           </div>
+
         </div>
 
         <div class="price">
@@ -1065,73 +1479,107 @@ body{
 
 
       <div class="crypto-warning">
-        Ushbu bo'limdagi qiymatlar dizayn va simulyatsiya uchun.
-        Ular real bozor kotirovkasi sifatida ishlatilmasligi kerak.
+        Ushbu qiymatlar dizayn va simulyatsiya uchun.
       </div>
 
     </div>
 
 
-    <!-- OPERATSIYALAR -->
+    <!-- MIJOZLAR -->
 
     <div class="panel">
 
       <div class="section-title">
-        OPERATSIYALAR TARIXI • DEMO
+        MIJOZLAR RO'YXATI
       </div>
 
-      <div class="history-item">
-        <div>
-          <strong>Kiritilgan investitsiya</strong>
-          <small>Simulyatsiya</small>
+
+      <div class="locked">
+
+        <div class="lock-icon">
+          🔒
         </div>
 
-        <div class="history-value">
-          297 510 082 so'm
-        </div>
+        <strong>
+          QULFLANGAN
+        </strong>
+
+        <p>
+          Mijozlar ma'lumotlari maxfiy.
+          Ushbu bo'lim boshqa foydalanuvchilar
+          uchun ochiq emas.
+        </p>
+
       </div>
 
+    </div>
+
+
+    <!-- YUTUQ HOLATI -->
+
+    <div class="panel">
+
+      <div class="section-title">
+        DIYORBEK CHORSHANBIYEV YUTUG'I
+      </div>
+
+
       <div class="history-item">
+
         <div>
-          <strong>Yutuq uchun mavjud</strong>
-          <small>Simulyatsiya</small>
+
+          <strong>
+            Yutuq summasi
+          </strong>
+
+          <small>
+            Demo / simulyatsiya
+          </small>
+
         </div>
 
         <div class="history-value">
           395 000₽
         </div>
+
       </div>
 
+
       <div class="history-item">
+
         <div>
-          <strong>Komissiya</strong>
-          <small>Simulyatsiya</small>
+
+          <strong>
+            KOMISSIYA
+          </strong>
+
+          <small>
+            Demo / simulyatsiya
+          </small>
+
         </div>
 
         <div class="history-value">
           38 000₽
         </div>
+
       </div>
 
     </div>
 
 
-    <!-- YORDAM -->
-
-    <div class="panel support">
-
-      <h3>YORDAM MARKAZI</h3>
-
-      <p>
-        Kabinet bo'yicha ma'lumot va texnik yordam uchun
-        qo'llab-quvvatlash bo'limiga murojaat qiling.
-      </p>
-
-    </div>
+    <button
+      class="btn withdraw-btn"
+      type="button"
+      onclick="withdrawPrize()"
+    >
+      YUTUQNI OLISH
+    </button>
 
 
     <button
       class="btn logout"
+      type="button"
       onclick="logoutUser()"
     >
       ← CHIQISH
@@ -1143,103 +1591,381 @@ body{
     </div>
 
   </div>
+
 </main>
 
 
 <script>
 
+/* MATNNI TOZALASH */
+
 function normalizeText(text){
+
   return text
     .trim()
     .toLowerCase()
     .replace(/\s+/g," ");
+
 }
 
+
+/* KIRISH */
 
 function continueApp(){
 
   const name =
-    document.getElementById("name").value;
+    document
+    .getElementById("name")
+    .value
+    .trim();
+
 
   const surname =
-    document.getElementById("surname").value;
+    document
+    .getElementById("surname")
+    .value
+    .trim();
 
-  if(!name.trim() || !surname.trim()){
-    alert("Ism va familiyangizni kiriting.");
+
+  const accessCode =
+    document
+    .getElementById("accessCode")
+    .value
+    .trim();
+
+
+  if(
+    !name ||
+    !surname ||
+    !accessCode
+  ){
+
+    alert(
+      "Ism, familiya va kirish kodini kiriting."
+    );
+
     return;
+
   }
 
 
   const user =
-    normalizeText(name + " " + surname);
+    normalizeText(
+      name + " " + surname
+    );
 
 
-  if(user !== "diyorbek chorshanbiyev"){
-    alert("Foydalanuvchi topilmadi.");
+  if(
+    user !== "diyorbek chorshanbiyev" ||
+    accessCode !== "2026"
+  ){
+
+    alert(
+      "Ism, familiya yoki kirish kodi noto'g'ri."
+    );
+
     return;
+
   }
 
 
-  document.getElementById("fullName").innerText =
+  document
+  .getElementById("fullName")
+  .innerText =
     "Diyorbek Chorshanbiyev";
 
 
-  document.getElementById("loginScreen").style.display =
+  document
+  .getElementById("loginScreen")
+  .style
+  .display =
     "none";
 
 
-  document.getElementById("dashboard").style.display =
+  document
+  .getElementById("dashboard")
+  .style
+  .display =
     "block";
 
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
 
+/* RO'YXATDAN O'TISH */
+
+function registerUser(){
+
+  alert(
+    "DEMO RO'YXATDAN O'TISH\n\n" +
+    "Bu demo sahifa. " +
+    "Haqiqiy akkaunt yaratilmaydi."
+  );
+
+}
+
+
+/* YUTUQNI OLISH */
+
+function withdrawPrize(){
+
+  alert(
+    "DEMO / SIMULYATSIYA\n\n" +
+    "Ushbu demo sahifada yutuqni olish " +
+    "jarayoni faqat ko'rsatma sifatida ishlaydi.\n\n" +
+    "Haqiqiy pul o'tkazmasi amalga oshirilmaydi."
+  );
+
+}
+
+
+/* CHIQISH */
+
 function logoutUser(){
 
-  document.getElementById("dashboard").style.display =
+  document
+  .getElementById("dashboard")
+  .style
+  .display =
     "none";
 
 
-  document.getElementById("loginScreen").style.display =
+  document
+  .getElementById("loginScreen")
+  .style
+  .display =
     "block";
 
 
-  document.getElementById("name").value =
+  document
+  .getElementById("name")
+  .value =
     "";
 
 
-  document.getElementById("surname").value =
+  document
+  .getElementById("surname")
+  .value =
     "";
 
 
-  window.scrollTo(0,0);
+  document
+  .getElementById("accessCode")
+  .value =
+    "";
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* VIBRATION */
+
+function tinyVibration(){
+
+  if(
+    "vibrate" in navigator
+  ){
+
+    navigator.vibrate(18);
+
+  }
 
 }
 
 
 document
-.getElementById("name")
-.addEventListener("keydown",function(event){
+.querySelectorAll("input")
+.forEach(function(input){
 
-  if(event.key === "Enter"){
-    continueApp();
-  }
+  input.addEventListener(
+    "input",
+    tinyVibration
+  );
 
 });
+
+
+document
+.querySelectorAll("button")
+.forEach(function(button){
+
+  button.addEventListener(
+    "click",
+    function(){
+
+      if(
+        "vibrate" in navigator
+      ){
+
+        navigator.vibrate(30);
+
+      }
+
+    }
+  );
+
+});
+
+
+/* ENTER */
+
+document
+.getElementById("name")
+.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter"
+    ){
+
+      continueApp();
+
+    }
+
+  }
+);
 
 
 document
 .getElementById("surname")
-.addEventListener("keydown",function(event){
+.addEventListener(
+  "keydown",
+  function(event){
 
-  if(event.key === "Enter"){
-    continueApp();
+    if(
+      event.key === "Enter"
+    ){
+
+      continueApp();
+
+    }
+
+  }
+);
+
+
+document
+.getElementById("accessCode")
+.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter"
+    ){
+
+      continueApp();
+
+    }
+
+  }
+);
+
+
+/* ANIMATSIYALI TRADING FON */
+
+function createCandle(){
+
+  const market =
+    document
+    .getElementById("marketBg");
+
+
+  if(
+    !market
+  ){
+
+    return;
+
   }
 
-});
+
+  const candle =
+    document
+    .createElement("div");
+
+
+  const rising =
+    Math.random() > .45;
+
+
+  candle.className =
+    "candle " +
+    (
+      rising
+      ? "up"
+      : "down"
+    );
+
+
+  candle.style.left =
+    Math.random() * 100 +
+    "%";
+
+
+  candle.style.height =
+    (
+      18 +
+      Math.random() * 45
+    ) +
+    "px";
+
+
+  candle.style.animationDuration =
+    (
+      7 +
+      Math.random() * 7
+    ) +
+    "s";
+
+
+  market
+  .appendChild(
+    candle
+  );
+
+
+  setTimeout(
+    function(){
+
+      candle.remove();
+
+    },
+    15000
+  );
+
+}
+
+
+setInterval(
+  createCandle,
+  600
+);
+
+
+for(
+  let i = 0;
+  i < 14;
+  i++
+){
+
+  setTimeout(
+    createCandle,
+    i * 180
+  );
+
+}
 
 </script>
 
