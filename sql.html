@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JASMINA — SQL nusxalash</title>
+<style>
+body{margin:0;padding:24px;background:#0a0a0a;color:#f5f5f5;font-family:-apple-system,system-ui,sans-serif}
+h1{font-size:20px;margin:0 0 8px}
+p{color:#a3a3a3;font-size:14px;line-height:1.5}
+button{width:100%;padding:16px;font-size:16px;font-weight:700;border:0;border-radius:12px;
+background:linear-gradient(180deg,#f5d472,#d4a933);color:#1a1a1a;margin:12px 0}
+a.btn{display:block;text-align:center;padding:16px;border-radius:12px;border:1px solid #333;
+color:#f5d472;text-decoration:none;font-weight:700;margin:12px 0}
+textarea{width:100%;height:220px;background:#141414;color:#d4d4d4;border:1px solid #262626;
+border-radius:12px;padding:12px;font-family:ui-monospace,monospace;font-size:11px}
+.ok{color:#4ade80;font-size:14px;min-height:20px}
+ol{padding-left:20px;font-size:14px;line-height:1.7;color:#d4d4d4}
+</style>
+</head>
+<body>
+
+<h1>Bazani yaratish</h1>
+<p>Quyidagi tugmani bosib SQL kodni nusxalaysiz, keyin Supabase SQL Editor'ga qo'yib RUN bosasiz.</p>
+
+<button onclick="copySql()">1. SQL KODNI NUSXALASH</button>
+<div class="ok" id="msg"></div>
+
+<a class="btn" href="https://supabase.com/dashboard/project/nvflfwaykadmgerprbmh/sql/new" target="_blank">2. SQL EDITOR'NI OCHISH →</a>
+
+<ol>
+<li>Ochilgan bo'sh maydonga bosib turib "Paste" (Qo'yish) qilasiz.</li>
+<li>"Run" tugmasini bosasiz.</li>
+<li>"Success" yozuvi chiqsa — bo'ldi, saytga qaytib kirasiz.</li>
+</ol>
+
+<textarea id="sql" readonly>-- ============================================================
+-- JASMINA TREDING — Supabase baza sxemasi va xavfsiz funksiyalar
+-- Supabase → SQL Editor → New query → shu faylni to'liq qo'yib RUN bosing
+-- ============================================================
+
+create extension if not exists pgcrypto;
+
+-- ---------- JADVALLAR ----------
+
+create table if not exists app_users (
+  id              uuid primary key default gen_random_uuid(),
+  name            text not null,
+  surname         text not null,
+  code            text not null unique,
+  status          text not null default 'active',
+  paid_income     numeric not null default 0,   -- to'langan daromadlar (so'm)
+  prize           numeric not null default 0,   -- yutuq summasi (rubl)
+  commission      numeric not null default 0,   -- komissiya (rubl)
+  investment_uzs  numeric not null default 0,   -- sarmoya (so'm)
+  investment_rub  numeric not null default 0,   -- sarmoya (rubl)
+  balance         numeric not null default 0,   -- joriy balans (rubl)
+  profit_percent  numeric not null default 0,   -- foyda %
+  prize_available boolean not null default true,
+  country         text not null default 'ROSSIYA',
+  currency        text not null default 'RUB',
+  card_last4      text not null default '',
+  note            text not null default '',
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
+);
+
+create table if not exists app_trades (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references app_users(id) on delete cascade,
+  symbol     text not null,
+  direction  text not null default 'up',       -- up | down
+  amount     numeric not null default 0,
+  result     numeric not null default 0,
+  traded_at  timestamptz not null default now()
+);
+
+create index if not exists app_trades_user_idx on app_trades(user_id, traded_at desc);
+
+create table if not exists app_settings (
+  key   text primary key,
+  value text not null
+);
+
+create table if not exists admin_sessions (
+  token      uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null default now() + interval '60 minutes'
+);
+
+-- ---------- RLS: to'g'ridan-to'g'ri kirish taqiqlanadi ----------
+
+alter table app_users      enable row level security;
+alter table app_trades     enable row level security;
+alter table app_settings   enable row level security;
+alter table admin_sessions enable row level security;
+-- Hech qanday policy yo'q =&gt; anon/authenticated jadvallarni o'qiy/yoza olmaydi.
+-- Barcha ish faqat quyidagi security definer funksiyalari orqali bo'ladi.
+
+-- ---------- ADMIN PAROLI ----------
+
+insert into app_settings(key, value)
+values ('admin_password_hash', crypt('Jasmina-HW0ch9CR6P', gen_salt('bf')))
+on conflict (key) do nothing;
+
+-- ---------- YORDAMCHI ----------
+
+create or replace function app_check_admin(p_token uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  delete from admin_sessions where expires_at &lt; now();
+  if not exists (select 1 from admin_sessions where token = p_token and expires_at &gt; now()) then
+    raise exception 'ADMIN_SESSION_INVALID';
+  end if;
+end;
+$$;
+
+create or replace function app_norm(p_text text)
+returns text
+language sql
+immutable
+as $$ select lower(regexp_replace(coalesce(p_text,''), '\s+', ' ', 'g')) $$;
+
+-- ---------- FOYDALANUVCHI KIRISHI ----------
+
+create or replace function user_login(p_name text, p_surname text, p_code text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user app_users;
+  v_trades jsonb;
+begin
+  select * into v_user
+  from app_users
+  where trim(code) = trim(p_code)
+    and app_norm(name)    = app_norm(trim(p_name))
+    and app_norm(surname) = app_norm(trim(p_surname))
+    and status = 'active'
+  limit 1;
+
+  if v_user.id is null then
+    raise exception 'LOGIN_FAILED';
+  end if;
+
+  select coalesce(jsonb_agg(t order by t.traded_at desc), '[]'::jsonb)
+  into v_trades
+  from (
+    select id, symbol, direction, amount, result, traded_at
+    from app_trades where user_id = v_user.id
+    order by traded_at desc limit 50
+  ) t;
+
+  return jsonb_build_object(
+    'id', v_user.id,
+    'name', v_user.name,
+    'surname', v_user.surname,
+    'paid_income', v_user.paid_income,
+    'prize', v_user.prize,
+    'commission', v_user.commission,
+    'investment_uzs', v_user.investment_uzs,
+    'investment_rub', v_user.investment_rub,
+    'balance', v_user.balance,
+    'profit_percent', v_user.profit_percent,
+    'prize_available', v_user.prize_available,
+    'country', v_user.country,
+    'currency', v_user.currency,
+    'card_last4', v_user.card_last4,
+    'note', v_user.note,
+    'trades', v_trades
+  );
+end;
+$$;
+
+-- ---------- ADMIN FUNKSIYALARI ----------
+
+create or replace function admin_login(p_password text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_hash text;
+  v_token uuid;
+begin
+  select value into v_hash from app_settings where key = 'admin_password_hash';
+  if v_hash is null or crypt(p_password, v_hash) &lt;&gt; v_hash then
+    raise exception 'ADMIN_PASSWORD_INVALID';
+  end if;
+
+  delete from admin_sessions where expires_at &lt; now();
+  insert into admin_sessions default values returning token into v_token;
+  return jsonb_build_object('token', v_token, 'expires_in', 3600);
+end;
+$$;
+
+create or replace function admin_logout(p_token uuid)
+returns void
+language sql
+security definer
+set search_path = public
+as $$ delete from admin_sessions where token = p_token $$;
+
+create or replace function admin_set_password(p_token uuid, p_new_password text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform app_check_admin(p_token);
+  if length(coalesce(p_new_password,'')) &lt; 8 then
+    raise exception 'PASSWORD_TOO_SHORT';
+  end if;
+  update app_settings set value = crypt(p_new_password, gen_salt('bf'))
+  where key = 'admin_password_hash';
+end;
+$$;
+
+create or replace function admin_list_users(p_token uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare v_rows jsonb;
+begin
+  perform app_check_admin(p_token);
+
+  select coalesce(jsonb_agg(u order by u.created_at desc), '[]'::jsonb)
+  into v_rows
+  from (
+    select u.*, (
+      select coalesce(jsonb_agg(jsonb_build_object(
+        'id', t.id, 'symbol', t.symbol, 'direction', t.direction,
+        'amount', t.amount, 'result', t.result, 'traded_at', t.traded_at
+      ) order by t.traded_at desc), '[]'::jsonb)
+      from app_trades t where t.user_id = u.id
+    ) as trades
+    from app_users u
+    order by u.created_at desc
+  ) u;
+
+  return v_rows;
+end;
+$$;
+
+create or replace function admin_save_user(p_token uuid, p_data jsonb)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_id uuid := nullif(p_data-&gt;&gt;'id','')::uuid;
+  v_user app_users;
+begin
+  perform app_check_admin(p_token);
+
+  if coalesce(trim(p_data-&gt;&gt;'name'),'') = '' or coalesce(trim(p_data-&gt;&gt;'surname'),'') = '' then
+    raise exception 'NAME_REQUIRED';
+  end if;
+  if coalesce(trim(p_data-&gt;&gt;'code'),'') = '' then
+    raise exception 'CODE_REQUIRED';
+  end if;
+
+  if v_id is null then
+    insert into app_users (
+      name, surname, code, status, paid_income, prize, commission,
+      investment_uzs, investment_rub, balance, profit_percent,
+      prize_available, country, currency, card_last4, note
+    ) values (
+      trim(p_data-&gt;&gt;'name'), trim(p_data-&gt;&gt;'surname'), trim(p_data-&gt;&gt;'code'),
+      coalesce(nullif(p_data-&gt;&gt;'status',''), 'active'),
+      coalesce((p_data-&gt;&gt;'paid_income')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'prize')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'commission')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'investment_uzs')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'investment_rub')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'balance')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'profit_percent')::numeric, 0),
+      coalesce((p_data-&gt;&gt;'prize_available')::boolean, true),
+      coalesce(nullif(p_data-&gt;&gt;'country',''), 'ROSSIYA'),
+      coalesce(nullif(p_data-&gt;&gt;'currency',''), 'RUB'),
+      coalesce(p_data-&gt;&gt;'card_last4', ''),
+      coalesce(p_data-&gt;&gt;'note', '')
+    )
+    returning * into v_user;
+  else
+    update app_users set
+      name            = trim(p_data-&gt;&gt;'name'),
+      surname         = trim(p_data-&gt;&gt;'surname'),
+      code            = trim(p_data-&gt;&gt;'code'),
+      status          = coalesce(nullif(p_data-&gt;&gt;'status',''), status),
+      paid_income     = coalesce((p_data-&gt;&gt;'paid_income')::numeric, paid_income),
+      prize           = coalesce((p_data-&gt;&gt;'prize')::numeric, prize),
+      commission      = coalesce((p_data-&gt;&gt;'commission')::numeric, commission),
+      investment_uzs  = coalesce((p_data-&gt;&gt;'investment_uzs')::numeric, investment_uzs),
+      investment_rub  = coalesce((p_data-&gt;&gt;'investment_rub')::numeric, investment_rub),
+      balance         = coalesce((p_data-&gt;&gt;'balance')::numeric, balance),
+      profit_percent  = coalesce((p_data-&gt;&gt;'profit_percent')::numeric, profit_percent),
+      prize_available = coalesce((p_data-&gt;&gt;'prize_available')::boolean, prize_available),
+      country         = coalesce(nullif(p_data-&gt;&gt;'country',''), country),
+      currency        = coalesce(nullif(p_data-&gt;&gt;'currency',''), currency),
+      card_last4      = coalesce(p_data-&gt;&gt;'card_last4', card_last4),
+      note            = coalesce(p_data-&gt;&gt;'note', note),
+      updated_at      = now()
+    where id = v_id
+    returning * into v_user;
+
+    if v_user.id is null then
+      raise exception 'USER_NOT_FOUND';
+    end if;
+  end if;
+
+  return to_jsonb(v_user);
+end;
+$$;
+
+create or replace function admin_delete_user(p_token uuid, p_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform app_check_admin(p_token);
+  delete from app_users where id = p_id;
+end;
+$$;
+
+create or replace function admin_add_trade(
+  p_token uuid, p_user_id uuid, p_symbol text,
+  p_direction text, p_amount numeric, p_result numeric
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare v_row app_trades;
+begin
+  perform app_check_admin(p_token);
+  insert into app_trades(user_id, symbol, direction, amount, result)
+  values (p_user_id, upper(trim(p_symbol)),
+          case when lower(coalesce(p_direction,'up')) = 'down' then 'down' else 'up' end,
+          coalesce(p_amount,0), coalesce(p_result,0))
+  returning * into v_row;
+  return to_jsonb(v_row);
+end;
+$$;
+
+create or replace function admin_delete_trade(p_token uuid, p_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform app_check_admin(p_token);
+  delete from app_trades where id = p_id;
+end;
+$$;
+
+-- ---------- RUXSATLAR ----------
+
+revoke all on all tables in schema public from anon, authenticated;
+
+grant execute on function user_login(text, text, text)                        to anon, authenticated;
+grant execute on function admin_login(text)                                   to anon, authenticated;
+grant execute on function admin_logout(uuid)                                  to anon, authenticated;
+grant execute on function admin_set_password(uuid, text)                      to anon, authenticated;
+grant execute on function admin_list_users(uuid)                              to anon, authenticated;
+grant execute on function admin_save_user(uuid, jsonb)                        to anon, authenticated;
+grant execute on function admin_delete_user(uuid, uuid)                       to anon, authenticated;
+grant execute on function admin_add_trade(uuid, uuid, text, text, numeric, numeric) to anon, authenticated;
+grant execute on function admin_delete_trade(uuid, uuid)                      to anon, authenticated;
+
+revoke execute on function app_check_admin(uuid) from anon, authenticated;
+
+-- ---------- BOSHLANG'ICH FOYDALANUVCHI (ixtiyoriy) ----------
+
+insert into app_users (name, surname, code, paid_income, prize, commission,
+                       investment_uzs, investment_rub, card_last4)
+values ('Diyorbek', 'Chorshanbiyev', '2026', 457920139, 390000, 38000,
+        58196666, 390000, '5537')
+on conflict (code) do nothing;
+</textarea>
+
+<script>
+function copySql(){
+  const box = document.getElementById('sql');
+  const msg = document.getElementById('msg');
+  box.select();
+  box.setSelectionRange(0, 999999);
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(box.value).then(function(){
+      msg.textContent = 'Nusxalandi. Endi 2-tugmani bosing.';
+    }).catch(function(){
+      document.execCommand('copy');
+      msg.textContent = 'Nusxalandi. Endi 2-tugmani bosing.';
+    });
+  }else{
+    document.execCommand('copy');
+    msg.textContent = 'Nusxalandi. Endi 2-tugmani bosing.';
+  }
+}
+</script>
+
+</body>
+</html>
