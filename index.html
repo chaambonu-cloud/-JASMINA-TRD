@@ -886,6 +886,41 @@ body{
   font-size:9px;
 }
 
+.currency.active{
+
+  background:
+    rgba(233,190,86,.12);
+
+  border-color:
+    rgba(233,190,86,.45);
+}
+
+.currency.active b{
+
+  color:#e9be56;
+}
+
+
+/* BANK LOGO */
+
+.bank-logo-row{
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  margin:2px 0 10px;
+}
+
+.bank-logo-row img{
+
+  height:26px;
+
+  width:auto;
+
+  border-radius:8px;
+}
+
 
 /* CRYPTO */
 
@@ -2286,13 +2321,13 @@ a:active{
 </div>
 
 <strong class="value" id="prizeValue">
-  0₽
+  0
 </strong>
 
 </div>
 
-<div class="icon">
-  ₽
+<div class="icon" id="prizeIcon">
+  —
 </div>
 
 </div>
@@ -2312,7 +2347,7 @@ a:active{
 </div>
 
 <strong class="value" id="commissionValue">
-  0₽
+  0
 </strong>
 
 </div>
@@ -2342,7 +2377,7 @@ a:active{
 </strong>
 
 <div class="subnote" id="investRub">
-  0₽
+  0
 </div>
 
 <div class="divider"></div>
@@ -2350,7 +2385,7 @@ a:active{
 <div class="status-row">
 <div>
   <div class="label">JORIY BALANS</div>
-  <strong class="value" id="balanceValue">0₽</strong>
+  <strong class="value" id="balanceValue">0</strong>
 </div>
 <div class="active-badge" id="profitBadge">0%</div>
 </div>
@@ -2366,24 +2401,7 @@ a:active{
   VALYUTA
 </div>
 
-<div class="currency-grid">
-
-<div class="currency">
-  <b>SO'M</b>
-  <small>UZS</small>
-</div>
-
-<div class="currency">
-  <b>RUBL</b>
-  <small>RUB</small>
-</div>
-
-<div class="currency">
-  <b>SOMON</b>
-  <small>TJS</small>
-</div>
-
-</div>
+<div class="currency-grid" id="currencyGrid"></div>
 </div>
 
 
@@ -2609,8 +2627,17 @@ a:active{
 </div>
 
 <div class="client-row">
+  <span>BANK / KARTA</span>
+  <strong id="clientBank">—</strong>
+</div>
+
+<div class="bank-logo-row" id="clientBankLogoRow" style="display:none;">
+  <img id="clientBankLogo" alt="" src="">
+</div>
+
+<div class="client-row">
   <span>KARTA</span>
-  <strong id="clientCard">•••• •••• •••• ••••</strong>
+  <strong id="clientCard">**** **** **** ****</strong>
 </div>
 
 </div>
@@ -2644,7 +2671,7 @@ a:active{
 </div>
 
 <div class="history-value" id="prizeSum">
-  0₽
+  0
 </div>
 
 </div>
@@ -2665,7 +2692,7 @@ a:active{
 </div>
 
 <div class="history-value" id="prizeCommission">
-  0₽
+  0
 </div>
 
 </div>
@@ -2781,7 +2808,20 @@ a:active{
 </span>
 
 <strong class="card-number" id="profileCard">
-  •••• •••• •••• ••••
+  **** **** **** ****
+</strong>
+
+</div>
+
+
+<div class="profile-line">
+
+<span>
+  BANK / KARTA
+</span>
+
+<strong id="profileBank">
+  —
 </strong>
 
 </div>
@@ -2889,13 +2929,13 @@ a:active{
             <input id="f_code" type="text" placeholder="Masalan: 4821">
             <button class="btn register-btn tiny-btn" type="button" onclick="generateCode()">KOD GENERATSIYA</button>
           </div>
-          <div class="field"><label>TO'LANGAN DAROMAD (so'm)</label><input id="f_paid_income" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>SARMOYA (so'm)</label><input id="f_investment_uzs" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>SARMOYA (₽)</label><input id="f_investment_rub" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>JORIY BALANS (₽)</label><input id="f_balance" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_paid">TO'LANGAN DAROMAD</label><input id="f_paid_income" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_inv1">SARMOYA</label><input id="f_investment_uzs" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_inv2">SARMOYA (kichik satr)</label><input id="f_investment_rub" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_balance">JORIY BALANS</label><input id="f_balance" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field"><label>FOYDA (%)</label><input id="f_profit_percent" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>YUTUQ SUMMASI (₽)</label><input id="f_prize" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>KOMISSIYA (₽)</label><input id="f_commission" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_prize">YUTUQ SUMMASI</label><input id="f_prize" type="number" inputmode="decimal" placeholder="0"></div>
+          <div class="field"><label id="lab_commission">KOMISSIYA</label><input id="f_commission" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field">
             <label>YUTUQ HOLATI</label>
             <select id="f_prize_available">
@@ -2903,8 +2943,29 @@ a:active{
               <option value="false">Yopiq</option>
             </select>
           </div>
-          <div class="field"><label>DAVLAT</label><input id="f_country" type="text" placeholder="ROSSIYA"></div>
-          <div class="field"><label>VALYUTA</label><input id="f_currency" type="text" placeholder="RUB"></div>
+          <div class="field">
+            <label>DAVLAT</label>
+            <select id="f_country" onchange="onCountryChange()">
+              <option value="O'ZBEKISTON">O'zbekiston</option>
+              <option value="ROSSIYA">Rossiya</option>
+              <option value="TOJIKISTON">Tojikiston</option>
+              <option value="TURKIYA">Turkiya</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>VALYUTA</label>
+            <select id="f_currency" onchange="onCurrencyChange()">
+              <option value="UZS">UZS — so'm</option>
+              <option value="RUB">RUB — rubl</option>
+              <option value="USD">USD — dollar</option>
+              <option value="TRY">TRY — turk lirasi</option>
+              <option value="TJS">TJS — somoni</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label>KARTA / BANK</label>
+            <select id="f_bank"></select>
+          </div>
           <div class="field"><label>KARTA (oxirgi 4 raqam)</label><input id="f_card_last4" type="text" maxlength="4" inputmode="numeric" placeholder="5537"></div>
           <div class="field wide last"><label>IZOH (kabinetda ko'rinadi)</label><input id="f_note" type="text" placeholder="Ixtiyoriy"></div>
           <div class="field">
@@ -3220,12 +3281,158 @@ function fmtNumber(value){
     .replace(/\u00a0/g, " ");
 }
 
+/* VALYUTALAR */
+
+const CURRENCIES = {
+  UZS:{code:"UZS", name:"so'm",        grid:"SO'M",   short:"so'm",   locale:"ru-RU", prefix:"",  suffix:" so'm"},
+  RUB:{code:"RUB", name:"rubl",        grid:"RUBL",   short:"₽",      locale:"ru-RU", prefix:"",  suffix:" ₽"},
+  USD:{code:"USD", name:"dollar",      grid:"DOLLAR", short:"$",      locale:"en-US", prefix:"$", suffix:""},
+  TRY:{code:"TRY", name:"turk lirasi", grid:"LIRA",   short:"₺",      locale:"en-US", prefix:"₺", suffix:""},
+  TJS:{code:"TJS", name:"somoni",      grid:"SOMONI", short:"somoni", locale:"ru-RU", prefix:"",  suffix:" somoni"}
+};
+
+function curInfo(code){
+  const key = String(code || "").trim().toUpperCase();
+  return CURRENCIES[key] || CURRENCIES.UZS;
+}
+
+function fmtMoney(value, code){
+
+  const info = curInfo(code);
+
+  const number = Number(value || 0)
+    .toLocaleString(info.locale, {maximumFractionDigits:2})
+    .replace(/\u00a0/g, " ");
+
+  return info.prefix + number + info.suffix;
+}
+
 function fmtSum(value){
-  return fmtNumber(value) + " so'm";
+  return fmtMoney(value, "UZS");
 }
 
 function fmtRub(value){
-  return fmtNumber(value) + "₽";
+  return fmtMoney(value, "RUB");
+}
+
+
+/* DAVLAT VA BANKLAR */
+
+const COUNTRIES = {
+  "O'ZBEKISTON":"O'zbekiston",
+  "ROSSIYA":"Rossiya",
+  "TOJIKISTON":"Tojikiston",
+  "TURKIYA":"Turkiya"
+};
+
+const BANKS_BY_COUNTRY = {
+  "O'ZBEKISTON":[
+    ["uzcard","Uzcard"],["humo","Humo"],["visa","Visa"],["mastercard","Mastercard"],
+    ["kapitalbank","Kapitalbank"],["ipakyoli","Ipak Yo'li"],["hamkorbank","Hamkorbank"],
+    ["anorbank","Anorbank"],["tbcuz","TBC Uzbekistan"]
+  ],
+  "ROSSIYA":[
+    ["sberbank","Sberbank"],["tbank","T-Bank"],["vtb","VTB"],["alfabank","Alfa-Bank"],
+    ["gazprombank","Gazprombank"],["visa","Visa"],["mastercard","Mastercard"],["mir","MIR"]
+  ],
+  "TOJIKISTON":[
+    ["alif","Alif"],["dushanbecity","Dushanbe City"],["eskhata","Eskhata"],
+    ["amonatbank","Amonatbank"],["visa","Visa"],["mastercard","Mastercard"]
+  ],
+  "TURKIYA":[
+    ["ziraat","Ziraat Bankası"],["isbankasi","İş Bankası"],["garanti","Garanti BBVA"],
+    ["akbank","Akbank"],["yapikredi","Yapı Kredi"],["visa","Visa"],["mastercard","Mastercard"]
+  ]
+};
+
+function countryLabel(code){
+  const key = String(code || "").trim().toUpperCase();
+  return COUNTRIES[key] || (code ? String(code) : "—");
+}
+
+function bankName(key){
+
+  const wanted = String(key || "").trim();
+
+  if(!wanted){
+    return "";
+  }
+
+  for(const country in BANKS_BY_COUNTRY){
+    const found = BANKS_BY_COUNTRY[country].find(function(row){
+      return row[0] === wanted;
+    });
+    if(found){
+      return found[1];
+    }
+  }
+
+  return wanted;
+}
+
+function bankLogo(key){
+  return "logos/" + String(key || "").trim() + ".svg";
+}
+
+function maskCard(value){
+
+  const digits = String(value || "").replace(/\D/g, "").slice(-4);
+
+  return digits
+    ? "**** **** **** " + digits
+    : "**** **** **** ****";
+}
+
+
+/* ADMIN: DAVLAT / VALYUTA / BANK TANLOVI */
+
+function fillBankOptions(country, selected){
+
+  const select = document.getElementById("f_bank");
+
+  if(!select){
+    return;
+  }
+
+  const key = String(country || "").trim().toUpperCase();
+  const list = BANKS_BY_COUNTRY[key] || [];
+
+  const keep = selected == null
+    ? String(select.value || "")
+    : String(selected);
+
+  select.innerHTML =
+    '<option value="">— tanlanmagan —</option>' +
+    list.map(function(row){
+      return '<option value="' + escapeHtml(row[0]) + '">' +
+        escapeHtml(row[1]) + "</option>";
+    }).join("");
+
+  const exists = list.some(function(row){ return row[0] === keep; });
+
+  select.value = exists ? keep : "";
+}
+
+function onCountryChange(){
+  /* Valyuta majburan o'zgarmaydi — faqat bank ro'yxati yangilanadi */
+  fillBankOptions(fieldValue("f_country"), null);
+}
+
+function onCurrencyChange(){
+  updateMoneyLabels();
+}
+
+function updateMoneyLabels(){
+
+  const info = curInfo(fieldValue("f_currency"));
+  const suffix = " (" + info.short + ")";
+
+  setText("lab_paid", "TO'LANGAN DAROMAD" + suffix);
+  setText("lab_inv1", "SARMOYA" + suffix);
+  setText("lab_inv2", "SARMOYA — kichik satr" + suffix);
+  setText("lab_balance", "JORIY BALANS" + suffix);
+  setText("lab_prize", "YUTUQ SUMMASI" + suffix);
+  setText("lab_commission", "KOMISSIYA" + suffix);
 }
 
 function setText(id, value){
@@ -3462,27 +3669,57 @@ async function continueApp(){
 
 function renderUserData(user){
 
-  setText("heroMoney", fmtSum(user.paid_income));
-  setText("prizeValue", fmtRub(user.prize));
-  setText("commissionValue", fmtRub(user.commission));
-  setText("investUzs", fmtSum(user.investment_uzs));
-  setText("investRub", fmtRub(user.investment_rub));
-  setText("balanceValue", fmtRub(user.balance));
+  const info = curInfo(user.currency);
+
+  setText("heroMoney", fmtMoney(user.paid_income, info.code));
+  setText("prizeValue", fmtMoney(user.prize, info.code));
+  setText("commissionValue", fmtMoney(user.commission, info.code));
+  setText("investUzs", fmtMoney(user.investment_uzs, info.code));
+  setText("investRub", fmtMoney(user.investment_rub, info.code));
+  setText("balanceValue", fmtMoney(user.balance, info.code));
   setText("profitBadge", fmtNumber(user.profit_percent) + "%");
-  setText("prizeSum", fmtRub(user.prize));
-  setText("prizeCommission", fmtRub(user.commission));
+  setText("prizeSum", fmtMoney(user.prize, info.code));
+  setText("prizeCommission", fmtMoney(user.commission, info.code));
+  setText("prizeIcon", info.short);
 
-  setText("clientCountry", String(user.country || "—").toUpperCase());
-  setText("clientCurrency", String(user.currency || "—").toUpperCase());
-  setText("profileCountry", user.country || "—");
+  setText("clientCountry", countryLabel(user.country).toUpperCase());
+  setText("clientCurrency", info.code + " — " + info.name);
+  setText("profileCountry", countryLabel(user.country));
 
-  const card = String(user.card_last4 || "").slice(-4);
-  const cardText = card
-    ? "•••• •••• •••• " + card
-    : "•••• •••• •••• ••••";
+  const currencyGrid = document.getElementById("currencyGrid");
+
+  if(currencyGrid){
+    currencyGrid.style.gridTemplateColumns = "1fr";
+    currencyGrid.innerHTML =
+      '<div class="currency active"><b>' + escapeHtml(info.grid) +
+      "</b><small>" + escapeHtml(info.code) + "</small></div>";
+  }
+
+  const cardText = maskCard(user.card_last4);
 
   setText("clientCard", cardText);
   setText("profileCard", cardText);
+
+  const bankKey = String(user.bank || "").trim();
+  const bankTitle = bankKey ? bankName(bankKey) : "—";
+
+  setText("clientBank", bankTitle);
+  setText("profileBank", bankTitle);
+
+  const logoRow = document.getElementById("clientBankLogoRow");
+  const logoImg = document.getElementById("clientBankLogo");
+
+  if(logoRow && logoImg){
+    if(bankKey){
+      logoImg.onerror = function(){ logoRow.style.display = "none"; };
+      logoImg.alt = bankTitle;
+      logoImg.src = bankLogo(bankKey);
+      logoRow.style.display = "flex";
+    }else{
+      logoRow.style.display = "none";
+      logoImg.removeAttribute("src");
+    }
+  }
 
   const noteBox = document.getElementById("userNoteBox");
 
@@ -3717,7 +3954,7 @@ async function loadAdminUsers(){
       '<div class="admin-row">' +
         "<div><b>" + escapeHtml(user.name + " " + user.surname) + "</b>" +
         "<small>Kod: " + escapeHtml(user.code) +
-        " • " + fmtRub(user.balance) +
+        " • " + fmtMoney(user.balance, user.currency) +
         " • " + (user.status === "active" ? "faol" : "bloklangan") +
         "</small></div>" +
         '<button class="btn register-btn tiny-btn" type="button" onclick="editUser(\'' +
@@ -3756,9 +3993,11 @@ function newUserForm(){
   setField("f_prize_available", "true");
   setField("f_country", "ROSSIYA");
   setField("f_currency", "RUB");
+  fillBankOptions("ROSSIYA", "");
   setField("f_card_last4", "");
   setField("f_note", "");
   setField("f_status", "active");
+  updateMoneyLabels();
 
   document.getElementById("adminTradeBox").style.display = "none";
 
@@ -3786,11 +4025,13 @@ function editUser(id){
   setField("f_prize", user.prize);
   setField("f_commission", user.commission);
   setField("f_prize_available", user.prize_available ? "true" : "false");
-  setField("f_country", user.country);
-  setField("f_currency", user.currency);
+  setField("f_country", String(user.country || "ROSSIYA").toUpperCase());
+  setField("f_currency", curInfo(user.currency).code);
+  fillBankOptions(user.country, user.bank || "");
   setField("f_card_last4", user.card_last4);
   setField("f_note", user.note);
   setField("f_status", user.status);
+  updateMoneyLabels();
 
   document.getElementById("adminTradeBox").style.display = "block";
   renderAdminTrades(user);
@@ -3863,6 +4104,7 @@ async function saveUser(){
     prize_available: fieldValue("f_prize_available") === "true",
     country: fieldValue("f_country"),
     currency: fieldValue("f_currency"),
+    bank: fieldValue("f_bank"),
     card_last4: fieldValue("f_card_last4"),
     note: fieldValue("f_note")
   };
