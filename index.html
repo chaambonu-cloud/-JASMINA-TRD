@@ -3058,6 +3058,61 @@ body{
 }
 
 
+/* ===== KABINET: PREMIUM TRADING FON ===== */
+/* Faqat mijoz kabineti (#dashboard). Kirish sahifasi va admin panel tegilmagan. */
+
+#dashboard{
+  background:
+    radial-gradient(125% 34% at 44% -8%, rgba(152,46,156,.34), transparent 66%),
+    radial-gradient(90% 26% at 86% 2%, rgba(98,44,182,.26), transparent 70%),
+    radial-gradient(70% 20% at 8% 9%, rgba(184,62,174,.16), transparent 72%),
+    radial-gradient(72% 17% at 50% 100%, rgba(236,183,72,.17), transparent 70%),
+    linear-gradient(180deg,#080b17 0%,#060811 46%,#04060c 100%);
+}
+
+/* Xira binafsha-magenta yorug'lik chiziqlari */
+#dashboard::after{
+  content:"";
+  position:absolute;
+  left:-18%;
+  right:-18%;
+  top:0;
+  height:32%;
+  z-index:1;
+  pointer-events:none;
+
+  background:
+    repeating-linear-gradient(95deg,
+      rgba(234,144,228,.26) 0 1.5px,
+      rgba(232,140,226,0) 1.5px 13px),
+    repeating-linear-gradient(91deg,
+      rgba(168,120,255,.14) 0 1px,
+      rgba(168,120,255,0) 1px 22px);
+
+  -webkit-mask-image:linear-gradient(180deg,
+    rgba(0,0,0,.92) 0%, rgba(0,0,0,.45) 52%, transparent 96%);
+  mask-image:linear-gradient(180deg,
+    rgba(0,0,0,.92) 0%, rgba(0,0,0,.45) 52%, transparent 96%);
+
+  filter:blur(2px);
+  opacity:.6;
+}
+
+/* Ustidagi dark overlay — o'qilishni saqlaydi */
+.dash-scrim{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+
+  background:
+    linear-gradient(180deg,
+      rgba(4,6,13,.46) 0%,
+      rgba(4,5,11,.64) 48%,
+      rgba(3,4,9,.72) 100%);
+}
+
+
 /* ANIMATSIYANI KAMAYTIRISH */
 
 @media (prefers-reduced-motion:reduce){
@@ -3298,6 +3353,8 @@ body{
   class="app"
   id="dashboard"
   style="display:none;">
+
+<div class="dash-scrim" aria-hidden="true"></div>
 
 <div class="content">
 
