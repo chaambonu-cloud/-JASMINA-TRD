@@ -1983,6 +1983,27 @@ a:active{
     font-size:9px;
     line-height:1.4;
   }
+
+  /* Kabinetdagi valyuta kartalari (3 ta yonma-yon) */
+  .currency-grid{
+    gap:6px;
+    margin-top:10px;
+  }
+
+  .currency{
+    padding:10px 3px;
+    border-radius:12px;
+  }
+
+  .currency b{
+    font-size:12px;
+    letter-spacing:.2px;
+  }
+
+  .currency small{
+    margin-top:3px;
+    font-size:8px;
+  }
 }
 
 
@@ -3374,9 +3395,46 @@ function bankLogo(key){
   return "logos/" + String(key || "").trim() + ".svg";
 }
 
+/* Karta qiymati ichida bank kaliti ham saqlanadi: "sberbank#1234" */
+
+function cardDigits(value){
+
+  let text = String(value || "");
+  const at = text.indexOf("#");
+
+  if(at > -1){
+    text = text.slice(at + 1);
+  }
+
+  return text.replace(/\D/g, "").slice(-4);
+}
+
+function bankFromCard(value){
+
+  const text = String(value || "");
+  const at = text.indexOf("#");
+
+  return at > -1 ? text.slice(0, at).trim() : "";
+}
+
+function packCard(bankKey, cardValue){
+
+  const digits = cardDigits(cardValue);
+  const key = String(bankKey || "").trim();
+
+  return key ? key + "#" + digits : digits;
+}
+
+function userBank(user){
+
+  const direct = String((user && user.bank) || "").trim();
+
+  return direct || bankFromCard(user && user.card_last4);
+}
+
 function maskCard(value){
 
-  const digits = String(value || "").replace(/\D/g, "").slice(-4);
+  const digits = cardDigits(value);
 
   return digits
     ? "**** **** **** " + digits
@@ -3525,7 +3583,7 @@ function setUserDisplay(
       displayName,
 
     investmentTitle:
-      `${upperName} SARMOYASI`,
+      "DAROMAD OLINGAN",
 
     prizeTitle:
       `${upperName} YUTUG'I`
@@ -3689,10 +3747,23 @@ function renderUserData(user){
   const currencyGrid = document.getElementById("currencyGrid");
 
   if(currencyGrid){
-    currencyGrid.style.gridTemplateColumns = "1fr";
-    currencyGrid.innerHTML =
-      '<div class="currency active"><b>' + escapeHtml(info.grid) +
-      "</b><small>" + escapeHtml(info.code) + "</small></div>";
+
+    const shown = ["RUB", "UZS", "USD"];
+
+    if(shown.indexOf(info.code) === -1){
+      shown.push(info.code);
+    }
+
+    currencyGrid.innerHTML = shown.map(function(code){
+
+      const item = curInfo(code);
+      const active = code === info.code ? " active" : "";
+
+      return '<div class="currency' + active + '"><b>' +
+        escapeHtml(item.grid) + "</b><small>" +
+        escapeHtml(item.code + " " + item.short) + "</small></div>";
+
+    }).join("");
   }
 
   const cardText = maskCard(user.card_last4);
@@ -3700,7 +3771,7 @@ function renderUserData(user){
   setText("clientCard", cardText);
   setText("profileCard", cardText);
 
-  const bankKey = String(user.bank || "").trim();
+  const bankKey = userBank(user);
   const bankTitle = bankKey ? bankName(bankKey) : "—";
 
   setText("clientBank", bankTitle);
@@ -4027,8 +4098,8 @@ function editUser(id){
   setField("f_prize_available", user.prize_available ? "true" : "false");
   setField("f_country", String(user.country || "ROSSIYA").toUpperCase());
   setField("f_currency", curInfo(user.currency).code);
-  fillBankOptions(user.country, user.bank || "");
-  setField("f_card_last4", user.card_last4);
+  fillBankOptions(user.country, userBank(user));
+  setField("f_card_last4", cardDigits(user.card_last4));
   setField("f_note", user.note);
   setField("f_status", user.status);
   updateMoneyLabels();
@@ -4105,7 +4176,7 @@ async function saveUser(){
     country: fieldValue("f_country"),
     currency: fieldValue("f_currency"),
     bank: fieldValue("f_bank"),
-    card_last4: fieldValue("f_card_last4"),
+    card_last4: packCard(fieldValue("f_bank"), fieldValue("f_card_last4")),
     note: fieldValue("f_note")
   };
 
