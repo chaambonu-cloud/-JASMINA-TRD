@@ -2499,6 +2499,176 @@ body{
 }
 
 
+/* ===== RO'YXATDAN O'TISH ANKETASI ===== */
+
+.reg-hint{
+  font-size:11.5px;
+  line-height:1.5;
+  color:var(--muted);
+  margin:2px 0 14px;
+}
+
+.combo{ position:relative; }
+
+.combo input{ width:100%; }
+
+.combo-list{
+  display:none;
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  z-index:40;
+  max-height:210px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  background:#0d1012;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,.55);
+}
+
+.combo-list.show{ display:block; }
+
+.combo-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 13px;
+  font-size:13px;
+  color:#e6e8ea;
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.combo-item:last-child{ border-bottom:none; }
+
+.combo-item.active,
+.combo-item:hover{ background:rgba(232,179,65,.1); }
+
+.combo-item span{
+  font-size:11.5px;
+  color:var(--muted);
+  font-variant-numeric:tabular-nums;
+}
+
+.combo-empty{
+  padding:12px 13px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.phone-row{
+  display:flex;
+  align-items:stretch;
+  gap:8px;
+}
+
+.phone-row .dial{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:72px;
+  height:48px;
+  padding:0 10px;
+  border-radius:12px;
+  background:#12161a;
+  border:1px solid rgba(255,255,255,.08);
+  font-size:14px;
+  font-weight:700;
+  color:var(--gold);
+  font-variant-numeric:tabular-nums;
+}
+
+.phone-row input{ flex:1; min-width:0; }
+
+/* ===== ADMIN: SO'ROVLAR ===== */
+
+.req-card{
+  padding:12px 13px;
+  border-radius:14px;
+  background:#0f1214;
+  border:1px solid var(--border);
+  margin-bottom:10px;
+}
+
+.req-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.req-name{
+  font-size:13.5px;
+  font-weight:800;
+  color:#f2f4f6;
+}
+
+.req-badge{
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.4px;
+  padding:4px 8px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+
+.req-badge.new{ color:var(--gold); background:rgba(232,179,65,.12); }
+.req-badge.ok{ color:var(--green); background:rgba(47,190,134,.12); }
+.req-badge.no{ color:var(--red); background:rgba(232,86,106,.12); }
+
+.req-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:5px 0;
+  font-size:12px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+
+.req-row b{
+  color:#e6e8ea;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+}
+
+.req-row span{ color:var(--muted); }
+
+.req-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+
+.req-actions .btn{ margin-top:0; min-height:42px; font-size:10.5px; }
+
+.req-ok{ color:#08130d; background:var(--green); border:none; }
+.req-no{ color:#e6e8ea; background:#14181b; border:1px solid rgba(232,86,106,.25); }
+
+.req-code{
+  margin-top:9px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:rgba(47,190,134,.08);
+  border:1px solid rgba(47,190,134,.18);
+  font-size:12px;
+  color:#cfe9dd;
+}
+
+.req-code b{
+  font-size:15px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:1.5px;
+  font-variant-numeric:tabular-nums;
+}
+
+
 /* ===== ADMIN PANEL — MOBIL KOMPAKT KO'RINISH (faqat kichik ekran) ===== */
 
 @media (max-width:480px){
@@ -3125,10 +3295,6 @@ body{
   0 so'm
 </strong>
 
-<div class="subnote" id="investRub">
-  0
-</div>
-
 </div>
 
 
@@ -3563,6 +3729,58 @@ body{
 </div>
 
 
+<!-- RO'YXATDAN O'TISH ANKETASI -->
+<div class="modal" id="registerModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h3>RO'YXATDAN O'TISH</h3>
+      <button class="close-btn" type="button" onclick="closeRegister()">×</button>
+    </div>
+
+    <div class="reg-hint">
+      Anketani to'ldirib so'rov yuboring. Admin so'rovni qabul qilgandan keyin
+      sizga kirish kodi beriladi va kabinet ochiladi.
+    </div>
+
+    <div class="field">
+      <label>ISM</label>
+      <input id="r_name" type="text" autocomplete="given-name" placeholder="Ismingiz">
+    </div>
+
+    <div class="field">
+      <label>FAMILIYA</label>
+      <input id="r_surname" type="text" autocomplete="family-name" placeholder="Familiyangiz">
+    </div>
+
+    <div class="field">
+      <label>HOZIR YASHAYOTGAN DAVLAT</label>
+      <div class="combo">
+        <input id="r_country" type="text" autocomplete="off"
+               placeholder="Davlatni yozib qidiring"
+               oninput="onCountryInput()"
+               onfocus="openCountryList()">
+        <div class="combo-list" id="r_country_list"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>TELEFON RAQAMI</label>
+      <div class="phone-row">
+        <div class="dial" id="r_dial">+998</div>
+        <input id="r_phone" type="tel" inputmode="tel" autocomplete="tel"
+               placeholder="90 123 45 67">
+      </div>
+    </div>
+
+    <button class="btn" type="button" id="r_submit" onclick="submitRequest()">
+      SO'ROV YUBORISH
+    </button>
+
+    <div class="safe">🔒 Karta raqami va bank ma'lumotlari so'ralmaydi</div>
+  </div>
+</div>
+
+
 <!-- MAXFIY ADMIN PANEL -->
 <div class="modal" id="adminLoginModal" aria-hidden="true">
   <div class="modal-card">
@@ -3591,11 +3809,25 @@ body{
 
       <div class="admin-grid">
         <div class="admin-mini"><span>FOYDALANUVCHILAR</span><strong id="adminCountLabel">0</strong></div>
-        <div class="admin-mini"><span>SESSIYA</span><strong id="adminSessionLabel">Faol</strong></div>
+        <div class="admin-mini"><span>YANGI SO'ROV</span><strong id="adminReqMini">0</strong></div>
       </div>
 
       <!-- RO'YXAT -->
       <div id="adminListView">
+
+        <div class="admin-status" style="margin-top:14px;">
+          <span>RO'YXATDAN O'TISH SO'ROVLARI</span>
+          <strong id="reqCountLabel">0 yangi</strong>
+        </div>
+        <div id="adminRequestsList" class="admin-list"></div>
+        <div class="admin-actions">
+          <button class="btn register-btn" type="button" onclick="loadAdminRequests()">SO'ROVLARNI YANGILASH</button>
+        </div>
+
+        <div class="admin-status" style="margin-top:18px;">
+          <span>MIJOZLAR</span>
+          <strong>Boshqarish</strong>
+        </div>
         <div class="admin-actions">
           <button class="btn" type="button" onclick="newUserForm()">+ YANGI MIJOZ</button>
         </div>
@@ -3978,6 +4210,21 @@ function translateError(raw){
   }
   if(raw.indexOf("USER_NOT_FOUND") > -1){
     return "Foydalanuvchi topilmadi.";
+  }
+  if(raw.indexOf("Could not find the function") > -1 || raw.indexOf("PGRST202") > -1){
+    return "Baza yangilanmagan. Admin Supabase SQL Editor'da ro'yxatdan o'tish so'rovlari faylini ishga tushirishi kerak.";
+  }
+  if(raw.indexOf("COUNTRY_REQUIRED") > -1){
+    return "Davlatni tanlang.";
+  }
+  if(raw.indexOf("PHONE_INVALID") > -1){
+    return "Telefon raqami noto'g'ri yoki to'liq emas.";
+  }
+  if(raw.indexOf("REQUEST_EXISTS") > -1){
+    return "Bu raqam bilan so'rov allaqachon yuborilgan. Admin javobini kuting.";
+  }
+  if(raw.indexOf("REQUEST_NOT_FOUND") > -1){
+    return "So'rov topilmadi.";
   }
   return raw;
 }
@@ -4706,14 +4953,443 @@ async function changeAdminPassword(){
   }
 }
 
+const COUNTRY_LIST = [
+  {c:"UZ",n:"O'zbekiston",d:"+998"},
+  {c:"RU",n:"Rossiya",d:"+7"},
+  {c:"TJ",n:"Tojikiston",d:"+992"},
+  {c:"TR",n:"Turkiya",d:"+90"},
+  {c:"KZ",n:"Qozog'iston",d:"+7"},
+  {c:"KG",n:"Qirg'iziston",d:"+996"},
+  {c:"TM",n:"Turkmaniston",d:"+993"},
+  {c:"AZ",n:"Ozarbayjon",d:"+994"},
+  {c:"GE",n:"Gruziya",d:"+995"},
+  {c:"AM",n:"Armaniston",d:"+374"},
+  {c:"UA",n:"Ukraina",d:"+380"},
+  {c:"BY",n:"Belarus",d:"+375"},
+  {c:"AE",n:"Birlashgan Arab Amirliklari",d:"+971"},
+  {c:"US",n:"AQSh",d:"+1"},
+  {c:"GB",n:"Buyuk Britaniya",d:"+44"},
+  {c:"DE",n:"Germaniya",d:"+49"},
+  {c:"AF",n:"Afg'oniston",d:"+93"},
+  {c:"AX",n:"Aland",d:"+358"},
+  {c:"AL",n:"Albaniya",d:"+355"},
+  {c:"AS",n:"American Samoa",d:"+1684"},
+  {c:"AD",n:"Andorra",d:"+376"},
+  {c:"AO",n:"Angola",d:"+244"},
+  {c:"AI",n:"Anguilla",d:"+1264"},
+  {c:"AQ",n:"Antarctica",d:"+672"},
+  {c:"AG",n:"Antigua and Barbuda",d:"+1268"},
+  {c:"AR",n:"Argentina",d:"+54"},
+  {c:"AW",n:"Aruba",d:"+297"},
+  {c:"AC",n:"Ascension Island",d:"+247"},
+  {c:"AU",n:"Avstraliya",d:"+61"},
+  {c:"AT",n:"Avstriya",d:"+43"},
+  {c:"BS",n:"Bahamas",d:"+1242"},
+  {c:"BH",n:"Bahrayn",d:"+973"},
+  {c:"BD",n:"Bangladesh",d:"+880"},
+  {c:"BB",n:"Barbados",d:"+1246"},
+  {c:"BE",n:"Belgiya",d:"+32"},
+  {c:"BZ",n:"Belize",d:"+501"},
+  {c:"BJ",n:"Benin",d:"+229"},
+  {c:"BM",n:"Bermuda",d:"+1441"},
+  {c:"BG",n:"Bolgariya",d:"+359"},
+  {c:"BO",n:"Bolivia",d:"+591"},
+  {c:"BQ",n:"Bonaire",d:"+5997"},
+  {c:"BA",n:"Bosniya va Gertsegovina",d:"+387"},
+  {c:"BW",n:"Botswana",d:"+267"},
+  {c:"BV",n:"Bouvet Island",d:"+47"},
+  {c:"BR",n:"Braziliya",d:"+55"},
+  {c:"IO",n:"British Indian Ocean Territory",d:"+246"},
+  {c:"VG",n:"British Virgin Islands",d:"+1284"},
+  {c:"BN",n:"Bruney",d:"+673"},
+  {c:"BF",n:"Burkina Faso",d:"+226"},
+  {c:"BI",n:"Burundi",d:"+257"},
+  {c:"BT",n:"Butan",d:"+975"},
+  {c:"CV",n:"Cabo Verde",d:"+238"},
+  {c:"CM",n:"Cameroon",d:"+237"},
+  {c:"KY",n:"Cayman Islands",d:"+1345"},
+  {c:"CF",n:"Central African Republic",d:"+236"},
+  {c:"TD",n:"Chad",d:"+235"},
+  {c:"ME",n:"Chernogoriya",d:"+382"},
+  {c:"CZ",n:"Chexiya",d:"+420"},
+  {c:"CL",n:"Chili",d:"+56"},
+  {c:"CX",n:"Christmas Island",d:"+61"},
+  {c:"CC",n:"Cocos (Keeling) Islands",d:"+61"},
+  {c:"CO",n:"Colombia",d:"+57"},
+  {c:"KM",n:"Comoros",d:"+269"},
+  {c:"CK",n:"Cook Islands",d:"+682"},
+  {c:"CR",n:"Costa Rica",d:"+506"},
+  {c:"CU",n:"Cuba",d:"+53"},
+  {c:"CW",n:"Curacao",d:"+5999"},
+  {c:"DK",n:"Daniya",d:"+45"},
+  {c:"CD",n:"Democratic Republic of the Congo",d:"+243"},
+  {c:"DJ",n:"Djibouti",d:"+253"},
+  {c:"DM",n:"Dominica",d:"+1767"},
+  {c:"DO",n:"Dominican Republic",d:"+1809"},
+  {c:"TL",n:"East Timor",d:"+670"},
+  {c:"EC",n:"Ecuador",d:"+593"},
+  {c:"ET",n:"Efiopiya",d:"+251"},
+  {c:"SV",n:"El Salvador",d:"+503"},
+  {c:"GQ",n:"Equatorial Guinea",d:"+240"},
+  {c:"ER",n:"Eritrea",d:"+291"},
+  {c:"EE",n:"Estoniya",d:"+372"},
+  {c:"SZ",n:"Eswatini",d:"+268"},
+  {c:"FK",n:"Falkland Islands",d:"+500"},
+  {c:"FO",n:"Faroe Islands",d:"+298"},
+  {c:"FJ",n:"Fiji",d:"+679"},
+  {c:"PH",n:"Filippin",d:"+63"},
+  {c:"FI",n:"Finlyandiya",d:"+358"},
+  {c:"FR",n:"Fransiya",d:"+33"},
+  {c:"GF",n:"French Guiana",d:"+594"},
+  {c:"PF",n:"French Polynesia",d:"+689"},
+  {c:"TF",n:"French Southern Territories",d:"+262"},
+  {c:"GA",n:"Gabon",d:"+241"},
+  {c:"GM",n:"Gambia",d:"+220"},
+  {c:"GH",n:"Gana",d:"+233"},
+  {c:"GI",n:"Gibraltar",d:"+350"},
+  {c:"HK",n:"Gonkong",d:"+852"},
+  {c:"GL",n:"Greenland",d:"+299"},
+  {c:"GD",n:"Grenada",d:"+1473"},
+  {c:"GR",n:"Gretsiya",d:"+30"},
+  {c:"GP",n:"Guadeloupe",d:"+590"},
+  {c:"GU",n:"Guam",d:"+1671"},
+  {c:"GT",n:"Guatemala",d:"+502"},
+  {c:"GG",n:"Guernsey",d:"+44"},
+  {c:"GN",n:"Guinea",d:"+224"},
+  {c:"GW",n:"Guinea-Bissau",d:"+245"},
+  {c:"GY",n:"Guyana",d:"+592"},
+  {c:"HT",n:"Haiti",d:"+509"},
+  {c:"HM",n:"Heard Island and McDonald Islands",d:"+61"},
+  {c:"IN",n:"Hindiston",d:"+91"},
+  {c:"HN",n:"Honduras",d:"+504"},
+  {c:"ID",n:"Indoneziya",d:"+62"},
+  {c:"JO",n:"Iordaniya",d:"+962"},
+  {c:"IE",n:"Irlandiya",d:"+353"},
+  {c:"IR",n:"Iron",d:"+98"},
+  {c:"IQ",n:"Iroq",d:"+964"},
+  {c:"IS",n:"Islandiya",d:"+354"},
+  {c:"IM",n:"Isle of Man",d:"+44"},
+  {c:"ES",n:"Ispaniya",d:"+34"},
+  {c:"IL",n:"Isroil",d:"+972"},
+  {c:"IT",n:"Italiya",d:"+39"},
+  {c:"CI",n:"Ivory Coast",d:"+225"},
+  {c:"JM",n:"Jamaica",d:"+1876"},
+  {c:"ZA",n:"Janubiy Afrika",d:"+27"},
+  {c:"KR",n:"Janubiy Koreya",d:"+82"},
+  {c:"DZ",n:"Jazoir",d:"+213"},
+  {c:"JE",n:"Jersey",d:"+44"},
+  {c:"KH",n:"Kambodja",d:"+855"},
+  {c:"CA",n:"Kanada",d:"+1"},
+  {c:"KE",n:"Keniya",d:"+254"},
+  {c:"CY",n:"Kipr",d:"+357"},
+  {c:"KI",n:"Kiribati",d:"+686"},
+  {c:"XK",n:"Kosovo",d:"+377"},
+  {c:"KW",n:"Kuvayt",d:"+965"},
+  {c:"LA",n:"Laos",d:"+856"},
+  {c:"LV",n:"Latviya",d:"+371"},
+  {c:"LS",n:"Lesotho",d:"+266"},
+  {c:"LR",n:"Liberia",d:"+231"},
+  {c:"LI",n:"Liechtenstein",d:"+423"},
+  {c:"LT",n:"Litva",d:"+370"},
+  {c:"LB",n:"Livan",d:"+961"},
+  {c:"LY",n:"Liviya",d:"+218"},
+  {c:"LU",n:"Lyuksemburg",d:"+352"},
+  {c:"MG",n:"Madagascar",d:"+261"},
+  {c:"MO",n:"Makao",d:"+853"},
+  {c:"MW",n:"Malawi",d:"+265"},
+  {c:"MY",n:"Malayziya",d:"+60"},
+  {c:"MV",n:"Maldiv orollari",d:"+960"},
+  {c:"ML",n:"Mali",d:"+223"},
+  {c:"MT",n:"Malta",d:"+356"},
+  {c:"MA",n:"Marokash",d:"+212"},
+  {c:"MH",n:"Marshall Islands",d:"+692"},
+  {c:"MQ",n:"Martinique",d:"+596"},
+  {c:"MR",n:"Mauritania",d:"+222"},
+  {c:"MU",n:"Mauritius",d:"+230"},
+  {c:"YT",n:"Mayotte",d:"+262"},
+  {c:"MX",n:"Meksika",d:"+52"},
+  {c:"FM",n:"Micronesia",d:"+691"},
+  {c:"EG",n:"Misr",d:"+20"},
+  {c:"MN",n:"Mo'g'uliston",d:"+976"},
+  {c:"MD",n:"Moldova",d:"+373"},
+  {c:"MC",n:"Monaco",d:"+377"},
+  {c:"MS",n:"Montserrat",d:"+1664"},
+  {c:"MZ",n:"Mozambique",d:"+258"},
+  {c:"MM",n:"Myanma",d:"+95"},
+  {c:"NA",n:"Namibia",d:"+264"},
+  {c:"NR",n:"Nauru",d:"+674"},
+  {c:"NP",n:"Nepal",d:"+977"},
+  {c:"NC",n:"New Caledonia",d:"+687"},
+  {c:"NI",n:"Nicaragua",d:"+505"},
+  {c:"NL",n:"Niderlandiya",d:"+31"},
+  {c:"NE",n:"Niger",d:"+227"},
+  {c:"NG",n:"Nigeriya",d:"+234"},
+  {c:"NU",n:"Niue",d:"+683"},
+  {c:"NF",n:"Norfolk Island",d:"+672"},
+  {c:"MP",n:"Northern Mariana Islands",d:"+1670"},
+  {c:"NO",n:"Norvegiya",d:"+47"},
+  {c:"PW",n:"Palau",d:"+680"},
+  {c:"PS",n:"Palestine",d:"+970"},
+  {c:"PA",n:"Panama",d:"+507"},
+  {c:"PG",n:"Papua New Guinea",d:"+675"},
+  {c:"PY",n:"Paraguay",d:"+595"},
+  {c:"PE",n:"Peru",d:"+51"},
+  {c:"PN",n:"Pitcairn Islands",d:"+64"},
+  {c:"PK",n:"Pokiston",d:"+92"},
+  {c:"PL",n:"Polsha",d:"+48"},
+  {c:"PT",n:"Portugaliya",d:"+351"},
+  {c:"PR",n:"Puerto Rico",d:"+1787"},
+  {c:"QA",n:"Qatar",d:"+974"},
+  {c:"CG",n:"Republic of the Congo",d:"+242"},
+  {c:"RE",n:"Reunion",d:"+262"},
+  {c:"RO",n:"Rumuniya",d:"+40"},
+  {c:"RW",n:"Rwanda",d:"+250"},
+  {c:"BL",n:"Saint Barthelemy",d:"+590"},
+  {c:"SH",n:"Saint Helena",d:"+290"},
+  {c:"KN",n:"Saint Kitts and Nevis",d:"+1869"},
+  {c:"LC",n:"Saint Lucia",d:"+1758"},
+  {c:"MF",n:"Saint Martin",d:"+590"},
+  {c:"PM",n:"Saint Pierre and Miquelon",d:"+508"},
+  {c:"VC",n:"Saint Vincent and the Grenadines",d:"+1784"},
+  {c:"WS",n:"Samoa",d:"+685"},
+  {c:"SM",n:"San Marino",d:"+378"},
+  {c:"ST",n:"Sao Tome and Principe",d:"+239"},
+  {c:"SA",n:"Saudiya Arabistoni",d:"+966"},
+  {c:"SN",n:"Senegal",d:"+221"},
+  {c:"RS",n:"Serbiya",d:"+381"},
+  {c:"SC",n:"Seychelles",d:"+248"},
+  {c:"KP",n:"Shimoliy Koreya",d:"+850"},
+  {c:"MK",n:"Shimoliy Makedoniya",d:"+389"},
+  {c:"LK",n:"Shri-Lanka",d:"+94"},
+  {c:"SE",n:"Shvetsiya",d:"+46"},
+  {c:"CH",n:"Shveytsariya",d:"+41"},
+  {c:"SL",n:"Sierra Leone",d:"+232"},
+  {c:"SG",n:"Singapur",d:"+65"},
+  {c:"SX",n:"Sint Maarten",d:"+1721"},
+  {c:"SK",n:"Slovakiya",d:"+421"},
+  {c:"SI",n:"Sloveniya",d:"+386"},
+  {c:"SB",n:"Solomon Islands",d:"+677"},
+  {c:"SO",n:"Somalia",d:"+252"},
+  {c:"GS",n:"South Georgia and the South Sandwich Islands",d:"+500"},
+  {c:"SS",n:"South Sudan",d:"+211"},
+  {c:"SD",n:"Sudan",d:"+249"},
+  {c:"SR",n:"Suriname",d:"+597"},
+  {c:"SY",n:"Suriya",d:"+963"},
+  {c:"SJ",n:"Svalbard and Jan Mayen",d:"+4779"},
+  {c:"TH",n:"Tailand",d:"+66"},
+  {c:"TZ",n:"Tanzaniya",d:"+255"},
+  {c:"TW",n:"Tayvan",d:"+886"},
+  {c:"TG",n:"Togo",d:"+228"},
+  {c:"TK",n:"Tokelau",d:"+690"},
+  {c:"TO",n:"Tonga",d:"+676"},
+  {c:"TT",n:"Trinidad and Tobago",d:"+1868"},
+  {c:"TA",n:"Tristan da Cunha",d:"+290"},
+  {c:"TN",n:"Tunis",d:"+216"},
+  {c:"TC",n:"Turks and Caicos Islands",d:"+1649"},
+  {c:"TV",n:"Tuvalu",d:"+688"},
+  {c:"UM",n:"U.S. Minor Outlying Islands",d:"+1"},
+  {c:"VI",n:"U.S. Virgin Islands",d:"+1340"},
+  {c:"UG",n:"Uganda",d:"+256"},
+  {c:"OM",n:"Ummon",d:"+968"},
+  {c:"UY",n:"Uruguay",d:"+598"},
+  {c:"VU",n:"Vanuatu",d:"+678"},
+  {c:"VA",n:"Vatican City",d:"+379"},
+  {c:"VE",n:"Venezuela",d:"+58"},
+  {c:"HU",n:"Vengriya",d:"+36"},
+  {c:"VN",n:"Vetnam",d:"+84"},
+  {c:"WF",n:"Wallis and Futuna",d:"+681"},
+  {c:"EH",n:"Western Sahara",d:"+212"},
+  {c:"CN",n:"Xitoy",d:"+86"},
+  {c:"HR",n:"Xorvatiya",d:"+385"},
+  {c:"YE",n:"Yaman",d:"+967"},
+  {c:"NZ",n:"Yangi Zelandiya",d:"+64"},
+  {c:"JP",n:"Yaponiya",d:"+81"},
+  {c:"ZM",n:"Zambia",d:"+260"},
+  {c:"ZW",n:"Zimbabwe",d:"+263"}
+];
+
+let regCountry = null;
+
+function normText(v){
+  return String(v || "")
+    .toLowerCase()
+    .replace(/[\u02bb\u02bc\u2018\u2019'`\u02b9]/g, "'")
+    .trim();
+}
+
 function registerUser(){
+  openRegister();
+}
+
+function openRegister(){
+
+  const modal = document.getElementById("registerModal");
+  if(!modal){ return; }
+
+  const nameEl = document.getElementById("r_name");
+  const surnEl = document.getElementById("r_surname");
+  const phoneEl = document.getElementById("r_phone");
+
+  if(nameEl){ nameEl.value = ""; }
+  if(surnEl){ surnEl.value = ""; }
+  if(phoneEl){ phoneEl.value = ""; }
+
+  pickCountry("UZ", true);
+  closeCountryList();
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+
+  setTimeout(function(){ if(nameEl){ nameEl.focus(); } }, 80);
+}
+
+function closeRegister(){
+  const modal = document.getElementById("registerModal");
+  if(!modal){ return; }
+  closeCountryList();
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function renderCountryList(query){
+
+  const box = document.getElementById("r_country_list");
+  if(!box){ return; }
+
+  const q = normText(query);
+
+  let items = COUNTRY_LIST;
+
+  if(q){
+    items = COUNTRY_LIST.filter(function(c){
+      return normText(c.n).indexOf(q) > -1
+          || c.d.indexOf(q.replace(/[^0-9+]/g, "")) === 0 && q.replace(/[^0-9+]/g, "") !== ""
+          || normText(c.c) === q;
+    });
+  }
+
+  if(!items.length){
+    box.innerHTML = '<div class="combo-empty">Topilmadi. Boshqacha yozib ko\'ring.</div>';
+    return;
+  }
+
+  let html = "";
+
+  items.slice(0, 60).forEach(function(c){
+    const active = (regCountry && regCountry.c === c.c) ? " active" : "";
+    html += '<div class="combo-item' + active + '" onclick="pickCountry(\'' + c.c + '\')">' +
+              '<div>' + c.n + '</div><span>' + c.d + '</span>' +
+            '</div>';
+  });
+
+  box.innerHTML = html;
+}
+
+function openCountryList(){
+  const box = document.getElementById("r_country_list");
+  const input = document.getElementById("r_country");
+  if(!box){ return; }
+  renderCountryList(input && input.dataset.picked === "1" ? "" : (input ? input.value : ""));
+  box.classList.add("show");
+}
+
+function closeCountryList(){
+  const box = document.getElementById("r_country_list");
+  if(box){ box.classList.remove("show"); }
+}
+
+function onCountryInput(){
+  const input = document.getElementById("r_country");
+  if(input){ input.dataset.picked = "0"; }
+  regCountry = null;
+  const dial = document.getElementById("r_dial");
+  if(dial){ dial.textContent = "+"; }
+  openCountryList();
+}
+
+function pickCountry(code, silent){
+
+  const found = COUNTRY_LIST.filter(function(c){ return c.c === code; })[0];
+  if(!found){ return; }
+
+  regCountry = found;
+
+  const input = document.getElementById("r_country");
+  const dial  = document.getElementById("r_dial");
+
+  if(input){
+    input.value = found.n;
+    input.dataset.picked = "1";
+  }
+  if(dial){ dial.textContent = found.d; }
+
+  closeCountryList();
+
+  if(!silent){
+    const phoneEl = document.getElementById("r_phone");
+    if(phoneEl){ setTimeout(function(){ phoneEl.focus(); }, 60); }
+  }
+}
+
+document.addEventListener("click", function(ev){
+  const combo = ev.target.closest ? ev.target.closest(".combo") : null;
+  if(!combo){ closeCountryList(); }
+});
+
+async function submitRequest(){
+
+  const btn = document.getElementById("r_submit");
+
+  const name    = (document.getElementById("r_name").value || "").trim();
+  const surname = (document.getElementById("r_surname").value || "").trim();
+  const phone   = (document.getElementById("r_phone").value || "").trim();
+
+  if(!name || !surname){
+    alert("Ism va familiyani kiriting.");
+    return;
+  }
+
+  if(!regCountry){
+    alert("Ro'yxatdan davlatingizni tanlang.");
+    openCountryList();
+    return;
+  }
+
+  const digits = phone.replace(/[^0-9]/g, "");
+
+  if(digits.length < 7){
+    alert("Telefon raqamini to'liq kiriting.");
+    return;
+  }
+
+  const fullPhone = regCountry.d + " " + phone;
+
+  if(btn){ btn.disabled = true; btn.textContent = "YUBORILMOQDA..."; }
+
+  try{
+    await rpc("register_request", {
+      p_name: name,
+      p_surname: surname,
+      p_country: regCountry.n,
+      p_country_code: regCountry.c,
+      p_phone: fullPhone
+    });
+  }catch(err){
+    alert(err.message);
+    if(btn){ btn.disabled = false; btn.textContent = "SO'ROV YUBORISH"; }
+    return;
+  }
+
+  if(btn){ btn.disabled = false; btn.textContent = "SO'ROV YUBORISH"; }
+
+  closeRegister();
 
   alert(
-    "RO'YXATDAN OTISH \n\n" +
-    " sahifa. " +
-    " admin bilan bog'laning."
+    "SO'ROVINGIZ YUBORILDI\n\n" +
+    name + " " + surname + "\n" +
+    regCountry.n + " \u2022 " + fullPhone + "\n\n" +
+    "Admin so'rovni tekshiradi. Qabul qilinganidan keyin sizga kirish kodi beriladi."
   );
-
 }
 
 
@@ -4773,6 +5449,7 @@ async function unlockAdmin(){
 
   backToList();
   loadAdminUsers();
+  loadAdminRequests();
 }
 
 function lockAdmin(){
@@ -4818,6 +5495,141 @@ function backToList(){
 function showEditView(){
   document.getElementById("adminListView").style.display = "none";
   document.getElementById("adminEditView").style.display = "block";
+}
+
+let adminRequests = [];
+
+function reqDate(value){
+  if(!value){ return "—"; }
+  const d = new Date(value);
+  if(isNaN(d.getTime())){ return "—"; }
+  const p = function(n){ return String(n).padStart(2, "0"); };
+  return p(d.getDate()) + "." + p(d.getMonth() + 1) + "." + d.getFullYear() +
+         " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+
+function escapeText(value){
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+async function loadAdminRequests(){
+
+  const list = document.getElementById("adminRequestsList");
+  const label = document.getElementById("reqCountLabel");
+  const mini = document.getElementById("adminReqMini");
+
+  if(!list){ return; }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("admin_list_requests", {p_token: adminToken});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + '</div>';
+    if(label){ label.textContent = "—"; }
+    if(mini){ mini.textContent = "—"; }
+    return;
+  }
+
+  adminRequests = Array.isArray(rows) ? rows : [];
+
+  const fresh = adminRequests.filter(function(r){ return r.status === "new"; }).length;
+
+  if(label){ label.textContent = fresh + " yangi"; }
+  if(mini){ mini.textContent = String(fresh); }
+
+  if(!adminRequests.length){
+    list.innerHTML = '<div class="combo-empty">Hozircha so\'rov yo\'q.</div>';
+    return;
+  }
+
+  let html = "";
+
+  adminRequests.forEach(function(r){
+
+    let badge = '<div class="req-badge new">YANGI</div>';
+    if(r.status === "approved"){ badge = '<div class="req-badge ok">QABUL QILINDI</div>'; }
+    if(r.status === "rejected"){ badge = '<div class="req-badge no">RAD ETILDI</div>'; }
+
+    html += '<div class="req-card">' +
+      '<div class="req-top">' +
+        '<div class="req-name">' + escapeText(r.name) + ' ' + escapeText(r.surname) + '</div>' +
+        badge +
+      '</div>' +
+      '<div class="req-row"><span>ISM</span><b>' + escapeText(r.name) + '</b></div>' +
+      '<div class="req-row"><span>FAMILIYA</span><b>' + escapeText(r.surname) + '</b></div>' +
+      '<div class="req-row"><span>DAVLAT</span><b>' + escapeText(r.country || "—") + '</b></div>' +
+      '<div class="req-row"><span>TELEFON</span><b>' + escapeText(r.phone || "—") + '</b></div>' +
+      '<div class="req-row"><span>SANA</span><b>' + reqDate(r.created_at) + '</b></div>';
+
+    if(r.status === "new"){
+      html += '<div class="req-actions">' +
+        '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id + '\')">QABUL QILISH</button>' +
+        '<button class="btn req-no" type="button" onclick="rejectRequest(\'' + r.id + '\')">RAD ETISH</button>' +
+      '</div>';
+    }
+
+    if(r.status === "approved" && r.code){
+      html += '<div class="req-code">KIRISH KODI: <b>' + escapeText(r.code) + '</b></div>';
+    }
+
+    html += '</div>';
+  });
+
+  list.innerHTML = html;
+}
+
+async function approveRequest(id){
+
+  const row = adminRequests.filter(function(r){ return r.id === id; })[0];
+  const who = row ? (row.name + " " + row.surname) : "mijoz";
+
+  if(!confirm(who + " qabul qilinsinmi?\n\nQabul qilingandan keyin unga kabinet ochiladi.")){
+    return;
+  }
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_approve_request", {p_token: adminToken, p_id: id});
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadAdminRequests();
+  await loadAdminUsers();
+
+  alert(
+    "QABUL QILINDI\n\n" + who + "\n\n" +
+    "KIRISH KODI: " + ((res && res.code) ? res.code : "—") + "\n\n" +
+    "Shu kodni mijozga bering. U ism, familiya va kod bilan kabinetga kiradi."
+  );
+}
+
+async function rejectRequest(id){
+
+  const row = adminRequests.filter(function(r){ return r.id === id; })[0];
+  const who = row ? (row.name + " " + row.surname) : "mijoz";
+
+  if(!confirm(who + " so'rovi rad etilsinmi?")){
+    return;
+  }
+
+  try{
+    await rpc("admin_reject_request", {p_token: adminToken, p_id: id});
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadAdminRequests();
 }
 
 async function loadAdminUsers(){
