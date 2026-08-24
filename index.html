@@ -3589,6 +3589,444 @@ body{
 }
 
 
+/* ===== SARMOYA / TO'LOV TIZIMI ===== */
+
+.inv-panel{
+  position:relative;
+  border:1px solid rgba(236,183,72,.20);
+  background:
+    radial-gradient(120% 90% at 10% 0%, rgba(152,46,156,.16), transparent 60%),
+    linear-gradient(180deg, rgba(20,17,32,.92), rgba(11,10,18,.94));
+}
+
+.inv-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:6px;
+}
+
+.inv-state{
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:.02em;
+  color:#f3efe6;
+  margin-top:4px;
+}
+
+.inv-badge{
+  flex:0 0 auto;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.10em;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  color:#cfc9bd;
+  background:rgba(255,255,255,.05);
+  white-space:nowrap;
+}
+
+.inv-badge.wait{
+  color:#efc978;
+  border-color:rgba(236,183,72,.34);
+  background:rgba(236,183,72,.10);
+}
+
+.inv-badge.ok{
+  color:#5fe0a6;
+  border-color:rgba(95,224,166,.32);
+  background:rgba(95,224,166,.10);
+}
+
+.inv-badge.bad{
+  color:#ff8b98;
+  border-color:rgba(255,139,152,.32);
+  background:rgba(255,139,152,.10);
+}
+
+.inv-amount{
+  margin-top:12px;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:-.01em;
+  color:#fff;
+  font-variant-numeric:tabular-nums lining-nums;
+}
+
+.inv-sub{
+  margin-top:4px;
+  font-size:11.5px;
+  color:#9a94a6;
+  line-height:1.5;
+}
+
+.inv-block{
+  margin-top:12px;
+  padding:12px 13px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.inv-block span{
+  font-size:10px;
+  letter-spacing:.12em;
+  color:#8f8a99;
+  font-weight:700;
+}
+
+.inv-block strong{
+  font-size:17px;
+  color:#fff;
+  font-variant-numeric:tabular-nums lining-nums;
+}
+
+.inv-block.gold{
+  border-color:rgba(236,183,72,.28);
+  background:linear-gradient(180deg, rgba(236,183,72,.10), rgba(236,183,72,.03));
+}
+
+.inv-block.gold strong{ color:#f4d489; }
+
+.inv-timeline{
+  margin-top:14px;
+  display:grid;
+  gap:8px;
+}
+
+.inv-step{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:11.5px;
+  color:#7e7889;
+}
+
+.inv-step i{
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.16);
+  display:inline-block;
+}
+
+.inv-step.done{ color:#cfc9bd; }
+
+.inv-step.done i{
+  border-color:rgba(95,224,166,.6);
+  background:radial-gradient(circle, #5fe0a6 38%, transparent 42%);
+}
+
+.inv-step.now{ color:#f4d489; font-weight:700; }
+
+.inv-step.now i{
+  border-color:rgba(236,183,72,.75);
+  background:radial-gradient(circle, #ecb748 38%, transparent 42%);
+}
+
+.invest-btn{
+  background:linear-gradient(135deg, rgba(236,183,72,.96), rgba(198,132,32,.96));
+  color:#181206;
+  border:none;
+  font-weight:900;
+  letter-spacing:.06em;
+  box-shadow:0 10px 26px rgba(198,132,32,.24);
+}
+
+.inv-steps{
+  display:flex;
+  gap:6px;
+  margin:2px 0 14px;
+}
+
+.inv-steps span{
+  flex:1;
+  text-align:center;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.08em;
+  padding:7px 4px;
+  border-radius:10px;
+  color:#7e7889;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+}
+
+.inv-steps span.on{
+  color:#f4d489;
+  border-color:rgba(236,183,72,.32);
+  background:rgba(236,183,72,.09);
+}
+
+.cur-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:9px;
+}
+
+.cur-btn{
+  text-align:left;
+  padding:13px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.035);
+  color:#efeae1;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.cur-btn small{
+  display:block;
+  margin-top:3px;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#8f8a99;
+}
+
+.cur-btn.on{
+  border-color:rgba(236,183,72,.42);
+  background:linear-gradient(180deg, rgba(236,183,72,.12), rgba(236,183,72,.04));
+  color:#f7dfa6;
+}
+
+.pkg-card{
+  width:100%;
+  text-align:left;
+  margin-top:9px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+  color:#efeae1;
+  display:block;
+}
+
+.pkg-card.on{
+  border-color:rgba(236,183,72,.45);
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(152,46,156,.16), transparent 62%),
+    linear-gradient(180deg, rgba(236,183,72,.11), rgba(236,183,72,.03));
+}
+
+.pkg-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.pkg-amount{
+  font-size:19px;
+  font-weight:900;
+  color:#fff;
+  font-variant-numeric:tabular-nums lining-nums;
+}
+
+.pkg-fee{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.06em;
+  padding:4px 8px;
+  border-radius:999px;
+  color:#f4d489;
+  border:1px solid rgba(236,183,72,.30);
+  background:rgba(236,183,72,.08);
+  white-space:nowrap;
+}
+
+.pkg-row{
+  margin-top:9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:11px;
+  color:#8f8a99;
+  letter-spacing:.04em;
+}
+
+.pkg-row b{
+  font-size:14px;
+  color:#e8ddc4;
+  font-variant-numeric:tabular-nums lining-nums;
+}
+
+.risk-note{
+  margin-top:12px;
+  padding:11px 12px;
+  border-radius:12px;
+  border:1px solid rgba(236,183,72,.20);
+  background:rgba(236,183,72,.055);
+  color:#cbbfa4;
+  font-size:10.5px;
+  line-height:1.6;
+}
+
+.pay-box{
+  margin-top:10px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+}
+
+.pay-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px dashed rgba(255,255,255,.07);
+  font-size:11px;
+  letter-spacing:.04em;
+  color:#8f8a99;
+}
+
+.pay-line:last-child{ border-bottom:none; }
+
+.pay-line strong{
+  font-size:13px;
+  color:#f3efe6;
+  text-align:right;
+  font-variant-numeric:tabular-nums lining-nums;
+  word-break:break-word;
+}
+
+.pay-card{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(236,183,72,.26);
+  background:rgba(236,183,72,.06);
+}
+
+.pay-card b{
+  display:block;
+  font-size:18px;
+  letter-spacing:.06em;
+  color:#f7dfa6;
+  font-variant-numeric:tabular-nums lining-nums;
+  word-break:break-all;
+}
+
+.pay-card small{
+  display:block;
+  margin-top:4px;
+  font-size:10px;
+  letter-spacing:.10em;
+  color:#a99b7c;
+}
+
+.inv-msg{
+  margin-top:10px;
+  font-size:11px;
+  line-height:1.55;
+  color:#9a94a6;
+}
+
+.inv-msg.ok{ color:#5fe0a6; }
+.inv-msg.bad{ color:#ff8b98; }
+
+.file-btn{
+  margin-top:10px;
+  background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.18);
+  color:#cfc9bd;
+  font-weight:700;
+}
+
+.file-name{
+  margin-top:6px;
+  font-size:10.5px;
+  color:#8f8a99;
+  word-break:break-all;
+}
+
+.adm-inv{
+  margin-top:9px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+}
+
+.adm-inv h5{
+  margin:0 0 6px;
+  font-size:13px;
+  color:#f3efe6;
+}
+
+.adm-inv p{
+  margin:0 0 4px;
+  font-size:11px;
+  color:#9a94a6;
+  line-height:1.5;
+  word-break:break-word;
+}
+
+.adm-inv .row{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.adm-inv .row .btn{
+  flex:1 1 44%;
+  margin:0;
+  padding:9px 8px;
+  font-size:10.5px;
+}
+
+.adm-mini-form{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px;
+  margin-top:9px;
+}
+
+.adm-mini-form .field{ margin:0; }
+
+.adm-mini-form .field.wide{ grid-column:1 / -1; }
+
+.adm-tag{
+  display:inline-block;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.08em;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  color:#cfc9bd;
+  margin-right:5px;
+}
+
+.adm-tag.wait{ color:#efc978; border-color:rgba(236,183,72,.34); }
+.adm-tag.ok{ color:#5fe0a6; border-color:rgba(95,224,166,.32); }
+.adm-tag.bad{ color:#ff8b98; border-color:rgba(255,139,152,.32); }
+
+.receipt-view{
+  margin-top:8px;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.receipt-view img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
 /* ANIMATSIYANI KAMAYTIRISH */
 
 @media (prefers-reduced-motion:reduce){
@@ -3984,7 +4422,7 @@ body{
 
 <!-- DAROMAD -->
 
-<div class="panel hero-panel">
+<div class="panel hero-panel" id="heroPanel">
 
 <div class="label hero-label">
   TO'LANGAN DAROMADLAR
@@ -4020,9 +4458,70 @@ body{
 </div>
 
 
+<!-- SARMOYA HOLATI -->
+
+<div class="panel inv-panel" id="invPanel" style="display:none;">
+
+<div class="section-title">
+  SARMOYA
+</div>
+
+<div class="inv-head">
+
+<div>
+  <div class="label">HOLAT</div>
+  <div class="inv-state" id="invStateText">—</div>
+</div>
+
+<span class="inv-badge" id="invBadge">—</span>
+
+</div>
+
+<div class="inv-amount" id="invAmount">—</div>
+
+<div class="inv-sub" id="invSub"></div>
+
+<div class="inv-timeline" id="invTimeline"></div>
+
+<div class="inv-block gold" id="invPrizeBlock" style="display:none;">
+  <span>YUTUQ SUMMASI</span>
+  <strong id="invPrizeValue">—</strong>
+</div>
+
+<div class="inv-block" id="invCommissionBlock" style="display:none;">
+  <span>KOMISSIYA</span>
+  <strong id="invCommissionValue">—</strong>
+</div>
+
+<div class="admin-note" id="invAdminNote" style="display:none;"></div>
+
+<button
+  class="btn withdraw-btn"
+  type="button"
+  id="invWithdrawBtn"
+  style="display:none;"
+  onclick="withdrawInvestment()">
+
+  YUTUQNI OLISH
+
+</button>
+
+</div>
+
+
+<button
+  class="btn invest-btn"
+  type="button"
+  id="investBtn"
+  onclick="openInvest()">
+
+  SARMOYA KIRITISH
+
+</button>
+
 <!-- HISOB KO'RSATKICHLARI -->
 
-<div class="panel">
+<div class="panel" id="statsPanel">
 
 <div class="section-title">
   HISOB KO'RSATKICHLARI
@@ -4063,7 +4562,7 @@ body{
 
 <!-- INVESTMENT -->
 
-<div class="panel investment">
+<div class="panel investment" id="legacyInvPanel">
 
 <div
   class="label"
@@ -4372,6 +4871,7 @@ body{
 <button
   class="btn withdraw-btn"
   type="button"
+  id="legacyWithdrawBtn"
   onclick="withdrawPrize()">
 
   YUTUQNI OLISH
@@ -4584,6 +5084,100 @@ body{
 </div>
 
 
+<!-- SARMOYA KIRITISH OYNASI -->
+
+<div class="modal" id="investModal" aria-hidden="true">
+  <div class="modal-card">
+
+    <div class="modal-top">
+      <h3 id="invModalTitle">SARMOYA KIRITISH</h3>
+      <button class="close-btn" type="button" onclick="closeInvest()">×</button>
+    </div>
+
+    <div class="inv-steps">
+      <span id="ivs1" class="on">1 VALYUTA</span>
+      <span id="ivs2">2 PAKET</span>
+      <span id="ivs3">3 TO'LOV</span>
+    </div>
+
+    <!-- 1-QADAM: VALYUTA -->
+    <div id="ivStep1">
+
+      <div class="reg-hint">
+        Avval o'zingizga tegishli valyutani tanlang. Faqat shu valyutadagi
+        paketlar ko'rsatiladi.
+      </div>
+
+      <div class="cur-grid" id="ivCurGrid"></div>
+
+    </div>
+
+    <!-- 2-QADAM: PAKET -->
+    <div id="ivStep2" style="display:none;">
+
+      <div class="reg-hint" id="ivPkgHint">Paketni tanlang.</div>
+
+      <div id="ivPkgList"></div>
+
+      <div class="risk-note">
+        Ko'rsatilgan natija raqamlari — kutilayotgan (prognoz) natija.
+        Ular kafolatlangan foyda emas. Bozor sharoitiga qarab natija
+        o'zgarishi yoki sarmoya qiymati kamayishi mumkin.
+      </div>
+
+      <button class="btn" type="button" onclick="invGoPay()">DAVOM ETISH →</button>
+      <button class="btn register-btn" type="button" onclick="invBack(1)">← ORQAGA</button>
+
+    </div>
+
+    <!-- 3-QADAM: TO'LOV -->
+    <div id="ivStep3" style="display:none;">
+
+      <div class="pay-box" id="ivSummary"></div>
+
+      <div class="field" id="ivMethodField" style="margin-top:12px;">
+        <label>TO'LOV REKVIZITI</label>
+        <select id="ivMethod" onchange="invRenderMethod()"></select>
+      </div>
+
+      <div class="pay-box" id="ivMethodBox"></div>
+
+      <button class="btn register-btn" type="button" onclick="invCopyCard()">
+        NUSXALASH
+      </button>
+
+      <div class="field" style="margin-top:12px;">
+        <label>IZOH (ixtiyoriy)</label>
+        <input id="ivNote" type="text" placeholder="To'lov haqida qisqa izoh">
+      </div>
+
+      <input id="ivReceipt" type="file" accept="image/*" style="display:none;"
+             onchange="invPickReceipt()">
+
+      <button class="btn file-btn" type="button" onclick="invOpenFile()">
+        📎 CHEK YUBORISH (rasm)
+      </button>
+
+      <div class="file-name" id="ivFileName"></div>
+
+      <button class="btn" type="button" id="ivPaidBtn" onclick="invPaid()">
+        TO'LOV QILDIM
+      </button>
+
+      <button class="btn register-btn" type="button" onclick="invBack(2)">← ORQAGA</button>
+
+      <div class="risk-note">
+        To'lov avtomatik tasdiqlanmaydi. Admin chekni tekshirib tasdiqlagandan
+        keyingina sarmoya kabinetingizda faol holatga o'tadi.
+      </div>
+
+    </div>
+
+    <div class="inv-msg" id="ivMsg"></div>
+
+  </div>
+</div>
+
 <!-- MAXFIY ADMIN PANEL -->
 <div class="modal" id="adminLoginModal" aria-hidden="true">
   <div class="modal-card">
@@ -4640,6 +5234,100 @@ body{
           <button class="btn admin-danger" type="button" onclick="lockAdmin()">ADMINNI QULFLASH</button>
         </div>
 
+        <!-- SARMOYA TO'LOV SO'ROVLARI -->
+        <div class="admin-status" style="margin-top:18px;">
+          <span>SARMOYA / TO'LOV SO'ROVLARI</span>
+          <strong id="invCountLabel">0 yangi</strong>
+        </div>
+        <div id="admInvList" class="admin-list"></div>
+        <div class="admin-actions">
+          <button class="btn register-btn" type="button" onclick="loadAdminInvestments()">
+            TO'LOVLARNI YANGILASH
+          </button>
+        </div>
+
+        <!-- PAKETLAR -->
+        <div class="admin-status" style="margin-top:18px;">
+          <span>SARMOYA PAKETLARI</span>
+          <strong id="pkgCountLabel">0</strong>
+        </div>
+        <div id="admPkgList" class="admin-list"></div>
+
+        <div class="adm-mini-form">
+          <input type="hidden" id="pk_id">
+          <div class="field">
+            <label>VALYUTA</label>
+            <select id="pk_currency">
+              <option value="UZS">UZS</option>
+              <option value="RUB">RUB</option>
+              <option value="TJS">TJS</option>
+              <option value="KZT">KZT</option>
+              <option value="KGS">KGS</option>
+              <option value="USD">USD</option>
+              <option value="TRY">TRY</option>
+            </select>
+          </div>
+          <div class="field"><label>TARTIB</label><input id="pk_sort" type="number" placeholder="1"></div>
+          <div class="field wide"><label>NOMI</label><input id="pk_title" type="text" placeholder="Masalan: 1-paket"></div>
+          <div class="field"><label>BOSHLANG'ICH SUMMA</label><input id="pk_amount" type="number" inputmode="decimal" placeholder="450000"></div>
+          <div class="field"><label>KUTILAYOTGAN NATIJA</label><input id="pk_payout" type="number" inputmode="decimal" placeholder="15200000"></div>
+          <div class="field"><label>ISH HAQI (%)</label><input id="pk_fee" type="number" inputmode="decimal" placeholder="10"></div>
+          <div class="field"><label>MINIMAL SUMMA</label><input id="pk_min" type="number" inputmode="decimal" placeholder="450000"></div>
+          <div class="field wide">
+            <label>HOLATI</label>
+            <select id="pk_active">
+              <option value="true">Aktiv</option>
+              <option value="false">Nofaol</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn" type="button" onclick="savePackage()">PAKETNI SAQLASH</button>
+          <button class="btn register-btn" type="button" onclick="newPackageForm()">+ YANGI PAKET</button>
+        </div>
+
+        <!-- TO'LOV REKVIZITLARI -->
+        <div class="admin-status" style="margin-top:18px;">
+          <span>TO'LOV REKVIZITLARI</span>
+          <strong id="metCountLabel">0</strong>
+        </div>
+        <div id="admMetList" class="admin-list"></div>
+
+        <div class="adm-mini-form">
+          <input type="hidden" id="mt_id">
+          <div class="field">
+            <label>VALYUTA</label>
+            <select id="mt_currency">
+              <option value="UZS">UZS</option>
+              <option value="RUB">RUB</option>
+              <option value="TJS">TJS</option>
+              <option value="KZT">KZT</option>
+              <option value="KGS">KGS</option>
+              <option value="USD">USD</option>
+              <option value="TRY">TRY</option>
+            </select>
+          </div>
+          <div class="field"><label>TARTIB</label><input id="mt_sort" type="number" placeholder="1"></div>
+          <div class="field"><label>DAVLAT</label><input id="mt_country" type="text" placeholder="O'zbekiston"></div>
+          <div class="field"><label>BANK NOMI</label><input id="mt_bank" type="text" placeholder="Kapitalbank"></div>
+          <div class="field wide"><label>KARTA / HISOB RAQAMI</label><input id="mt_card" type="text" placeholder="8600 1234 5678 9012"></div>
+          <div class="field wide"><label>KARTA EGASI</label><input id="mt_holder" type="text" placeholder="F.I.SH."></div>
+          <div class="field wide"><label>QO'SHIMCHA IZOH</label><input id="mt_extra" type="text" placeholder="Ixtiyoriy"></div>
+          <div class="field wide">
+            <label>HOLATI</label>
+            <select id="mt_active">
+              <option value="true">Aktiv</option>
+              <option value="false">Nofaol</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn" type="button" onclick="saveMethod()">REKVIZITNI SAQLASH</button>
+          <button class="btn register-btn" type="button" onclick="newMethodForm()">+ YANGI REKVIZIT</button>
+        </div>
+
         <!-- PAROLNI ALMASHTIRISH -->
         <div class="admin-status" style="margin-top:18px;"><span>ADMIN PAROLI</span><strong>Almashtirish</strong></div>
         <div class="field">
@@ -4690,6 +5378,8 @@ body{
               <option value="O'ZBEKISTON">O'zbekiston</option>
               <option value="ROSSIYA">Rossiya</option>
               <option value="TOJIKISTON">Tojikiston</option>
+              <option value="QOZOGISTON">Qozog'iston</option>
+              <option value="QIRGIZISTON">Qirg'iziston</option>
               <option value="TURKIYA">Turkiya</option>
             </select>
           </div>
@@ -4701,6 +5391,8 @@ body{
               <option value="USD">USD — dollar</option>
               <option value="TRY">TRY — turk lirasi</option>
               <option value="TJS">TJS — somoni</option>
+              <option value="KZT">KZT — tenge</option>
+              <option value="KGS">KGS — som</option>
             </select>
           </div>
           <div class="field wide">
@@ -5035,6 +5727,45 @@ function translateError(raw){
   if(raw.indexOf("REQUEST_NOT_FOUND") > -1){
     return "So'rov topilmadi.";
   }
+  if(raw.indexOf("INVESTMENT_PENDING") > -1){
+    return "Sizda tekshirilmoqda holatidagi to'lov bor. Admin javobini kuting.";
+  }
+  if(raw.indexOf("INVESTMENT_ACTIVE") > -1){
+    return "Sizda allaqachon faol sarmoya bor.";
+  }
+  if(raw.indexOf("PACKAGE_NOT_FOUND") > -1){
+    return "Paket topilmadi yoki nofaol qilingan.";
+  }
+  if(raw.indexOf("METHOD_NOT_FOUND") > -1){
+    return "To'lov rekviziti topilmadi.";
+  }
+  if(raw.indexOf("AMOUNT_TOO_SMALL") > -1){
+    return "Summa paketning minimal summasidan kichik.";
+  }
+  if(raw.indexOf("AMOUNT_REQUIRED") > -1){
+    return "Summani kiriting.";
+  }
+  if(raw.indexOf("CURRENCY_REQUIRED") > -1){
+    return "Valyutani tanlang.";
+  }
+  if(raw.indexOf("RECEIPT_TOO_BIG") > -1){
+    return "Chek rasmi juda katta. Kichikroq rasm yuboring.";
+  }
+  if(raw.indexOf("RECEIPT_INVALID") > -1){
+    return "Chek fayli noto'g'ri. Faqat rasm yuboring.";
+  }
+  if(raw.indexOf("INVESTMENT_NOT_FOUND") > -1){
+    return "Sarmoya yozuvi topilmadi.";
+  }
+  if(raw.indexOf("INVESTMENT_REJECTED") > -1){
+    return "Bu to'lov rad etilgan. Qaytadan so'rov yuboring.";
+  }
+  if(raw.indexOf("STAGE_INVALID") > -1){
+    return "Bosqich qiymati noto'g'ri.";
+  }
+  if(raw.indexOf("CARD_REQUIRED") > -1){
+    return "Karta / hisob raqamini kiriting.";
+  }
   return raw;
 }
 
@@ -5054,7 +5785,9 @@ const CURRENCIES = {
   RUB:{code:"RUB", name:"rubl",        grid:"RUBL",   short:"₽",      locale:"ru-RU", prefix:"",  suffix:" ₽"},
   USD:{code:"USD", name:"dollar",      grid:"DOLLAR", short:"$",      locale:"en-US", prefix:"$", suffix:""},
   TRY:{code:"TRY", name:"turk lirasi", grid:"LIRA",   short:"₺",      locale:"en-US", prefix:"₺", suffix:""},
-  TJS:{code:"TJS", name:"somoni",      grid:"SOMONI", short:"somoni", locale:"ru-RU", prefix:"",  suffix:" somoni"}
+  TJS:{code:"TJS", name:"somoni",      grid:"SOMONI", short:"somoni", locale:"ru-RU", prefix:"",  suffix:" somoni"},
+  KZT:{code:"KZT", name:"tenge",       grid:"TENGE",  short:"₸",      locale:"ru-RU", prefix:"",  suffix:" ₸"},
+  KGS:{code:"KGS", name:"som",         grid:"SOM",    short:"som",    locale:"ru-RU", prefix:"",  suffix:" som"}
 };
 
 function curInfo(code){
@@ -5088,6 +5821,8 @@ const COUNTRIES = {
   "O'ZBEKISTON":"O'zbekiston",
   "ROSSIYA":"Rossiya",
   "TOJIKISTON":"Tojikiston",
+  "QOZOGISTON":"Qozog'iston",
+  "QIRGIZISTON":"Qirg'iziston",
   "TURKIYA":"Turkiya"
 };
 
@@ -5104,6 +5839,14 @@ const BANKS_BY_COUNTRY = {
   "TOJIKISTON":[
     ["alif","Alif"],["dushanbecity","Dushanbe City"],["eskhata","Eskhata"],
     ["amonatbank","Amonatbank"],["visa","Visa"],["mastercard","Mastercard"]
+  ],
+  "QOZOGISTON":[
+    ["kaspi","Kaspi Bank"],["halyk","Halyk Bank"],["forte","ForteBank"],
+    ["visa","Visa"],["mastercard","Mastercard"]
+  ],
+  "QIRGIZISTON":[
+    ["optima","Optima Bank"],["demirbank","Demir Bank"],["mbank","MBank"],
+    ["visa","Visa"],["mastercard","Mastercard"]
   ],
   "TURKIYA":[
     ["ziraat","Ziraat Bankası"],["isbankasi","İş Bankası"],["garanti","Garanti BBVA"],
@@ -5600,6 +6343,8 @@ async function continueApp(){
   showScreen(
     "dashboard"
   );
+
+  loadInvestState();
 
 }
 
@@ -6593,6 +7338,9 @@ async function unlockAdmin(){
   backToList();
   loadAdminUsers();
   loadAdminRequests();
+  loadAdminInvestments();
+  loadAdminPackages();
+  loadAdminMethods();
 }
 
 function lockAdmin(){
@@ -7233,6 +7981,8 @@ function logoutUser(){
 
   currentUser = null;
   loginCode = "";
+  invState = null;
+  closeInvest();
   hideWatermark();
   adminUnlockedUntil = 0;
   closeAdminPanel();
@@ -8567,6 +9317,1257 @@ async function lmInit(){
       lmRefresh();
     }
   });
+}
+
+
+/* =========================================================
+   SARMOYA / TO'LOV TIZIMI (mijoz tomoni)
+   ========================================================= */
+
+let invState = null;
+let ivCurrency = "";
+let ivPackages = [];
+let ivPackage = null;
+let ivMethods = [];
+let ivReceiptData = "";
+
+function userCreds(){
+
+  if(!currentUser || !currentUser.name || !loginCode){
+    return null;
+  }
+
+  return {
+    p_name: currentUser.name,
+    p_surname: currentUser.surname,
+    p_code: loginCode
+  };
+}
+
+function ivSay(text, kind){
+
+  const box = document.getElementById("ivMsg");
+  if(!box){ return; }
+
+  box.textContent = text || "";
+  box.classList.remove("ok", "bad");
+
+  if(kind){ box.classList.add(kind); }
+}
+
+function ivStep(step){
+
+  [1,2,3].forEach(function(n){
+
+    const body = document.getElementById("ivStep" + n);
+    const tab = document.getElementById("ivs" + n);
+
+    if(body){ body.style.display = (n === step) ? "block" : "none"; }
+    if(tab){
+      tab.classList.remove("on");
+      if(n === step){ tab.classList.add("on"); }
+    }
+  });
+}
+
+function invBack(step){
+  ivSay("", "");
+  ivStep(step);
+}
+
+function openInvest(){
+
+  if(!userCreds()){
+    alert("Kabinetga qaytadan kiring.");
+    return;
+  }
+
+  ivCurrency = "";
+  ivPackage = null;
+  ivPackages = [];
+  ivMethods = [];
+  ivReceiptData = "";
+
+  const fileName = document.getElementById("ivFileName");
+  if(fileName){ fileName.textContent = ""; }
+
+  const noteEl = document.getElementById("ivNote");
+  if(noteEl){ noteEl.value = ""; }
+
+  ivSay("", "");
+  ivStep(1);
+
+  const modal = document.getElementById("investModal");
+
+  if(modal){
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  loadInvestCurrencies();
+}
+
+function closeInvest(){
+
+  const modal = document.getElementById("investModal");
+
+  if(modal){
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+async function loadInvestCurrencies(){
+
+  const grid = document.getElementById("ivCurGrid");
+  const creds = userCreds();
+
+  if(!grid || !creds){ return; }
+
+  grid.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("user_currencies", creds);
+  }catch(err){
+    grid.innerHTML = '<div class="combo-empty">' + escapeHtml(err.message) + "</div>";
+    return;
+  }
+
+  if(!Array.isArray(rows) || !rows.length){
+    grid.innerHTML = '<div class="combo-empty">Hozircha paketlar qo\'shilmagan.</div>';
+    return;
+  }
+
+  const own = String(currentUser && currentUser.currency ? currentUser.currency : "").toUpperCase();
+
+  rows.sort(function(a, b){
+    if(a.currency === own){ return -1; }
+    if(b.currency === own){ return 1; }
+    return String(a.currency).localeCompare(String(b.currency));
+  });
+
+  grid.innerHTML = rows.map(function(row){
+
+    const info = curInfo(row.currency);
+    const min = row.min_amount != null
+      ? ("min " + fmtMoney(row.min_amount, info.code))
+      : (row.packages + " paket");
+
+    return '<button class="cur-btn" type="button" onclick="invPickCurrency(\'' +
+      escapeHtml(row.currency) + '\')"><b>' + escapeHtml(info.code) + " — " +
+      escapeHtml(info.name) + "</b><small>" + escapeHtml(min) + "</small></button>";
+
+  }).join("");
+}
+
+async function invPickCurrency(code){
+
+  ivCurrency = String(code || "").toUpperCase();
+  ivPackage = null;
+
+  const creds = userCreds();
+  const list = document.getElementById("ivPkgList");
+  const hint = document.getElementById("ivPkgHint");
+
+  if(!creds || !list){ return; }
+
+  ivStep(2);
+  ivSay("", "");
+
+  const info = curInfo(ivCurrency);
+
+  if(hint){
+    hint.textContent = "Valyuta: " + info.code + " — " + info.name +
+      ". Paketni tanlab DAVOM ETISH tugmasini bosing.";
+  }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("user_packages", Object.assign({}, creds, {p_currency: ivCurrency}));
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeHtml(err.message) + "</div>";
+    return;
+  }
+
+  ivPackages = Array.isArray(rows) ? rows : [];
+
+  if(!ivPackages.length){
+    list.innerHTML = '<div class="combo-empty">Bu valyutada paket yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = ivPackages.map(function(pkg, index){
+
+    const fee = pkg.fee_percent != null
+      ? ('<span class="pkg-fee">ISH HAQI ' + fmtNumber(pkg.fee_percent) + "%</span>")
+      : "";
+
+    const payout = pkg.payout != null
+      ? ('<div class="pkg-row"><span>KUTILAYOTGAN NATIJA</span><b>' +
+         escapeHtml(fmtMoney(pkg.payout, info.code)) + "</b></div>")
+      : ('<div class="pkg-row"><span>NATIJA</span><b>Aniqlanmoqda</b></div>');
+
+    return '<button class="pkg-card" type="button" id="ivpkg_' + index +
+      '" onclick="invPickPackage(' + index + ')">' +
+      '<div class="pkg-top"><span class="pkg-amount">' +
+      escapeHtml(fmtMoney(pkg.amount, info.code)) + "</span>" + fee + "</div>" +
+      payout +
+      (pkg.title ? '<div class="pkg-row"><span>' + escapeHtml(pkg.title) + "</span><b></b></div>" : "") +
+      "</button>";
+
+  }).join("");
+}
+
+function invPickPackage(index){
+
+  ivPackage = ivPackages[index] || null;
+
+  ivPackages.forEach(function(pkg, n){
+    const el = document.getElementById("ivpkg_" + n);
+    if(el){
+      el.classList.remove("on");
+      if(n === index){ el.classList.add("on"); }
+    }
+  });
+
+  ivSay("", "");
+}
+
+async function invGoPay(){
+
+  if(!ivPackage){
+    ivSay("Avval paketni tanlang.", "bad");
+    return;
+  }
+
+  const creds = userCreds();
+  const info = curInfo(ivCurrency);
+  const summary = document.getElementById("ivSummary");
+  const select = document.getElementById("ivMethod");
+
+  if(!creds || !summary || !select){ return; }
+
+  ivStep(3);
+  ivSay("", "");
+
+  const payoutLine = ivPackage.payout != null
+    ? ('<div class="pay-line"><span>KUTILAYOTGAN NATIJA</span><strong>' +
+       escapeHtml(fmtMoney(ivPackage.payout, info.code)) + "</strong></div>")
+    : "";
+
+  const feeLine = ivPackage.fee_percent != null
+    ? ('<div class="pay-line"><span>ISH HAQI</span><strong>' +
+       fmtNumber(ivPackage.fee_percent) + "%</strong></div>")
+    : "";
+
+  summary.innerHTML =
+    '<div class="pay-line"><span>PAKET</span><strong>' +
+      escapeHtml(ivPackage.title || "Paket") + "</strong></div>" +
+    '<div class="pay-line"><span>TO\'LANADIGAN SUMMA</span><strong>' +
+      escapeHtml(fmtMoney(ivPackage.amount, info.code)) + "</strong></div>" +
+    '<div class="pay-line"><span>VALYUTA</span><strong>' +
+      escapeHtml(info.code + " — " + info.name) + "</strong></div>" +
+    payoutLine + feeLine;
+
+  select.innerHTML = '<option value="">Yuklanmoqda...</option>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("user_pay_methods", Object.assign({}, creds, {p_currency: ivCurrency}));
+  }catch(err){
+    ivSay(err.message, "bad");
+    rows = [];
+  }
+
+  ivMethods = Array.isArray(rows) ? rows : [];
+
+  if(!ivMethods.length){
+    select.innerHTML = '<option value="">Rekvizit qo\'shilmagan</option>';
+    const box = document.getElementById("ivMethodBox");
+    if(box){
+      box.innerHTML = '<div class="inv-msg bad">Bu valyuta uchun to\'lov rekviziti ' +
+        "hozircha kiritilmagan. Iltimos, admin bilan bog'laning.</div>";
+    }
+    return;
+  }
+
+  select.innerHTML = ivMethods.map(function(m){
+    return '<option value="' + escapeHtml(m.id) + '">' +
+      escapeHtml((m.bank_name || "Bank") + (m.country ? " • " + m.country : "")) +
+      "</option>";
+  }).join("");
+
+  invRenderMethod();
+}
+
+function invCurrentMethod(){
+
+  const select = document.getElementById("ivMethod");
+  const id = select ? select.value : "";
+
+  return ivMethods.filter(function(m){ return m.id === id; })[0] || null;
+}
+
+function invRenderMethod(){
+
+  const box = document.getElementById("ivMethodBox");
+  const method = invCurrentMethod();
+
+  if(!box){ return; }
+
+  if(!method){
+    box.innerHTML = "";
+    return;
+  }
+
+  box.innerHTML =
+    '<div class="pay-line"><span>BANK / KARTA</span><strong>' +
+      escapeHtml(method.bank_name || "—") + "</strong></div>" +
+    '<div class="pay-line"><span>KARTA EGASI</span><strong>' +
+      escapeHtml(method.holder || "—") + "</strong></div>" +
+    (method.extra
+      ? '<div class="pay-line"><span>IZOH</span><strong>' + escapeHtml(method.extra) + "</strong></div>"
+      : "") +
+    '<div class="pay-card"><b id="ivCardNumber">' +
+      escapeHtml(method.card_number || "—") + "</b><small>TO'LOV REKVIZITI</small></div>";
+}
+
+function invCopyCard(){
+
+  const method = invCurrentMethod();
+
+  if(!method || !method.card_number){
+    ivSay("Nusxalash uchun rekvizit yo'q.", "bad");
+    return;
+  }
+
+  const text = String(method.card_number);
+  let copied = false;
+
+  function done(){
+
+    if(copied){ return; }
+
+    copied = true;
+    ivSay("Rekvizit nusxalandi.", "ok");
+    tinyVibration(18);
+  }
+
+  function fallback(){
+
+    if(copied){ return; }
+
+    const tmp = document.createElement("textarea");
+    tmp.value = text;
+    tmp.setAttribute("readonly", "readonly");
+    tmp.style.position = "fixed";
+    tmp.style.left = "-9999px";
+
+    document.body.appendChild(tmp);
+    tmp.select();
+
+    let ok = false;
+
+    try{
+      ok = document.execCommand("copy");
+    }catch(err){
+      ok = false;
+    }
+
+    document.body.removeChild(tmp);
+
+    if(ok){
+      done();
+    }else{
+      ivSay("Nusxalash ishlamadi. Raqamni qo'lda ko'chiring.", "bad");
+    }
+  }
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+    setTimeout(fallback, 900);
+    return;
+  }
+
+  fallback();
+}
+
+function invOpenFile(){
+  const input = document.getElementById("ivReceipt");
+  if(input){ input.click(); }
+}
+
+function invPickReceipt(){
+
+  const input = document.getElementById("ivReceipt");
+  const file = input && input.files && input.files[0];
+  const label = document.getElementById("ivFileName");
+
+  if(!file){ return; }
+
+  if(String(file.type).indexOf("image/") !== 0){
+    ivSay("Faqat rasm (screenshot yoki foto) yuborish mumkin.", "bad");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(){
+
+    const img = new Image();
+
+    img.onload = function(){
+
+      const max = 1100;
+      let w = img.width;
+      let h = img.height;
+
+      if(w > max || h > max){
+        const k = Math.min(max / w, max / h);
+        w = Math.round(w * k);
+        h = Math.round(h * k);
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+
+      ivReceiptData = canvas.toDataURL("image/jpeg", 0.72);
+
+      if(ivReceiptData.length > 860000){
+        ivReceiptData = canvas.toDataURL("image/jpeg", 0.5);
+      }
+
+      if(ivReceiptData.length > 880000){
+        ivReceiptData = "";
+        ivSay("Rasm juda katta. Kichikroq screenshot yuboring.", "bad");
+        return;
+      }
+
+      if(label){
+        label.textContent = "Chek tanlandi \u2022 " +
+          Math.round(ivReceiptData.length / 1024) + " KB";
+      }
+
+      ivSay("Chek tanlandi. Endi TO'LOV QILDIM tugmasini bosing.", "ok");
+    };
+
+    img.onerror = function(){
+      ivSay("Rasmni o'qib bo'lmadi.", "bad");
+    };
+
+    img.src = String(reader.result);
+  };
+
+  reader.onerror = function(){
+    ivSay("Faylni o'qib bo'lmadi.", "bad");
+  };
+
+  reader.readAsDataURL(file);
+}
+
+async function invPaid(){
+
+  const creds = userCreds();
+  const button = document.getElementById("ivPaidBtn");
+
+  if(!creds){
+    ivSay("Kabinetga qaytadan kiring.", "bad");
+    return;
+  }
+
+  if(!ivPackage){
+    ivSay("Paket tanlanmagan.", "bad");
+    return;
+  }
+
+  const method = invCurrentMethod();
+  const noteEl = document.getElementById("ivNote");
+  const note = noteEl ? String(noteEl.value || "").trim() : "";
+
+  if(button){
+    button.disabled = true;
+    button.textContent = "YUBORILMOQDA...";
+  }
+
+  let res = null;
+
+  try{
+
+    res = await rpc("user_start_investment", Object.assign({}, creds, {
+      p_package_id: ivPackage.id,
+      p_currency: ivCurrency,
+      p_amount: ivPackage.amount,
+      p_method_id: method ? method.id : null,
+      p_note: note
+    }));
+
+    if(ivReceiptData && res && res.id){
+      await rpc("user_send_receipt", Object.assign({}, creds, {
+        p_id: res.id,
+        p_receipt: ivReceiptData,
+        p_note: note
+      }));
+    }
+
+  }catch(err){
+
+    ivSay(err.message, "bad");
+
+    if(button){
+      button.disabled = false;
+      button.textContent = "TO'LOV QILDIM";
+    }
+
+    return;
+  }
+
+  if(button){
+    button.disabled = false;
+    button.textContent = "TO'LOV QILDIM";
+  }
+
+  ivReceiptData = "";
+
+  await loadInvestState();
+
+  closeInvest();
+  window.scrollTo(0, 0);
+
+  alert(
+    "SO'ROV YUBORILDI\n\n" +
+    "To'lov avtomatik tasdiqlanmaydi. Admin chekni tekshirib tasdiqlagandan " +
+    "keyin sarmoya kabinetingizda faol holatga o'tadi."
+  );
+}
+
+/* --------- KABINET: BOSQICHMA-BOSQICH HOLAT --------- */
+
+function invShow(id, on, mode){
+
+  const el = document.getElementById(id);
+  if(!el){ return; }
+
+  el.style.display = on ? (mode || "block") : "none";
+}
+
+async function loadInvestState(){
+
+  const creds = userCreds();
+
+  if(!creds){
+    invState = null;
+    renderInvestState();
+    return;
+  }
+
+  try{
+    invState = await rpc("user_state", creds);
+  }catch(err){
+    invState = null;
+  }
+
+  renderInvestState();
+}
+
+function invTimelineHtml(state){
+
+  const active = state.status === "active";
+  const stage = String(state.stage || "");
+
+  const steps = [
+    {t:"So'rov yuborildi", done:true},
+    {t:"To'lov tasdiqlandi", done:active},
+    {t:"Jarayonda", done:active && (stage === "progress" || stage === "result")},
+    {t:"Natija tayyor", done:active && stage === "result"}
+  ];
+
+  let currentSet = false;
+
+  return steps.map(function(step){
+
+    let cls = step.done ? "done" : "";
+
+    if(!step.done && !currentSet){
+      cls = "now";
+      currentSet = true;
+    }
+
+    return '<div class="inv-step ' + cls + '"><i></i>' + escapeHtml(step.t) + "</div>";
+
+  }).join("");
+}
+
+function renderInvestState(){
+
+  const legacy = ["heroPanel", "statsPanel", "legacyInvPanel", "legacyWithdrawBtn"];
+  const has = invState && invState.has_investment;
+
+  if(!has){
+
+    invShow("invPanel", false);
+    invShow("investBtn", true);
+
+    legacy.forEach(function(id){ invShow(id, true); });
+
+    return;
+  }
+
+  const info = curInfo(invState.currency);
+  const status = String(invState.status || "");
+  const stage = String(invState.stage || "");
+
+  if(status === "rejected"){
+
+    legacy.forEach(function(id){ invShow(id, true); });
+    invShow("investBtn", true);
+
+  }else{
+
+    legacy.forEach(function(id){ invShow(id, false); });
+    invShow("investBtn", false);
+  }
+
+  invShow("invPanel", true);
+
+  let badge = "TEKSHIRILMOQDA";
+  let badgeCls = "wait";
+  let stateText = "To'lov tekshirilmoqda";
+  let sub = "Chek admin tomonidan tekshirilmoqda. Tasdiqlangandan keyin sarmoya faol bo'ladi.";
+
+  if(status === "rejected"){
+    badge = "RAD ETILDI";
+    badgeCls = "bad";
+    stateText = "To'lov rad etildi";
+    sub = "To'lov tasdiqlanmadi. Admin bilan bog'lanib qayta urinib ko'ring.";
+  }
+
+  if(status === "active"){
+
+    badge = "FAOL";
+    badgeCls = "ok";
+    stateText = "Sarmoya — FAOL";
+    sub = "Sarmoya ustida ish olib borilmoqda.";
+
+    if(stage === "progress"){
+      badge = "JARAYONDA";
+      sub = "Sarmoya ustida ish olib borilmoqda.";
+    }
+
+    if(stage === "result"){
+      badge = "NATIJA TAYYOR";
+      sub = "Natija tayyor. Quyidagi ma'lumotlarni ko'rib chiqing.";
+    }
+
+    if(stage !== "result" || invState.prize == null){
+      sub += " Natija tayyor bo'lganda sizga xabar beriladi.";
+    }
+  }
+
+  const badgeEl = document.getElementById("invBadge");
+
+  if(badgeEl){
+    badgeEl.textContent = badge;
+    badgeEl.classList.remove("wait", "ok", "bad");
+    badgeEl.classList.add(badgeCls);
+  }
+
+  setText("invStateText", stateText);
+  setText("invAmount", fmtMoney(invState.amount, info.code));
+  setText("invSub", sub);
+
+  const timeline = document.getElementById("invTimeline");
+  if(timeline){ timeline.innerHTML = invTimelineHtml(invState); }
+
+  const hasPrize = invState.prize != null;
+
+  invShow("invPrizeBlock", hasPrize);
+
+  if(hasPrize){
+    setText("invPrizeValue", fmtMoney(invState.prize, info.code));
+  }
+
+  const hasCommission = (invState.commission != null) ||
+                        (invState.commission_percent != null);
+
+  invShow("invCommissionBlock", hasCommission);
+
+  if(hasCommission){
+
+    let text = "";
+
+    if(invState.commission != null){
+      text = fmtMoney(invState.commission, info.code);
+    }
+
+    if(invState.commission_percent != null){
+      text += (text ? " • " : "") + fmtNumber(invState.commission_percent) + "%";
+    }
+
+    setText("invCommissionValue", text);
+  }
+
+  invShow("invWithdrawBtn", invState.withdraw_open === true);
+
+  const noteBox = document.getElementById("invAdminNote");
+
+  if(noteBox){
+
+    const note = maskSensitive(String(invState.admin_note || ""));
+
+    if(note){
+      noteBox.textContent = note;
+      noteBox.style.display = "block";
+    }else{
+      noteBox.style.display = "none";
+    }
+  }
+}
+
+function withdrawInvestment(){
+
+  if(!invState || invState.withdraw_open !== true){
+    alert("Yechib olish hozircha ochilmagan.");
+    return;
+  }
+
+  const info = curInfo(invState.currency);
+
+  alert(
+    "YUTUQNI OLISH\n\n" +
+    (invState.prize != null
+      ? ("Yutuq summasi: " + fmtMoney(invState.prize, info.code) + "\n\n")
+      : "") +
+    "So'rovingiz qabul qilindi. To'lov admin tomonidan kartangizga o'tkaziladi."
+  );
+}
+
+/* =========================================================
+   ADMIN: SARMOYA BOSHQARUVI
+   ========================================================= */
+
+let admInvestments = [];
+let admPackages = [];
+let admMethods = [];
+
+function invStatusTag(row){
+
+  if(row.status === "pending"){ return '<span class="adm-tag wait">TEKSHIRILMOQDA</span>'; }
+  if(row.status === "rejected"){ return '<span class="adm-tag bad">RAD ETILDI</span>'; }
+
+  const map = {
+    confirmed: "TASDIQLANDI",
+    progress: "JARAYONDA",
+    result: "NATIJA TAYYOR"
+  };
+
+  return '<span class="adm-tag ok">FAOL</span>' +
+    '<span class="adm-tag">' + (map[row.stage] || "TASDIQLANDI") + "</span>";
+}
+
+async function loadAdminInvestments(){
+
+  const list = document.getElementById("admInvList");
+  const label = document.getElementById("invCountLabel");
+
+  if(!list){ return; }
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("admin_list_investments", {p_token: adminToken});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  admInvestments = Array.isArray(rows) ? rows : [];
+
+  const fresh = admInvestments.filter(function(r){ return r.status === "pending"; }).length;
+
+  if(label){ label.textContent = fresh + " yangi"; }
+
+  if(!admInvestments.length){
+    list.innerHTML = '<div class="combo-empty">Hozircha to\'lov so\'rovi yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = admInvestments.map(function(row){
+
+    const info = curInfo(row.currency);
+
+    let html = '<div class="adm-inv">' +
+      "<h5>" + escapeText(row.name + " " + row.surname) + "</h5>" +
+      "<p>" + invStatusTag(row) + "</p>" +
+      "<p>SUMMA: <b>" + escapeText(fmtMoney(row.amount, info.code)) + "</b></p>" +
+      "<p>VALYUTA: " + escapeText(info.code) + "</p>";
+
+    if(row.payout != null){
+      html += "<p>KUTILAYOTGAN NATIJA: " + escapeText(fmtMoney(row.payout, info.code)) + "</p>";
+    }
+
+    if(row.bank_name || row.card_number){
+      html += "<p>REKVIZIT: " + escapeText((row.bank_name || "") + " " + (row.card_number || "")) + "</p>";
+    }
+
+    if(row.client_note){
+      html += "<p>MIJOZ IZOHI: " + escapeText(row.client_note) + "</p>";
+    }
+
+    html += "<p>SANA: " + reqDate(row.created_at) + "</p>";
+    html += "<p>CHEK: " + (row.has_receipt ? "yuborilgan" : "yo'q") + "</p>";
+    html += '<div class="receipt-view" id="rc_' + row.id + '" style="display:none;"></div>';
+
+    html += '<div class="row">';
+
+    if(row.has_receipt){
+      html += '<button class="btn register-btn" type="button" onclick="viewReceipt(\'' +
+        row.id + '\')">CHEKNI KO\'RISH</button>';
+    }
+
+    if(row.status === "pending"){
+      html += '<button class="btn req-ok" type="button" onclick="decideInvestment(\'' +
+          row.id + '\', true)">TASDIQLASH</button>' +
+        '<button class="btn req-no" type="button" onclick="decideInvestment(\'' +
+          row.id + '\', false)">RAD ETISH</button>';
+    }
+
+    html += "</div>";
+
+    if(row.status === "active"){
+
+      html += '<div class="adm-mini-form">' +
+        '<div class="field wide"><label>BOSQICH</label><select id="is_' + row.id + '">' +
+          '<option value="confirmed"' + (row.stage === "confirmed" ? " selected" : "") + ">To'lov tasdiqlandi</option>" +
+          '<option value="progress"' + (row.stage === "progress" ? " selected" : "") + ">Jarayonda</option>" +
+          '<option value="result"' + (row.stage === "result" ? " selected" : "") + ">Natija tayyor</option>" +
+        "</select></div>" +
+        '<div class="field"><label>YUTUQ SUMMASI</label><input id="ip_' + row.id +
+          '" type="number" inputmode="decimal" value="' +
+          (row.prize == null ? "" : escapeText(String(row.prize))) + '" placeholder="bo\'sh = yashirin"></div>' +
+        '<div class="field"><label>KOMISSIYA</label><input id="ic_' + row.id +
+          '" type="number" inputmode="decimal" value="' +
+          (row.commission == null ? "" : escapeText(String(row.commission))) + '" placeholder="bo\'sh = yashirin"></div>' +
+        '<div class="field"><label>KOMISSIYA (%)</label><input id="icp_' + row.id +
+          '" type="number" inputmode="decimal" value="' +
+          (row.commission_percent == null ? "" : escapeText(String(row.commission_percent))) + '"></div>' +
+        '<div class="field"><label>YECHIB OLISH</label><select id="iw_' + row.id + '">' +
+          '<option value="false"' + (row.withdraw_open ? "" : " selected") + ">Yopiq</option>" +
+          '<option value="true"' + (row.withdraw_open ? " selected" : "") + ">Ochiq</option>" +
+        "</select></div>" +
+        '<div class="field wide"><label>IZOH (mijoz ko\'radi)</label><input id="in_' + row.id +
+          '" type="text" value="' + escapeText(row.admin_note || "") + '"></div>' +
+        "</div>" +
+        '<div class="row">' +
+          '<button class="btn" type="button" onclick="saveInvestment(\'' + row.id +
+            '\')">SAQLASH</button>' +
+          '<button class="btn req-no" type="button" onclick="deleteInvestment(\'' + row.id +
+            '\')">O\'CHIRISH</button>' +
+        "</div>";
+    }
+
+    if(row.status === "rejected"){
+      html += '<div class="row"><button class="btn req-no" type="button" onclick="deleteInvestment(\'' +
+        row.id + '\')">O\'CHIRISH</button></div>';
+    }
+
+    html += "</div>";
+
+    return html;
+
+  }).join("");
+}
+
+async function viewReceipt(id){
+
+  const box = document.getElementById("rc_" + id);
+
+  if(!box){ return; }
+
+  if(box.style.display === "block"){
+    box.style.display = "none";
+    box.innerHTML = "";
+    return;
+  }
+
+  box.style.display = "block";
+  box.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_investment_receipt", {p_token: adminToken, p_id: id});
+  }catch(err){
+    box.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  if(!res || !res.receipt){
+    box.innerHTML = '<div class="combo-empty">Chek yo\'q.</div>';
+    return;
+  }
+
+  const img = document.createElement("img");
+  img.alt = "Chek";
+  img.src = res.receipt;
+
+  box.innerHTML = "";
+  box.appendChild(img);
+}
+
+async function decideInvestment(id, approve){
+
+  const row = admInvestments.filter(function(r){ return r.id === id; })[0];
+  const who = row ? (row.name + " " + row.surname) : "mijoz";
+
+  const question = approve
+    ? (who + " to'lovi tasdiqlansinmi?\n\nTasdiqlangandan keyin sarmoya kabinetda faol bo'ladi.")
+    : (who + " to'lovi rad etilsinmi?");
+
+  if(!confirm(question)){ return; }
+
+  let note = null;
+
+  if(!approve){
+    note = prompt("Rad etish sababi (mijoz ko'radi, ixtiyoriy):", "");
+  }
+
+  try{
+    await rpc("admin_decide_investment", {
+      p_token: adminToken,
+      p_id: id,
+      p_approve: !!approve,
+      p_note: note
+    });
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadAdminInvestments();
+  adminMsg(approve ? "To'lov tasdiqlandi." : "To'lov rad etildi.", "ok");
+}
+
+async function saveInvestment(id){
+
+  const stage = document.getElementById("is_" + id);
+  const prize = document.getElementById("ip_" + id);
+  const commission = document.getElementById("ic_" + id);
+  const percent = document.getElementById("icp_" + id);
+  const withdraw = document.getElementById("iw_" + id);
+  const note = document.getElementById("in_" + id);
+
+  const data = {
+    stage: stage ? stage.value : "",
+    prize: prize ? String(prize.value || "").trim() : "",
+    commission: commission ? String(commission.value || "").trim() : "",
+    commission_percent: percent ? String(percent.value || "").trim() : "",
+    withdraw_open: withdraw ? (withdraw.value === "true") : false,
+    admin_note: note ? String(note.value || "").trim() : ""
+  };
+
+  try{
+    await rpc("admin_update_investment", {p_token: adminToken, p_id: id, p_data: data});
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadAdminInvestments();
+  adminMsg("Sarmoya holati yangilandi.", "ok");
+}
+
+async function deleteInvestment(id){
+
+  if(!confirm("Bu sarmoya yozuvi butunlay o'chirilsinmi?")){ return; }
+
+  try{
+    await rpc("admin_delete_investment", {p_token: adminToken, p_id: id});
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadAdminInvestments();
+}
+
+/* --------- ADMIN: PAKETLAR --------- */
+
+function pkgValue(id){
+  const el = document.getElementById(id);
+  return el ? String(el.value || "").trim() : "";
+}
+
+function pkgSet(id, value){
+  const el = document.getElementById(id);
+  if(el){ el.value = value == null ? "" : String(value); }
+}
+
+async function loadAdminPackages(){
+
+  const list = document.getElementById("admPkgList");
+  const label = document.getElementById("pkgCountLabel");
+
+  if(!list){ return; }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("admin_list_packages", {p_token: adminToken});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  admPackages = Array.isArray(rows) ? rows : [];
+
+  if(label){ label.textContent = String(admPackages.length); }
+
+  if(!admPackages.length){
+    list.innerHTML = '<div class="combo-empty">Paket yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = admPackages.map(function(row){
+
+    const info = curInfo(row.currency);
+
+    return '<div class="adm-inv">' +
+      "<h5>" + escapeText(info.code + " • " + fmtMoney(row.amount, info.code)) + "</h5>" +
+      "<p>" + escapeText(row.title || "—") + "</p>" +
+      "<p>NATIJA: " + escapeText(row.payout == null ? "—" : fmtMoney(row.payout, info.code)) + "</p>" +
+      "<p>ISH HAQI: " + escapeText(row.fee_percent == null ? "—" : (fmtNumber(row.fee_percent) + "%")) + "</p>" +
+      "<p>MINIMAL: " + escapeText(row.min_amount == null ? "—" : fmtMoney(row.min_amount, info.code)) + "</p>" +
+      "<p>" + (row.active ? '<span class="adm-tag ok">AKTIV</span>' : '<span class="adm-tag bad">NOFAOL</span>') + "</p>" +
+      '<div class="row">' +
+        '<button class="btn register-btn" type="button" onclick="editPackage(\'' + row.id + '\')">TAHRIRLASH</button>' +
+        '<button class="btn req-no" type="button" onclick="deletePackage(\'' + row.id + '\')">O\'CHIRISH</button>' +
+      "</div></div>";
+
+  }).join("");
+}
+
+function newPackageForm(){
+
+  pkgSet("pk_id", "");
+  pkgSet("pk_title", "");
+  pkgSet("pk_amount", "");
+  pkgSet("pk_payout", "");
+  pkgSet("pk_fee", "");
+  pkgSet("pk_min", "");
+  pkgSet("pk_sort", "");
+
+  const active = document.getElementById("pk_active");
+  if(active){ active.value = "true"; }
+
+  adminMsg("Yangi paket ma'lumotini kiriting.", "");
+}
+
+function editPackage(id){
+
+  const row = admPackages.filter(function(r){ return r.id === id; })[0];
+
+  if(!row){ return; }
+
+  pkgSet("pk_id", row.id);
+  pkgSet("pk_title", row.title);
+  pkgSet("pk_amount", row.amount);
+  pkgSet("pk_payout", row.payout);
+  pkgSet("pk_fee", row.fee_percent);
+  pkgSet("pk_min", row.min_amount);
+  pkgSet("pk_sort", row.sort);
+
+  const currency = document.getElementById("pk_currency");
+  if(currency){ currency.value = String(row.currency || "UZS").toUpperCase(); }
+
+  const active = document.getElementById("pk_active");
+  if(active){ active.value = row.active ? "true" : "false"; }
+
+  adminMsg("Paket tahrirlanmoqda.", "");
+}
+
+async function savePackage(){
+
+  const data = {
+    id: pkgValue("pk_id"),
+    currency: pkgValue("pk_currency"),
+    title: pkgValue("pk_title"),
+    amount: pkgValue("pk_amount"),
+    payout: pkgValue("pk_payout"),
+    fee_percent: pkgValue("pk_fee"),
+    min_amount: pkgValue("pk_min"),
+    sort: pkgValue("pk_sort") || "0",
+    active: pkgValue("pk_active") === "true"
+  };
+
+  try{
+    await rpc("admin_save_package", {p_token: adminToken, p_data: data});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  newPackageForm();
+  await loadAdminPackages();
+  adminMsg("Paket saqlandi.", "ok");
+}
+
+async function deletePackage(id){
+
+  if(!confirm("Paket o'chirilsinmi?")){ return; }
+
+  try{
+    await rpc("admin_delete_package", {p_token: adminToken, p_id: id});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  await loadAdminPackages();
+  adminMsg("Paket o'chirildi.", "ok");
+}
+
+/* --------- ADMIN: REKVIZITLAR --------- */
+
+async function loadAdminMethods(){
+
+  const list = document.getElementById("admMetList");
+  const label = document.getElementById("metCountLabel");
+
+  if(!list){ return; }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let rows = [];
+
+  try{
+    rows = await rpc("admin_list_methods", {p_token: adminToken});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  admMethods = Array.isArray(rows) ? rows : [];
+
+  if(label){ label.textContent = String(admMethods.length); }
+
+  if(!admMethods.length){
+    list.innerHTML = '<div class="combo-empty">Rekvizit yo\'q. Pastdagi shakl orqali qo\'shing.</div>';
+    return;
+  }
+
+  list.innerHTML = admMethods.map(function(row){
+
+    return '<div class="adm-inv">' +
+      "<h5>" + escapeText(String(row.currency).toUpperCase() + " • " + (row.bank_name || "—")) + "</h5>" +
+      "<p>KARTA: <b>" + escapeText(row.card_number || "—") + "</b></p>" +
+      "<p>EGASI: " + escapeText(row.holder || "—") + "</p>" +
+      (row.country ? "<p>DAVLAT: " + escapeText(row.country) + "</p>" : "") +
+      (row.extra ? "<p>IZOH: " + escapeText(row.extra) + "</p>" : "") +
+      "<p>" + (row.active ? '<span class="adm-tag ok">AKTIV</span>' : '<span class="adm-tag bad">NOFAOL</span>') + "</p>" +
+      '<div class="row">' +
+        '<button class="btn register-btn" type="button" onclick="editMethod(\'' + row.id + '\')">TAHRIRLASH</button>' +
+        '<button class="btn req-no" type="button" onclick="deleteMethod(\'' + row.id + '\')">O\'CHIRISH</button>' +
+      "</div></div>";
+
+  }).join("");
+}
+
+function newMethodForm(){
+
+  pkgSet("mt_id", "");
+  pkgSet("mt_country", "");
+  pkgSet("mt_bank", "");
+  pkgSet("mt_card", "");
+  pkgSet("mt_holder", "");
+  pkgSet("mt_extra", "");
+  pkgSet("mt_sort", "");
+
+  const active = document.getElementById("mt_active");
+  if(active){ active.value = "true"; }
+
+  adminMsg("Yangi rekvizit ma'lumotini kiriting.", "");
+}
+
+function editMethod(id){
+
+  const row = admMethods.filter(function(r){ return r.id === id; })[0];
+
+  if(!row){ return; }
+
+  pkgSet("mt_id", row.id);
+  pkgSet("mt_country", row.country);
+  pkgSet("mt_bank", row.bank_name);
+  pkgSet("mt_card", row.card_number);
+  pkgSet("mt_holder", row.holder);
+  pkgSet("mt_extra", row.extra);
+  pkgSet("mt_sort", row.sort);
+
+  const currency = document.getElementById("mt_currency");
+  if(currency){ currency.value = String(row.currency || "UZS").toUpperCase(); }
+
+  const active = document.getElementById("mt_active");
+  if(active){ active.value = row.active ? "true" : "false"; }
+
+  adminMsg("Rekvizit tahrirlanmoqda.", "");
+}
+
+async function saveMethod(){
+
+  const data = {
+    id: pkgValue("mt_id"),
+    currency: pkgValue("mt_currency"),
+    country: pkgValue("mt_country"),
+    bank_name: pkgValue("mt_bank"),
+    card_number: pkgValue("mt_card"),
+    holder: pkgValue("mt_holder"),
+    extra: pkgValue("mt_extra"),
+    sort: pkgValue("mt_sort") || "0",
+    active: pkgValue("mt_active") === "true"
+  };
+
+  try{
+    await rpc("admin_save_method", {p_token: adminToken, p_data: data});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  newMethodForm();
+  await loadAdminMethods();
+  adminMsg("Rekvizit saqlandi.", "ok");
+}
+
+async function deleteMethod(id){
+
+  if(!confirm("Rekvizit o'chirilsinmi?")){ return; }
+
+  try{
+    await rpc("admin_delete_method", {p_token: adminToken, p_id: id});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  await loadAdminMethods();
+  adminMsg("Rekvizit o'chirildi.", "ok");
 }
 
 
