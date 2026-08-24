@@ -2647,6 +2647,21 @@ a:active{
           <button class="btn register-btn" type="button" onclick="loadAdminUsers()">YANGILASH</button>
           <button class="btn admin-danger" type="button" onclick="lockAdmin()">ADMINNI QULFLASH</button>
         </div>
+
+        <!-- PAROLNI ALMASHTIRISH -->
+        <div class="admin-status" style="margin-top:18px;"><span>ADMIN PAROLI</span><strong>Almashtirish</strong></div>
+        <div class="field">
+          <label>YANGI PAROL (kamida 12 belgi)</label>
+          <input id="newAdminPassword" type="password" autocomplete="new-password" placeholder="Yangi parolni kiriting">
+        </div>
+        <div class="field">
+          <label>YANGI PAROLNI TAKRORLANG</label>
+          <input id="newAdminPassword2" type="password" autocomplete="new-password" placeholder="Yana bir marta">
+        </div>
+        <div class="admin-actions">
+          <button class="btn" type="button" onclick="changeAdminPassword()">PAROLNI SAQLASH</button>
+        </div>
+        <div class="safe">Parol almashtirilgach boshqa qurilmalardagi admin sessiyalari bekor qilinadi</div>
       </div>
 
       <!-- TAHRIRLASH -->
@@ -3312,6 +3327,38 @@ function escapeHtml(text){
 
 
 /* REGISTER */
+
+async function changeAdminPassword(){
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  const p1 = (document.getElementById("newAdminPassword") || {}).value || "";
+  const p2 = (document.getElementById("newAdminPassword2") || {}).value || "";
+
+  if(p1.length < 12){
+    adminMsg("Yangi parol kamida 12 belgidan bo'lishi kerak.", "err");
+    return;
+  }
+
+  if(p1 !== p2){
+    adminMsg("Ikki parol bir xil emas.", "err");
+    return;
+  }
+
+  try{
+    await rpc("admin_set_password", {p_token: adminToken, p_new_password: p1});
+    const f1 = document.getElementById("newAdminPassword");
+    const f2 = document.getElementById("newAdminPassword2");
+    if(f1){ f1.value = ""; }
+    if(f2){ f2.value = ""; }
+    adminMsg("Parol almashtirildi. Endi faqat yangi parol ishlaydi.", "ok");
+  }catch(err){
+    adminMsg(err.message || "Parolni almashtirib bo'lmadi.", "err");
+  }
+}
 
 function registerUser(){
 
