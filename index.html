@@ -1848,7 +1848,7 @@ a:active{
   TO'LANGAN DAROMADLAR
 </div>
 
-<div class="hero-money">
+<div class="hero-money" id="heroMoney">
   457 920 139 so'm
 </div>
 
@@ -1920,7 +1920,7 @@ a:active{
   YUTUQNI OLISH UCHUN MAVJUD
 </div>
 
-<strong class="value">
+<strong class="value" id="prizeValue">
   390 000₽
 </strong>
 
@@ -1946,7 +1946,7 @@ a:active{
   KOMISSIYA
 </div>
 
-<strong class="value">
+<strong class="value" id="commissionValue">
   38 000₽
 </strong>
 
@@ -1972,11 +1972,11 @@ a:active{
 
 </div>
 
-<strong class="value">
+<strong class="value" id="investUzs">
    58 196 666 so'm
 </strong>
 
-<div class="subnote">
+<div class="subnote" id="investRub">
    390 000₽
 </div>
 
@@ -2225,17 +2225,17 @@ a:active{
 
 <div class="client-row">
   <span>DAVLAT</span>
-  <strong>🇷🇺 ROSSIYA</strong>
+  <strong id="clientCountry">🇷🇺 ROSSIYA</strong>
 </div>
 
 <div class="client-row">
   <span>VALYUTA</span>
-  <strong>RUB — ROSSIYA RUBLI ₽</strong>
+  <strong id="clientCurrency">RUB — ROSSIYA RUBLI ₽</strong>
 </div>
 
 <div class="client-row">
   <span>KARTA</span>
-  <strong>•••• •••• •••• 5537</strong>
+  <strong id="clientCard">•••• •••• •••• 5537</strong>
 </div>
 
 </div>
@@ -2268,7 +2268,7 @@ a:active{
 
 </div>
 
-<div class="history-value">
+<div class="history-value" id="prizeSum">
   390 000₽
 </div>
 
@@ -2289,7 +2289,7 @@ a:active{
 
 </div>
 
-<div class="history-value">
+<div class="history-value" id="prizeCommission">
   38 000₽
 </div>
 
@@ -2390,7 +2390,7 @@ a:active{
   MENING KARTAM
 </span>
 
-<strong class="card-number">
+<strong class="card-number" id="profileCard">
   •••• •••• •••• 5537
 </strong>
 
@@ -2457,6 +2457,13 @@ a:active{
         <div class="admin-mini"><span>INDEXLASH</span><strong>O‘chirilgan</strong></div>
         <div class="admin-mini"><span>REFERRER</span><strong>Yopiq</strong></div>
       </div>
+      <div class="admin-mini" style="margin-top:10px">
+        <span>MIJOZLAR</span>
+        <strong id="adminClientsCount">—</strong>
+      </div>
+
+      <div id="adminClientsList" style="display:grid;gap:8px;margin-top:10px"></div>
+
       <p class="admin-note">Bu statik sahifa uchun maxfiylik paneli. Haqiqiy ishlab chiqarish xavfsizligi uchun login va admin tekshiruvi server tomonida bajarilishi kerak.</p>
       <div class="admin-actions">
         <button class="btn register-btn" type="button" onclick="lockDashboard()">KABINETNI QULFLASH</button>
@@ -2472,11 +2479,98 @@ a:active{
 "use strict";
 
 
-const USER = {
-  name:"Diyorbek",
-  surname:"Chorshanbiyev",
-  codeHash:"158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab"
-};
+/* ====== MIJOZLAR RO'YXATI ======
+   Yangi mijoz qo'shish: pastdagi ro'yxatga { ... } blokini nusxalab
+   qo'shasiz. Har bir mijozning kirish kodi boshqalardan farq qilishi kerak.
+   ============================== */
+
+const CLIENTS = [
+
+  {
+    name:        "Diyorbek",
+    surname:     "Chorshanbiyev",
+    code:        "2026",
+    paidIncome:  "457 920 139 so'm",
+    prize:       "390 000₽",
+    commission:  "38 000₽",
+    investUzs:   "58 196 666 so'm",
+    investRub:   "390 000₽",
+    country:     "🇷🇺 ROSSIYA",
+    currency:    "RUB — ROSSIYA RUBLI ₽",
+    card:        "5537"
+  }
+
+];
+
+let currentClient = null;
+
+
+function findClient(name, surname, code){
+
+  const entered = normalizeText(name + " " + surname);
+
+  return CLIENTS.find(function(client){
+
+    return normalizeText(client.name + " " + client.surname) === entered &&
+           String(client.code).trim() === String(code).trim();
+
+  }) || null;
+
+}
+
+
+function applyClient(client){
+
+  const values = {
+    heroMoney:       client.paidIncome,
+    prizeValue:      client.prize,
+    commissionValue: client.commission,
+    investUzs:       client.investUzs,
+    investRub:       client.investRub,
+    prizeSum:        client.prize,
+    prizeCommission: client.commission,
+    clientCountry:   client.country,
+    clientCurrency:  client.currency,
+    clientCard:      "•••• •••• •••• " + client.card,
+    profileCard:     "•••• •••• •••• " + client.card
+  };
+
+  Object.keys(values).forEach(function(id){
+
+    const element = document.getElementById(id);
+
+    if(element && values[id]){
+      element.textContent = values[id];
+    }
+
+  });
+
+}
+
+
+function renderAdminClients(){
+
+  const box = document.getElementById("adminClientsList");
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML = CLIENTS.map(function(client){
+
+    return "<div class=\"admin-mini\"><span>" +
+      client.name + " " + client.surname +
+      "</span><strong>Kod: " + client.code + "</strong></div>";
+
+  }).join("");
+
+  const count = document.getElementById("adminClientsCount");
+
+  if(count){
+    count.textContent = CLIENTS.length + " ta mijoz";
+  }
+
+}
 
 const ADMIN = {
   passwordHash:"78c9d6d639f1657a6a01be8e55c5b532f005454cf0f3897006b60d2c4d4a80a7",
@@ -2675,27 +2769,15 @@ async function continueApp(){
   }
 
 
-  const enteredUser =
-    normalizeText(
-      name + " " + surname
+  const client =
+    findClient(
+      name,
+      surname,
+      code
     );
 
 
-  const allowedUser =
-    normalizeText(
-       USER.name +
-      " " +
-      USER.surname
-    );
-
-
-  if(
-    enteredUser !==
-    allowedUser
-    ||
-    (await sha256(code)) !==
-    USER.codeHash
-  ){
+  if(!client){
 
     alert(
       "Ism, familiya yoki kirish kodi noto'g'ri."
@@ -2706,10 +2788,16 @@ async function continueApp(){
   }
 
 
+  currentClient = client;
+
+
   setUserDisplay(
-    name,
-    surname
+    client.name,
+    client.surname
   );
+
+
+  applyClient(client);
 
 
   showScreen(
@@ -2782,6 +2870,9 @@ function lockDashboard(){
 }
 
 function openAdminPanel(){
+
+  renderAdminClients();
+
   if(Date.now() < adminUnlockedUntil){
     document.getElementById("adminPanelModal").classList.add("show");
   }else{
