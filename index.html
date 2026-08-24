@@ -2625,6 +2625,103 @@ body{
 
 .phone-row input{ flex:1; min-width:0; }
 
+.geo-btn{
+  margin:2px 0 8px;
+  background:transparent;
+  border:1px solid rgba(212,175,55,.35);
+  color:var(--gold);
+  font-size:12.5px;
+  letter-spacing:.06em;
+  height:44px;
+  box-shadow:none;
+}
+
+.geo-btn:disabled{ opacity:.55; }
+
+.geo-note{
+  margin:0 0 14px;
+  font-size:11px;
+  line-height:1.5;
+  color:var(--muted);
+}
+
+.geo-note.ok{ color:#7fd18a; }
+.geo-note.bad{ color:#e08b8b; }
+
+/* ===== KABINET WATERMARK ===== */
+
+.wm-layer{
+  position:fixed;
+  inset:0;
+  z-index:60;
+  pointer-events:none;
+  display:none;
+  overflow:hidden;
+  opacity:.085;
+  mix-blend-mode:screen;
+}
+
+.wm-layer.on{ display:block; }
+
+.wm-inner{
+  position:absolute;
+  top:-60%;
+  left:-40%;
+  width:180%;
+  height:220%;
+  transform:rotate(-30deg);
+  display:flex;
+  flex-direction:column;
+  gap:58px;
+}
+
+.wm-row{
+  display:flex;
+  gap:52px;
+  white-space:nowrap;
+  font-size:12.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  color:#ffffff;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:480px){
+  .wm-row{ font-size:11px; letter-spacing:.1em; gap:38px; }
+  .wm-inner{ gap:46px; }
+}
+
+/* Chop etish / PDF ga saqlashni bloklash */
+@media print{
+  body{ display:none !important; }
+  html{ background:#000 !important; }
+}
+
+.no-copy{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+
+.screen-guard{
+  position:fixed;
+  inset:0;
+  z-index:90;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  text-align:center;
+  background:rgba(6,8,10,.97);
+  backdrop-filter:blur(14px);
+  font-size:13px;
+  line-height:1.6;
+  color:var(--gold);
+  letter-spacing:.04em;
+}
+
+.screen-guard.on{ display:flex; }
+
 /* ===== ADMIN: SO'ROVLAR ===== */
 
 .req-card{
@@ -3806,6 +3903,27 @@ body{
     </div>
 
     <div class="field">
+      <label>SHAHAR</label>
+      <input id="r_city" type="text" autocomplete="address-level2"
+             placeholder="Shaharni yozing">
+    </div>
+
+    <div class="field">
+      <label>MANZIL</label>
+      <input id="r_address" type="text" autocomplete="street-address"
+             placeholder="Ko'cha, uy, kvartira">
+    </div>
+
+    <button class="btn geo-btn" type="button" id="r_geo" onclick="detectLocation()">
+      JOYLASHUVNI ANIQLASH
+    </button>
+
+    <div class="geo-note" id="r_geo_note">
+      Tugmani bosganingizda brauzer ruxsat so'raydi. Ruxsat bersangiz davlat,
+      shahar va manzil avtomatik to'ldiriladi — keyin o'zingiz tahrirlashingiz mumkin.
+    </div>
+
+    <div class="field">
       <label>TELEFON RAQAMI</label>
       <div class="phone-row">
         <div class="dial" id="r_dial">+998</div>
@@ -4258,6 +4376,12 @@ function translateError(raw){
   }
   if(raw.indexOf("COUNTRY_REQUIRED") > -1){
     return "Davlatni tanlang.";
+  }
+  if(raw.indexOf("CITY_REQUIRED") > -1){
+    return "Shaharni kiriting.";
+  }
+  if(raw.indexOf("ADDRESS_REQUIRED") > -1){
+    return "Manzilni to'liq kiriting.";
   }
   if(raw.indexOf("PHONE_INVALID") > -1){
     return "Telefon raqami noto'g'ri yoki to'liq emas.";
@@ -4819,6 +4943,9 @@ async function continueApp(){
   }
 
   currentUser = data;
+  loginCode = code;
+
+  applyWatermark(data);
 
   setUserDisplay(
     data.name,
@@ -4907,7 +5034,7 @@ function renderUserData(user){
 
   if(noteBox){
 
-    const clean = noteText(user.note);
+    const clean = maskSensitive(noteText(user.note));
 
     if(clean){
       noteBox.textContent = clean;
@@ -4948,6 +5075,157 @@ function renderUserData(user){
       }).join("");
     }
   }
+}
+
+/* ===== WATERMARK VA SCREENSHOT HIMOYASI ===== */
+
+let loginCode = "";
+let guardTimer = 0;
+
+function maskCode(code){
+
+  const clean = String(code == null ? "" : code).replace(/[^0-9A-Za-z]/g, "");
+
+  if(clean.length < 4){
+    return clean ? clean.charAt(0) + "\u2022\u2022\u2022" : "\u2022\u2022\u2022\u2022";
+  }
+
+  return clean.slice(0, 2) +
+    "\u2022".repeat(clean.length - 4) +
+    clean.slice(-2);
+}
+
+function shortId(id){
+
+  return String(id == null ? "" : id)
+    .replace(/-/g, "")
+    .slice(0, 8)
+    .toUpperCase();
+}
+
+/* Matn ichidagi uzun raqamlarni maskalash (telefon, karta, kod) */
+function maskSensitive(text){
+
+  return String(text == null ? "" : text)
+    .replace(/\d[\d\s\-()]{6,}\d/g, function(match){
+
+      const digits = match.replace(/[^0-9]/g, "");
+
+      if(digits.length < 8){ return match; }
+
+      return digits.slice(0, 3) +
+        " " + "\u2022".repeat(digits.length - 5) +
+        " " + digits.slice(-2);
+    });
+}
+
+function applyWatermark(user){
+
+  const layer = document.getElementById("wmLayer");
+  const inner = document.getElementById("wmInner");
+
+  if(!layer || !inner || !user){ return; }
+
+  const label =
+    String(user.name || "").toUpperCase() + " " +
+    String(user.surname || "").toUpperCase() +
+    "  \u2022  ID " + shortId(user.id) +
+    "  \u2022  " + maskCode(loginCode);
+
+  const cell = escapeHtml(label);
+  const rowHtml = '<div class="wm-row">' +
+    new Array(7).join("<span>" + cell + "</span>") + "</div>";
+
+  inner.innerHTML = new Array(19).join(rowHtml);
+
+  layer.classList.add("on");
+
+  const dashboard = document.getElementById("dashboard");
+  if(dashboard){ dashboard.classList.add("no-copy"); }
+}
+
+function hideWatermark(){
+
+  const layer = document.getElementById("wmLayer");
+  const inner = document.getElementById("wmInner");
+
+  if(layer){ layer.classList.remove("on"); }
+  if(inner){ inner.innerHTML = ""; }
+
+  const dashboard = document.getElementById("dashboard");
+  if(dashboard){ dashboard.classList.remove("no-copy"); }
+}
+
+function flashGuard(){
+
+  const guard = document.getElementById("screenGuard");
+
+  if(!guard || !currentUser){ return; }
+
+  guard.classList.add("on");
+
+  if(guardTimer){ clearTimeout(guardTimer); }
+
+  guardTimer = setTimeout(function(){
+    guard.classList.remove("on");
+  }, 1400);
+}
+
+function initScreenGuard(){
+
+  document.addEventListener("keyup", function(event){
+
+    const key = event.key || "";
+
+    if(key === "PrintScreen" || key === "Snapshot"){
+
+      flashGuard();
+
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(" ").catch(function(){});
+      }
+    }
+  });
+
+  document.addEventListener("keydown", function(event){
+
+    const key = String(event.key || "").toLowerCase();
+    const mac = event.metaKey && event.shiftKey;
+    const win = event.ctrlKey && event.shiftKey && key === "s";
+
+    if(win || (mac && (key === "3" || key === "4" || key === "5"))){
+      flashGuard();
+    }
+
+    if((event.ctrlKey || event.metaKey) && key === "p"){
+      event.preventDefault();
+      flashGuard();
+    }
+  });
+
+  document.addEventListener("visibilitychange", function(){
+
+    if(!currentUser){ return; }
+
+    if(document.hidden){
+      flashGuard();
+    }else if(guardTimer){
+      clearTimeout(guardTimer);
+      const guard = document.getElementById("screenGuard");
+      if(guard){ guard.classList.remove("on"); }
+    }
+  });
+
+  document.addEventListener("contextmenu", function(event){
+
+    if(!currentUser){ return; }
+
+    const dashboard = document.getElementById("dashboard");
+
+    if(dashboard && dashboard.contains(event.target)){
+      event.preventDefault();
+    }
+  });
 }
 
 function escapeHtml(text){
@@ -5272,9 +5550,22 @@ function openRegister(){
   const surnEl = document.getElementById("r_surname");
   const phoneEl = document.getElementById("r_phone");
 
+  const cityEl = document.getElementById("r_city");
+  const addrEl = document.getElementById("r_address");
+
   if(nameEl){ nameEl.value = ""; }
   if(surnEl){ surnEl.value = ""; }
   if(phoneEl){ phoneEl.value = ""; }
+  if(cityEl){ cityEl.value = ""; }
+  if(addrEl){ addrEl.value = ""; }
+
+  geoLat = null;
+  geoLon = null;
+  geoSource = "";
+
+  geoNote("Tugmani bosganingizda brauzer ruxsat so'raydi. Ruxsat bersangiz " +
+          "davlat, shahar va manzil avtomatik to'ldiriladi \u2014 keyin " +
+          "o'zingiz tahrirlashingiz mumkin.", "");
 
   pickCountry("UZ", true);
   closeCountryList();
@@ -5378,6 +5669,155 @@ document.addEventListener("click", function(ev){
   if(!combo){ closeCountryList(); }
 });
 
+/* ===== JOYLASHUVNI ANIQLASH ===== */
+
+let geoLat = null;
+let geoLon = null;
+let geoSource = "";
+
+function geoNote(text, kind){
+
+  const box = document.getElementById("r_geo_note");
+
+  if(!box){ return; }
+
+  box.textContent = text;
+  box.className = "geo-note" + (kind ? " " + kind : "");
+}
+
+async function reverseGeocode(lat, lon){
+
+  const out = { country: "", city: "", address: "" };
+
+  try{
+    const res = await fetch(
+      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18" +
+      "&accept-language=uz&lat=" + lat + "&lon=" + lon,
+      { headers: { "Accept": "application/json" } }
+    );
+
+    if(res.ok){
+
+      const data = await res.json();
+      const a = data.address || {};
+
+      out.country = String(a.country_code || "").toUpperCase();
+      out.city = a.city || a.town || a.village || a.municipality ||
+                 a.county || a.state || "";
+
+      const parts = [];
+
+      if(a.road){ parts.push(a.road); }
+      if(a.house_number){ parts.push(a.house_number + "-uy"); }
+      if(!parts.length && a.neighbourhood){ parts.push(a.neighbourhood); }
+      if(!parts.length && a.suburb){ parts.push(a.suburb); }
+
+      out.address = parts.join(", ");
+
+      if(out.city || out.country){ return out; }
+    }
+  }catch(err){ /* pastdagi zaxira manba */ }
+
+  try{
+    const res2 = await fetch(
+      "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
+      lat + "&longitude=" + lon + "&localityLanguage=en"
+    );
+
+    if(res2.ok){
+
+      const d2 = await res2.json();
+
+      out.country = String(d2.countryCode || "").toUpperCase();
+      out.city = d2.city || d2.locality || d2.principalSubdivision || "";
+      out.address = out.address || d2.locality || "";
+    }
+  }catch(err2){ /* aniqlanmadi */ }
+
+  return out;
+}
+
+async function detectLocation(){
+
+  const btn = document.getElementById("r_geo");
+
+  if(!navigator.geolocation){
+    geoNote("Brauzeringiz joylashuvni aniqlashni qo'llab-quvvatlamaydi. " +
+            "Ma'lumotlarni qo'lda kiriting.", "bad");
+    return;
+  }
+
+  geoNote("Brauzer ruxsatini kutamiz...", "");
+
+  if(btn){ btn.disabled = true; btn.textContent = "ANIQLANMOQDA..."; }
+
+  function finish(){
+    if(btn){ btn.disabled = false; btn.textContent = "JOYLASHUVNI ANIQLASH"; }
+  }
+
+  navigator.geolocation.getCurrentPosition(async function(pos){
+
+    geoLat = Number(pos.coords.latitude.toFixed(6));
+    geoLon = Number(pos.coords.longitude.toFixed(6));
+    geoSource = "gps";
+
+    geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
+
+    const place = await reverseGeocode(geoLat, geoLon);
+
+    let filled = [];
+
+    if(place.country){
+      const match = COUNTRY_LIST.filter(function(c){
+        return c.c === place.country;
+      })[0];
+
+      if(match){
+        pickCountry(match.c, true);
+        filled.push("davlat");
+      }
+    }
+
+    const cityInput = document.getElementById("r_city");
+    const addrInput = document.getElementById("r_address");
+
+    if(cityInput && place.city){
+      cityInput.value = place.city;
+      filled.push("shahar");
+    }
+
+    if(addrInput && place.address){
+      addrInput.value = place.address;
+      filled.push("manzil");
+    }
+
+    finish();
+
+    if(filled.length){
+      geoNote("Aniqlandi: " + filled.join(", ") +
+              ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
+    }else{
+      geoNote("Joylashuv olindi, lekin manzil aniqlanmadi. " +
+              "Shahar va manzilni qo'lda kiriting.", "bad");
+    }
+
+  }, function(err){
+
+    finish();
+
+    geoLat = null;
+    geoLon = null;
+    geoSource = "";
+
+    if(err && err.code === 1){
+      geoNote("Ruxsat berilmadi. Davlat, shahar va manzilni qo'lda kiriting.", "bad");
+    }else{
+      geoNote("Joylashuvni aniqlab bo'lmadi. Ma'lumotlarni qo'lda kiriting.", "bad");
+    }
+
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+}
+
 async function submitRequest(){
 
   const btn = document.getElementById("r_submit");
@@ -5385,6 +5825,8 @@ async function submitRequest(){
   const name    = (document.getElementById("r_name").value || "").trim();
   const surname = (document.getElementById("r_surname").value || "").trim();
   const phone   = (document.getElementById("r_phone").value || "").trim();
+  const city    = (document.getElementById("r_city").value || "").trim();
+  const address = (document.getElementById("r_address").value || "").trim();
 
   if(!name || !surname){
     alert("Ism va familiyani kiriting.");
@@ -5394,6 +5836,16 @@ async function submitRequest(){
   if(!regCountry){
     alert("Ro'yxatdan davlatingizni tanlang.");
     openCountryList();
+    return;
+  }
+
+  if(!city){
+    alert("Shaharni kiriting.");
+    return;
+  }
+
+  if(address.length < 4){
+    alert("Manzilni to'liq kiriting (ko'cha, uy).");
     return;
   }
 
@@ -5414,7 +5866,12 @@ async function submitRequest(){
       p_surname: surname,
       p_country: regCountry.n,
       p_country_code: regCountry.c,
-      p_phone: fullPhone
+      p_phone: fullPhone,
+      p_city: city,
+      p_address: address,
+      p_lat: geoLat,
+      p_lon: geoLon,
+      p_geo_source: geoSource
     });
   }catch(err){
     alert(err.message);
@@ -5429,7 +5886,8 @@ async function submitRequest(){
   alert(
     "SO'ROVINGIZ YUBORILDI\n\n" +
     name + " " + surname + "\n" +
-    regCountry.n + " \u2022 " + fullPhone + "\n\n" +
+    regCountry.n + ", " + city + "\n" +
+    fullPhone + "\n\n" +
     "Admin so'rovni tekshiradi. Qabul qilinganidan keyin sizga kirish kodi beriladi."
   );
 }
@@ -5541,6 +5999,33 @@ function showEditView(){
 
 let adminRequests = [];
 
+/* Qurilma ma'lumoti (faqat server saqlagan holatda) */
+function deviceLine(row){
+
+  if(!row){ return "Aniqlanmadi"; }
+
+  const parts = [row.device, row.os, row.browser].filter(function(v){
+    return v && String(v).trim() && String(v) !== "Aniqlanmadi";
+  });
+
+  return parts.length ? parts.join(" • ") : "Aniqlanmadi";
+}
+
+function lastLoginLine(user){
+
+  if(!user || !user.last_login_at){
+    return "Oxirgi kirish: ma'lumot yo'q";
+  }
+
+  const device = deviceLine({
+    device: user.last_device,
+    os: user.last_os,
+    browser: user.last_browser
+  });
+
+  return "Oxirgi kirish: " + device + " • " + reqDate(user.last_login_at);
+}
+
 function reqDate(value){
   if(!value){ return "—"; }
   const d = new Date(value);
@@ -5607,8 +6092,17 @@ async function loadAdminRequests(){
       '<div class="req-row"><span>ISM</span><b>' + escapeText(r.name) + '</b></div>' +
       '<div class="req-row"><span>FAMILIYA</span><b>' + escapeText(r.surname) + '</b></div>' +
       '<div class="req-row"><span>DAVLAT</span><b>' + escapeText(r.country || "—") + '</b></div>' +
+      '<div class="req-row"><span>SHAHAR</span><b>' + escapeText(r.city || "—") + '</b></div>' +
+      '<div class="req-row"><span>MANZIL</span><b>' + escapeText(r.address || "—") + '</b></div>' +
       '<div class="req-row"><span>TELEFON</span><b>' + escapeText(r.phone || "—") + '</b></div>' +
+      '<div class="req-row"><span>QURILMA</span><b>' + escapeText(deviceLine(r)) + '</b></div>' +
       '<div class="req-row"><span>SANA</span><b>' + reqDate(r.created_at) + '</b></div>';
+
+    if(r.lat != null && r.lon != null){
+      html += '<div class="req-row"><span>GPS</span><b>' +
+        escapeText(Number(r.lat).toFixed(5) + ", " + Number(r.lon).toFixed(5)) +
+        '</b></div>';
+    }
 
     if(r.status === "new"){
       html += '<div class="req-actions">' +
@@ -5708,7 +6202,8 @@ async function loadAdminUsers(){
         "<small>Kod: " + escapeHtml(user.code) +
         " • " + fmtMoney(user.balance, user.currency) +
         " • " + (user.status === "active" ? "faol" : "bloklangan") +
-        "</small></div>" +
+        "</small>" +
+        "<small>" + escapeHtml(lastLoginLine(user)) + "</small></div>" +
         '<button class="btn register-btn tiny-btn" type="button" onclick="editUser(\'' +
         user.id + '\')">TAHRIR</button>' +
       "</div>"
@@ -6094,6 +6589,8 @@ function logoutUser(){
   startCountdown("");
 
   currentUser = null;
+  loginCode = "";
+  hideWatermark();
   adminUnlockedUntil = 0;
   closeAdminPanel();
   closeAdminLogin();
@@ -6641,8 +7138,23 @@ document.addEventListener("visibilitychange", function(){
 /* BOSHLANG'ICH HOLAT */
 
 initConfigScreen();
+initScreenGuard();
 
 </script>
+
+<!-- MIJOZ KABINETI: WATERMARK -->
+<div class="wm-layer" id="wmLayer" aria-hidden="true">
+  <div class="wm-inner" id="wmInner"></div>
+</div>
+
+<!-- SCREENSHOT OGOHLANTIRISHI -->
+<div class="screen-guard" id="screenGuard" aria-hidden="true">
+  <div>
+    🔒 MAXFIY MA'LUMOT<br>
+    Ekran tasviri va chop etish taqiqlanadi.<br>
+    Kabinet ma'lumotlari faqat sizga tegishli.
+  </div>
+</div>
 
 </body>
 </html>
