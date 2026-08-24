@@ -1203,6 +1203,159 @@ body{
 }
 
 
+/* BOSH SAHIFA STATISTIKASI */
+
+.home-stats{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:10px;
+
+  width:100%;
+
+  margin:18px 0 4px;
+}
+
+.home-stat{
+
+  padding:14px 12px 13px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.045),
+      rgba(255,255,255,.02)
+    );
+
+  border:
+    1px solid rgba(255,255,255,.08);
+}
+
+.home-stat span{
+
+  display:block;
+
+  color:#8b929b;
+
+  font-size:8.5px;
+
+  font-weight:700;
+
+  letter-spacing:.7px;
+
+  line-height:1.4;
+}
+
+.home-stat b{
+
+  display:block;
+
+  margin:9px 0 5px;
+
+  color:#fff;
+
+  font-size:clamp(13px,4.1vw,18px);
+
+  font-weight:800;
+
+  letter-spacing:-.2px;
+
+  white-space:nowrap;
+}
+
+.home-stat b i{
+
+  color:#9aa2ab;
+
+  font-size:.62em;
+
+  font-style:normal;
+
+  font-weight:600;
+}
+
+.home-stat small{
+
+  display:block;
+
+  color:#6f767f;
+
+  font-size:9px;
+
+  line-height:1.4;
+}
+
+
+/* COUNTDOWN */
+
+.countdown{
+
+  margin-top:6px;
+
+  color:#f5c451;
+
+  text-align:center;
+
+  font-size:34px;
+
+  font-weight:800;
+
+  letter-spacing:1.5px;
+
+  font-variant-numeric:tabular-nums;
+}
+
+.countdown-state{
+
+  margin:10px auto 0;
+
+  padding:5px 12px;
+
+  width:max-content;
+
+  border-radius:20px;
+
+  background:rgba(46,201,138,.14);
+
+  color:#2ec98a;
+
+  font-size:9px;
+
+  font-weight:800;
+
+  letter-spacing:.8px;
+}
+
+.countdown-state.expired{
+
+  background:rgba(239,77,93,.14);
+
+  color:#ef4d5d;
+}
+
+.countdown-note{
+
+  margin-top:11px;
+
+  color:#777d85;
+
+  text-align:center;
+
+  font-size:10px;
+
+  line-height:1.5;
+}
+
+.market-stale{
+  color:#f5c451;
+}
+
+
 /* HISTORY */
 
 .history-item{
@@ -2004,6 +2157,24 @@ a:active{
     margin-top:3px;
     font-size:8px;
   }
+
+  /* Bosh sahifa statistikasi */
+  .home-stats{
+    gap:8px;
+  }
+
+  .home-stat{
+    padding:12px 9px;
+    border-radius:15px;
+  }
+
+  .home-stat b{
+    margin:7px 0 4px;
+  }
+
+  .countdown{
+    font-size:30px;
+  }
 }
 
 
@@ -2197,6 +2368,33 @@ a:active{
 
   🔒 Ma'lumotlaringiz
   himoyalangan
+
+</div>
+
+</div>
+
+
+<!-- BOSH SAHIFA STATISTIKASI -->
+
+<div class="home-stats">
+
+<div class="home-stat">
+
+  <span>KIRITILGAN INVESTITSIYA</span>
+
+  <b>167 510 082 <i>so'm</i></b>
+
+  <small>jami depozit</small>
+
+</div>
+
+<div class="home-stat">
+
+  <span>TO'LANGAN DAROMAD</span>
+
+  <b>357 520 019 <i>so'm</i></b>
+
+  <small>kartalarga o'tkazilgan</small>
 
 </div>
 
@@ -2468,13 +2666,13 @@ a:active{
 
 </div>
 
-<div class="price">
-  694,70
-  <small>TRD</small>
+<div class="price" id="px_BNB">
+  —
+  <small>USDT</small>
 </div>
 
-<div class="change up">
-  +1,02%
+<div class="change up" id="ch_BNB">
+  —
 </div>
 
 </div>
@@ -2494,13 +2692,13 @@ a:active{
 
 </div>
 
-<div class="price">
-  77 066,00
-  <small>TRD</small>
+<div class="price" id="px_BTC">
+  —
+  <small>USDT</small>
 </div>
 
-<div class="change down">
-  -1,55%
+<div class="change up" id="ch_BTC">
+  —
 </div>
 
 </div>
@@ -2520,13 +2718,13 @@ a:active{
 
 </div>
 
-<div class="price">
-  2 424,00
-  <small> $ </small>
+<div class="price" id="px_ETH">
+  —
+  <small>USDT</small>
 </div>
 
-<div class="change down">
-  -3,89%
+<div class="change up" id="ch_ETH">
+  —
 </div>
 
 </div>
@@ -2546,13 +2744,13 @@ a:active{
 
 </div>
 
-<div class="price">
-  93,87
-  <small> $ </small>
+<div class="price" id="px_SOL">
+  —
+  <small>USDT</small>
 </div>
 
-<div class="change up">
-  +0,19%
+<div class="change up" id="ch_SOL">
+  —
 </div>
 
 </div>
@@ -2572,22 +2770,22 @@ a:active{
 
 </div>
 
-<div class="price">
-  0,09188
-  <small> $ </small>
+<div class="price" id="px_DOGE">
+  —
+  <small>USDT</small>
 </div>
 
-<div class="change up">
-  +0,15%
+<div class="change up" id="ch_DOGE">
+  —
 </div>
 
 </div>
 
 
-<div class="crypto-warning">
+<div class="crypto-warning" id="marketStatus">
 
-   JASMINA TRD
-  
+  Narxlar yuklanmoqda…
+
 </div>
 
 </div>
@@ -2685,10 +2883,6 @@ a:active{
   Yutuq summasi
 </strong>
 
-<small>
-  TRD
-</small>
-
 </div>
 
 <div class="history-value" id="prizeSum">
@@ -2706,10 +2900,6 @@ a:active{
   KOMISSIYA
 </strong>
 
-<small>
- TRED
-</small>
-
 </div>
 
 <div class="history-value" id="prizeCommission">
@@ -2719,6 +2909,29 @@ a:active{
 </div>
 
 <div id="userNoteBox" class="admin-note" style="display:none;"></div>
+
+</div>
+
+
+<!-- YUTUQ MUDDATI -->
+
+<div class="panel" id="deadlinePanel" style="display:none;">
+
+<div class="section-title">
+  YUTUQNI OLISH UCHUN QOLGAN VAQT
+</div>
+
+<div class="countdown" id="countdownValue">
+  00:00:00
+</div>
+
+<div class="countdown-state" id="countdownState">
+  FAOL
+</div>
+
+<div class="countdown-note">
+  Yutuq shu vaqt tugaguncha olinishi kerak.
+</div>
 
 </div>
 
@@ -2988,6 +3201,10 @@ a:active{
             <select id="f_bank"></select>
           </div>
           <div class="field"><label>KARTA (oxirgi 4 raqam)</label><input id="f_card_last4" type="text" maxlength="4" inputmode="numeric" placeholder="5537"></div>
+          <div class="field wide">
+            <label>YUTUQ MUDDATI (sana va soat)</label>
+            <input id="f_deadline" type="datetime-local">
+          </div>
           <div class="field wide last"><label>IZOH (kabinetda ko'rinadi)</label><input id="f_note" type="text" placeholder="Ixtiyoriy"></div>
           <div class="field">
             <label>HOLATI</label>
@@ -3432,6 +3649,139 @@ function userBank(user){
   return direct || bankFromCard(user && user.card_last4);
 }
 
+/* YUTUQ MUDDATI — izoh maydoni ichida saqlanadi: "... @@DL:2026-08-25T16:00:00.000Z@@" */
+
+const DEADLINE_RE = /@@DL:([^@]+)@@/;
+
+function noteText(note){
+  return String(note || "").replace(DEADLINE_RE, "").trim();
+}
+
+function noteDeadline(note){
+  const found = DEADLINE_RE.exec(String(note || ""));
+  return found ? found[1].trim() : "";
+}
+
+function packNote(text, iso){
+
+  const clean = noteText(text);
+
+  if(!iso){
+    return clean;
+  }
+
+  return clean ? clean + " @@DL:" + iso + "@@" : "@@DL:" + iso + "@@";
+}
+
+function userDeadline(user){
+
+  const direct = String((user && user.prize_deadline) || "").trim();
+
+  return direct || noteDeadline(user && user.note);
+}
+
+function isoFromLocalInput(value){
+
+  const text = String(value || "").trim();
+
+  if(!text){
+    return "";
+  }
+
+  const when = new Date(text);
+
+  return isNaN(when.getTime()) ? "" : when.toISOString();
+}
+
+function localInputFromIso(iso){
+
+  const text = String(iso || "").trim();
+
+  if(!text){
+    return "";
+  }
+
+  const when = new Date(text);
+
+  if(isNaN(when.getTime())){
+    return "";
+  }
+
+  const pad = function(n){ return String(n).padStart(2, "0"); };
+
+  return when.getFullYear() + "-" + pad(when.getMonth() + 1) + "-" +
+    pad(when.getDate()) + "T" + pad(when.getHours()) + ":" + pad(when.getMinutes());
+}
+
+let countdownTimer = null;
+
+function startCountdown(iso){
+
+  if(countdownTimer){
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+
+  const panel = document.getElementById("deadlinePanel");
+
+  if(!panel){
+    return;
+  }
+
+  const target = iso ? new Date(iso).getTime() : 0;
+
+  if(!target || isNaN(target)){
+    panel.style.display = "none";
+    return;
+  }
+
+  panel.style.display = "";
+
+  const value = document.getElementById("countdownValue");
+  const state = document.getElementById("countdownState");
+  const pad = function(n){ return String(n).padStart(2, "0"); };
+
+  function tick(){
+
+    const left = target - Date.now();
+
+    if(left <= 0){
+
+      if(value) value.textContent = "00:00:00";
+
+      if(state){
+        state.textContent = "MUDDAT TUGADI";
+        state.className = "countdown-state expired";
+      }
+
+      if(countdownTimer){
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+
+      return;
+    }
+
+    const total = Math.floor(left / 1000);
+
+    if(value){
+      value.textContent =
+        pad(Math.floor(total / 3600)) + ":" +
+        pad(Math.floor((total % 3600) / 60)) + ":" +
+        pad(total % 60);
+    }
+
+    if(state){
+      state.textContent = "FAOL";
+      state.className = "countdown-state";
+    }
+  }
+
+  tick();
+
+  countdownTimer = setInterval(tick, 1000);
+}
+
 function maskCard(value){
 
   const digits = cardDigits(value);
@@ -3795,13 +4145,18 @@ function renderUserData(user){
   const noteBox = document.getElementById("userNoteBox");
 
   if(noteBox){
-    if(user.note){
-      noteBox.textContent = user.note;
+
+    const clean = noteText(user.note);
+
+    if(clean){
+      noteBox.textContent = clean;
       noteBox.style.display = "block";
     }else{
       noteBox.style.display = "none";
     }
   }
+
+  startCountdown(userDeadline(user));
 
   const tradesPanel = document.getElementById("tradesPanel");
   const tradesList = document.getElementById("tradesList");
@@ -4100,7 +4455,8 @@ function editUser(id){
   setField("f_currency", curInfo(user.currency).code);
   fillBankOptions(user.country, userBank(user));
   setField("f_card_last4", cardDigits(user.card_last4));
-  setField("f_note", user.note);
+  setField("f_note", noteText(user.note));
+  setField("f_deadline", localInputFromIso(userDeadline(user)));
   setField("f_status", user.status);
   updateMoneyLabels();
 
@@ -4177,7 +4533,8 @@ async function saveUser(){
     currency: fieldValue("f_currency"),
     bank: fieldValue("f_bank"),
     card_last4: packCard(fieldValue("f_bank"), fieldValue("f_card_last4")),
-    note: fieldValue("f_note")
+    prize_deadline: isoFromLocalInput(fieldValue("f_deadline")),
+    note: packNote(fieldValue("f_note"), isoFromLocalInput(fieldValue("f_deadline")))
   };
 
   if(!payload.name.trim() || !payload.surname.trim()){
@@ -4407,6 +4764,8 @@ function withdrawPrize(){
 /* LOGOUT */
 
 function logoutUser(){
+
+  startCountdown("");
 
   currentUser = null;
   adminUnlockedUntil = 0;
@@ -4700,6 +5059,255 @@ document.addEventListener(
         else closeAdminPanel();
       }
     });
+  }
+});
+
+
+/* REAL BOZOR NARXLARI */
+
+const MARKET_COINS = [
+  { key:"BNB",  binance:"BNBUSDT",  gecko:"binancecoin", dec:2 },
+  { key:"BTC",  binance:"BTCUSDT",  gecko:"bitcoin",     dec:2 },
+  { key:"ETH",  binance:"ETHUSDT",  gecko:"ethereum",    dec:2 },
+  { key:"SOL",  binance:"SOLUSDT",  gecko:"solana",      dec:2 },
+  { key:"DOGE", binance:"DOGEUSDT", gecko:"dogecoin",    dec:5 }
+];
+
+const MARKET_CACHE_KEY = "jasmina_market_v1";
+
+function marketTime(stamp){
+
+  const when = new Date(stamp);
+  const pad = function(n){ return String(n).padStart(2, "0"); };
+
+  return pad(when.getHours()) + ":" + pad(when.getMinutes());
+}
+
+function fmtPriceValue(value, dec){
+
+  const num = Number(value);
+
+  if(!isFinite(num)){
+    return "—";
+  }
+
+  return num.toLocaleString("ru-RU", {
+    minimumFractionDigits: dec,
+    maximumFractionDigits: dec
+  });
+}
+
+function fmtChangeValue(value){
+
+  const num = Number(value);
+
+  if(!isFinite(num)){
+    return "—";
+  }
+
+  const text = Math.abs(num).toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  return (num >= 0 ? "+" : "-") + text + "%";
+}
+
+async function fetchJson(url){
+
+  const control = new AbortController();
+  const timer = setTimeout(function(){ control.abort(); }, 9000);
+
+  try{
+
+    const answer = await fetch(url, { signal: control.signal, cache: "no-store" });
+
+    if(!answer.ok){
+      throw new Error("HTTP " + answer.status);
+    }
+
+    return await answer.json();
+
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+async function marketFromBinance(){
+
+  const symbols = MARKET_COINS.map(function(coin){ return '"' + coin.binance + '"'; }).join(",");
+
+  const rows = await fetchJson(
+    "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
+    encodeURIComponent("[" + symbols + "]")
+  );
+
+  const out = {};
+
+  MARKET_COINS.forEach(function(coin){
+
+    const row = rows.find(function(item){ return item.symbol === coin.binance; });
+
+    if(row){
+      out[coin.key] = {
+        price: Number(row.lastPrice),
+        change: Number(row.priceChangePercent)
+      };
+    }
+  });
+
+  if(Object.keys(out).length < MARKET_COINS.length){
+    throw new Error("BINANCE_INCOMPLETE");
+  }
+
+  return out;
+}
+
+async function marketFromGecko(){
+
+  const ids = MARKET_COINS.map(function(coin){ return coin.gecko; }).join(",");
+
+  const data = await fetchJson(
+    "https://api.coingecko.com/api/v3/simple/price?ids=" + ids +
+    "&vs_currencies=usd&include_24hr_change=true"
+  );
+
+  const out = {};
+
+  MARKET_COINS.forEach(function(coin){
+
+    const row = data[coin.gecko];
+
+    if(row && isFinite(Number(row.usd))){
+      out[coin.key] = {
+        price: Number(row.usd),
+        change: Number(row.usd_24h_change)
+      };
+    }
+  });
+
+  if(Object.keys(out).length < MARKET_COINS.length){
+    throw new Error("GECKO_INCOMPLETE");
+  }
+
+  return out;
+}
+
+function renderMarket(data, stamp, stale){
+
+  MARKET_COINS.forEach(function(coin){
+
+    const row = data[coin.key];
+
+    if(!row){
+      return;
+    }
+
+    const priceBox = document.getElementById("px_" + coin.key);
+    const changeBox = document.getElementById("ch_" + coin.key);
+
+    if(priceBox){
+      priceBox.innerHTML =
+        escapeHtml(fmtPriceValue(row.price, coin.dec)) +
+        "<small>USDT</small>";
+    }
+
+    if(changeBox){
+      changeBox.textContent = fmtChangeValue(row.change);
+      changeBox.className = "change " + (Number(row.change) >= 0 ? "up" : "down");
+    }
+  });
+
+  const status = document.getElementById("marketStatus");
+
+  if(status){
+
+    if(stale){
+      status.className = "crypto-warning market-stale";
+      status.textContent =
+        "⚠️ Bozor ma'lumoti yangilanmadi — " + marketTime(stamp) +
+        " holatidagi oxirgi narxlar ko'rsatilmoqda (kechiktirilgan ma'lumot).";
+    }else{
+      status.className = "crypto-warning";
+      status.textContent =
+        "Real bozor narxlari • " + marketTime(stamp) + " da yangilandi";
+    }
+  }
+}
+
+function readMarketCache(){
+
+  try{
+
+    const raw = localStorage.getItem(MARKET_CACHE_KEY);
+
+    if(!raw){
+      return null;
+    }
+
+    const saved = JSON.parse(raw);
+
+    return (saved && saved.data && saved.stamp) ? saved : null;
+
+  }catch(err){
+    return null;
+  }
+}
+
+async function updateMarket(){
+
+  let data = null;
+
+  try{
+    data = await marketFromBinance();
+  }catch(err){
+    try{
+      data = await marketFromGecko();
+    }catch(err2){
+      data = null;
+    }
+  }
+
+  if(data){
+
+    const stamp = Date.now();
+
+    try{
+      localStorage.setItem(MARKET_CACHE_KEY, JSON.stringify({ data: data, stamp: stamp }));
+    }catch(err){}
+
+    renderMarket(data, stamp, false);
+    return;
+  }
+
+  const cache = readMarketCache();
+
+  if(cache){
+    renderMarket(cache.data, cache.stamp, true);
+    return;
+  }
+
+  const status = document.getElementById("marketStatus");
+
+  if(status){
+    status.className = "crypto-warning market-stale";
+    status.textContent = "⚠️ Bozor ma'lumotini olish imkoni bo'lmadi. Internetni tekshirib qayta urinib ko'ring.";
+  }
+}
+
+const marketCacheStart = readMarketCache();
+
+if(marketCacheStart){
+  renderMarket(marketCacheStart.data, marketCacheStart.stamp, true);
+}
+
+updateMarket();
+
+setInterval(updateMarket, 30000);
+
+document.addEventListener("visibilitychange", function(){
+  if(!document.hidden){
+    updateMarket();
   }
 });
 
