@@ -3113,6 +3113,482 @@ body{
 }
 
 
+/* ===== LIVE MARKET (kirish sahifasining pastki qismi) ===== */
+
+.mkt-sec{
+  position:relative;
+  margin:0 -16px;
+  padding:38px 16px 34px;
+  overflow:hidden;
+}
+
+.mkt-sec::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+.mkt-sec > *{
+  position:relative;
+  z-index:1;
+}
+
+/* Gold / DXY bo'limi — oltin + binafsha glow */
+.mkt-gold::before{
+  background:
+    radial-gradient(95% 34% at 16% 0%, rgba(236,183,72,.13), transparent 68%),
+    radial-gradient(80% 30% at 92% 12%, rgba(140,54,168,.20), transparent 70%),
+    linear-gradient(180deg, rgba(9,8,14,.72), rgba(4,5,10,.92));
+}
+
+/* Real-time market bo'limi — ko'k/binafsha glow */
+.mkt-live::before{
+  background:
+    radial-gradient(90% 32% at 84% 0%, rgba(74,86,214,.20), transparent 70%),
+    radial-gradient(85% 30% at 8% 18%, rgba(150,48,160,.16), transparent 72%),
+    linear-gradient(180deg, rgba(5,7,14,.86), rgba(3,4,9,.94));
+}
+
+/* Crypto bo'limi — binafsha + yashil glow */
+.mkt-crypto::before{
+  background:
+    radial-gradient(90% 30% at 12% 0%, rgba(120,52,180,.18), transparent 70%),
+    radial-gradient(80% 26% at 94% 16%, rgba(32,128,141,.14), transparent 72%),
+    linear-gradient(180deg, rgba(4,6,12,.9), rgba(3,4,9,.96));
+}
+
+.mkt-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.mkt-eyebrow{
+  display:block;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.24em;
+  color:rgba(255,255,255,.42);
+  margin-bottom:7px;
+}
+
+.mkt-title{
+  margin:0;
+  font-size:24px;
+  line-height:1.12;
+  font-weight:900;
+  letter-spacing:-.02em;
+  color:#fff;
+}
+
+.mkt-title i{
+  font-style:normal;
+  background:linear-gradient(95deg,#f5c451,#e0932f);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.mkt-sub{
+  margin:7px 0 0;
+  font-size:12px;
+  line-height:1.5;
+  color:var(--muted);
+}
+
+.mkt-badge{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.12em;
+  white-space:nowrap;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+}
+
+.mkt-badge span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:currentColor;
+}
+
+.mkt-badge.is-live{
+  color:#32d28e;
+  border-color:rgba(50,210,142,.34);
+  background:rgba(50,210,142,.09);
+}
+
+.mkt-badge.is-live span{
+  animation:mktPulse 1.6s infinite;
+}
+
+@keyframes mktPulse{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.25; }
+}
+
+.mkt-badge.is-delay{
+  color:#e8b341;
+  border-color:rgba(232,179,65,.3);
+  background:rgba(232,179,65,.08);
+}
+
+.mkt-badge.is-off{
+  color:#ff7b87;
+  border-color:rgba(255,83,100,.3);
+  background:rgba(255,83,100,.08);
+}
+
+.mkt-card{
+  position:relative;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:16px;
+  background:
+    linear-gradient(180deg, rgba(19,20,26,.82), rgba(10,11,15,.86));
+  box-shadow:0 18px 40px rgba(0,0,0,.4);
+}
+
+.mkt-card + .mkt-card{
+  margin-top:12px;
+}
+
+.mkt-grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.mkt-grid2 .mkt-card{
+  padding:13px;
+  margin-top:0;
+}
+
+.mkt-ico{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.02em;
+  flex:0 0 auto;
+}
+
+.mkt-ico.gold{
+  background:linear-gradient(150deg,#f6cd63,#c98a1d);
+  color:#241a05;
+}
+
+.mkt-ico.dxy{
+  background:linear-gradient(150deg,#6f7cf0,#3a3f9e);
+  color:#eef0ff;
+}
+
+.mkt-ico.oil{
+  background:linear-gradient(150deg,#5c6470,#2b3038);
+  color:#e9edf3;
+}
+
+.mkt-ico.gas{
+  background:linear-gradient(150deg,#4fb6c9,#1d6b7c);
+  color:#04222a;
+}
+
+.mkt-ico.btc{
+  background:linear-gradient(150deg,#f8a33c,#d67b12);
+  color:#26170a;
+}
+
+.mkt-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.mkt-name{
+  min-width:0;
+}
+
+.mkt-name b{
+  display:block;
+  font-size:13.5px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.mkt-name small{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  letter-spacing:.14em;
+  color:rgba(255,255,255,.4);
+  font-weight:700;
+}
+
+.mkt-price{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:-.02em;
+  color:#fff;
+  font-variant-numeric:tabular-nums lining-nums;
+  line-height:1.05;
+}
+
+.mkt-price em{
+  font-style:normal;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  margin-left:5px;
+  letter-spacing:.06em;
+}
+
+.mkt-grid2 .mkt-price{
+  font-size:21px;
+}
+
+.mkt-chg{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:8px;
+  padding:5px 9px;
+  border-radius:9px;
+  font-size:11.5px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+
+.mkt-chg.up{
+  color:#3ee39c;
+  background:rgba(50,210,142,.12);
+}
+
+.mkt-chg.down{
+  color:#ff6b7a;
+  background:rgba(255,83,100,.12);
+}
+
+.mkt-chg.flat{
+  color:var(--muted);
+  background:rgba(255,255,255,.06);
+}
+
+.mkt-spark{
+  display:block;
+  width:100%;
+  height:56px;
+  margin-top:12px;
+}
+
+.mkt-chart{
+  display:block;
+  width:100%;
+  height:168px;
+  margin-top:14px;
+}
+
+.mkt-range{
+  margin-top:13px;
+}
+
+.mkt-range-bar{
+  position:relative;
+  height:5px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(255,83,100,.35), rgba(255,255,255,.14), rgba(50,210,142,.35));
+}
+
+.mkt-range-dot{
+  position:absolute;
+  top:50%;
+  width:11px;
+  height:11px;
+  margin-left:-5.5px;
+  border-radius:50%;
+  transform:translateY(-50%);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(255,255,255,.14);
+}
+
+.mkt-range-labels{
+  display:flex;
+  justify-content:space-between;
+  margin-top:7px;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.1em;
+  color:rgba(255,255,255,.38);
+  font-variant-numeric:tabular-nums;
+}
+
+.mkt-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:12px;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.06);
+  font-size:10px;
+  letter-spacing:.04em;
+  color:rgba(255,255,255,.38);
+}
+
+.mkt-stat{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:9px;
+  font-size:11.5px;
+}
+
+.mkt-stat span{
+  color:rgba(255,255,255,.42);
+  letter-spacing:.1em;
+  font-size:9.5px;
+  font-weight:700;
+  align-self:center;
+}
+
+.mkt-stat b{
+  color:#e9ecf1;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Kripto ro'yxati */
+.coin-list{
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(18,19,25,.8), rgba(9,10,14,.86));
+}
+
+.coin-row{
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr) 58px auto;
+  align-items:center;
+  gap:9px;
+  padding:12px 13px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.coin-row:last-child{
+  border-bottom:0;
+}
+
+.coin-row img{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+
+.coin-id b{
+  display:block;
+  font-size:12.5px;
+  font-weight:800;
+  color:#fff;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.coin-id small{
+  display:block;
+  margin-top:2px;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.38);
+}
+
+.coin-spark{
+  width:58px;
+  height:26px;
+  display:block;
+}
+
+.coin-val{
+  text-align:right;
+  min-width:92px;
+}
+
+.coin-val b{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+.coin-val small{
+  display:block;
+  margin-top:3px;
+  font-size:10.5px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+
+.coin-val small.up{ color:#3ee39c; }
+.coin-val small.down{ color:#ff6b7a; }
+.coin-val small.flat{ color:var(--muted); }
+
+.mkt-off{
+  display:none;
+  align-items:center;
+  gap:9px;
+  margin-top:12px;
+  padding:13px 14px;
+  border-radius:16px;
+  border:1px solid rgba(255,83,100,.26);
+  background:rgba(255,83,100,.07);
+  font-size:11.5px;
+  line-height:1.5;
+  color:#ffb3bb;
+}
+
+.mkt-off.on{
+  display:flex;
+}
+
+.mkt-skeleton{
+  color:rgba(255,255,255,.3);
+}
+
+.mkt-note{
+  margin:12px 0 0;
+  font-size:10px;
+  line-height:1.6;
+  color:rgba(255,255,255,.3);
+}
+
+@media (min-width:430px){
+  .mkt-title{ font-size:26px; }
+  .mkt-price{ font-size:30px; }
+}
+
+
 /* ANIMATSIYANI KAMAYTIRISH */
 
 @media (prefers-reduced-motion:reduce){
@@ -3334,6 +3810,116 @@ body{
 </div>
 
 </div>
+
+
+
+<!-- ===== MARKET ANALYSIS: GOLD / DXY ===== -->
+
+<section class="mkt-sec mkt-gold" id="mktAnalysis">
+
+<div class="mkt-head">
+
+<div>
+  <span class="mkt-eyebrow">MARKET ANALYSIS</span>
+  <h2 class="mkt-title">Oltin va <i>dollar indeksi</i></h2>
+  <p class="mkt-sub">
+    Global bozorning ikki tayanch ko'rsatkichi —
+    joriy narx, kunlik o'zgarish va kun oralig'i.
+  </p>
+</div>
+
+<div class="mkt-badge" id="badgeMacro">
+  <span></span>YUKLANMOQDA
+</div>
+
+</div>
+
+<div id="macroBig"></div>
+
+<div class="mkt-off" id="offMacro">
+  <b>⚠️</b>
+  <div>Ma'lumot vaqtincha mavjud emas. Narxlar manbadan olinmadi — eski narx ko'rsatilmaydi.</div>
+</div>
+
+<p class="mkt-note">
+  Manba: CNBC market data (XAU/USD spot, ICE U.S. Dollar Index).
+  Narx faqat manba yangilanganda ko'rsatiladi.
+</p>
+
+</section>
+
+
+<!-- ===== REAL-TIME MARKET: BTC + OIL + GAS ===== -->
+
+<section class="mkt-sec mkt-live" id="mktLive">
+
+<div class="mkt-head">
+
+<div>
+  <span class="mkt-eyebrow">LIVE MARKET</span>
+  <h2 class="mkt-title">Bozor <i>xulosasi</i></h2>
+  <p class="mkt-sub">
+    Bitcoin bo'yicha 24 soatlik grafik, neft va tabiiy gaz kotirovkalari.
+  </p>
+</div>
+
+<div class="mkt-badge" id="badgeLive">
+  <span></span>YUKLANMOQDA
+</div>
+
+</div>
+
+<div id="btcCard"></div>
+
+<div class="mkt-grid2" id="macroSmall"></div>
+
+<div class="mkt-off" id="offLive">
+  <b>⚠️</b>
+  <div>Ma'lumot vaqtincha mavjud emas. Grafik va narxlar manbadan olinmadi.</div>
+</div>
+
+<p class="mkt-note">
+  Manba: CoinGecko (kripto), CNBC market data (WTI Crude, Natural Gas fyuchers).
+  Fyuchers kotirovkalari birja qoidasi bo'yicha kechikishli bo'lishi mumkin —
+  bu holat alohida belgilanadi.
+</p>
+
+</section>
+
+
+<!-- ===== CRYPTO MARKET ===== -->
+
+<section class="mkt-sec mkt-crypto" id="mktCrypto">
+
+<div class="mkt-head">
+
+<div>
+  <span class="mkt-eyebrow">CRYPTO MARKET</span>
+  <h2 class="mkt-title">Kripto <i>kotirovkalar</i></h2>
+  <p class="mkt-sub">
+    Joriy narx, 24 soatlik o'zgarish va 7 kunlik trend.
+  </p>
+</div>
+
+<div class="mkt-badge" id="badgeCrypto">
+  <span></span>YUKLANMOQDA
+</div>
+
+</div>
+
+<div class="coin-list" id="coinList"></div>
+
+<div class="mkt-off" id="offCrypto">
+  <b>⚠️</b>
+  <div>Ma'lumot vaqtincha mavjud emas. Narxlar manbadan olinmadi.</div>
+</div>
+
+<p class="mkt-note">
+  Manba: CoinGecko API. Narxlar USD hisobida, har 60 sekundda yangilanadi.
+</p>
+
+</section>
+
 
 
 <div class="footer">
@@ -7195,7 +7781,797 @@ document.addEventListener("visibilitychange", function(){
 /* BOSHLANG'ICH HOLAT */
 
 initConfigScreen();
+
+/* ===== LIVE MARKET (kirish sahifasi pastki qismi) ===== */
+
+const LM_MACRO = [
+  { key:"XAU", cnbc:"XAU=",  name:"Gold — XAU/USD",  tick:"OLTIN • SPOT",   ico:"gold", dec:2, big:true },
+  { key:"DXY", cnbc:".DXY",  name:"US Dollar Index", tick:"DXY • ICE",      ico:"dxy",  dec:3, big:true },
+  { key:"OIL", cnbc:"@CL.1", name:"WTI Crude Oil",   tick:"NEFT • WTI",     ico:"oil",  dec:2, big:false },
+  { key:"GAS", cnbc:"@NG.1", name:"Natural Gas",     tick:"TABIIY GAZ",     ico:"gas",  dec:3, big:false }
+];
+
+const LM_COINS = [
+  { id:"bitcoin",     sym:"BTC",  name:"Bitcoin",   dec:2, img:"https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" },
+  { id:"ethereum",    sym:"ETH",  name:"Ethereum",  dec:2, img:"https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628" },
+  { id:"tether",      sym:"USDT", name:"Tether",    dec:4, img:"https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661" },
+  { id:"binancecoin", sym:"BNB",  name:"BNB",       dec:2, img:"https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970" },
+  { id:"ripple",      sym:"XRP",  name:"XRP",       dec:4, img:"https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1696501442" },
+  { id:"usd-coin",    sym:"USDC", name:"USD Coin",  dec:4, img:"https://coin-images.coingecko.com/coins/images/6319/large/USDC.png?1769615602" },
+  { id:"solana",      sym:"SOL",  name:"Solana",    dec:2, img:"https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756" },
+  { id:"tron",        sym:"TRX",  name:"TRON",      dec:5, img:"https://coin-images.coingecko.com/coins/images/1094/large/photo_2026-04-13_09-59-16.png?1776048311" },
+  { id:"dogecoin",    sym:"DOGE", name:"Dogecoin",  dec:5, img:"https://coin-images.coingecko.com/coins/images/5/large/dogecoin.png?1696501409" },
+  { id:"cardano",     sym:"ADA",  name:"Cardano",   dec:4, img:"https://coin-images.coingecko.com/coins/images/975/large/cardano.png?1696502090" },
+  { id:"avalanche-2", sym:"AVAX", name:"Avalanche", dec:2, img:"https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png?1696512369" },
+  { id:"chainlink",   sym:"LINK", name:"Chainlink", dec:2, img:"https://coin-images.coingecko.com/coins/images/877/large/Chainlink_Logo_500.png?1760023405" }
+];
+
+const LM_SERIES_KEY = "jasmina_lm_series_v1";
+
+let lmTick = null;
+let lmChartTick = null;
+
+
+/* --- yordamchi funksiyalar --- */
+
+function lmNum(text){
+
+  if(text === null || text === undefined){
+    return NaN;
+  }
+
+  return Number(String(text).replace(/,/g, "").replace(/%/g, "").replace(/\+/g, ""));
+}
+
+function lmPrice(value, dec){
+
+  const num = Number(value);
+
+  if(!isFinite(num)){
+    return "—";
+  }
+
+  return num.toLocaleString("ru-RU", {
+    minimumFractionDigits: dec,
+    maximumFractionDigits: dec
+  });
+}
+
+function lmPct(value){
+
+  const num = Number(value);
+
+  if(!isFinite(num)){
+    return "—";
+  }
+
+  const text = Math.abs(num).toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  if(Math.abs(num) < 0.005){
+    return "• 0,00%";
+  }
+
+  return (num > 0 ? "▲ +" : "▼ -") + text + "%";
+}
+
+function lmDir(value){
+
+  const num = Number(value);
+
+  if(!isFinite(num) || Math.abs(num) < 0.005){
+    return "flat";
+  }
+
+  return num > 0 ? "up" : "down";
+}
+
+function lmClock(stamp){
+
+  const when = new Date(stamp);
+
+  if(isNaN(when.getTime())){
+    return "—";
+  }
+
+  const pad = function(n){ return String(n).padStart(2, "0"); };
+
+  return pad(when.getHours()) + ":" + pad(when.getMinutes()) + ":" + pad(when.getSeconds());
+}
+
+function lmBadge(id, state, text){
+
+  const box = document.getElementById(id);
+
+  if(!box){
+    return;
+  }
+
+  box.className = "mkt-badge" + (
+    state === "live" ? " is-live" :
+    state === "delay" ? " is-delay" :
+    state === "off" ? " is-off" : ""
+  );
+
+  box.innerHTML = "<span></span>" + escapeHtml(text);
+}
+
+function lmOff(id, on){
+
+  const box = document.getElementById(id);
+
+  if(box){
+    box.className = "mkt-off" + (on ? " on" : "");
+  }
+}
+
+
+/* --- SVG grafik --- */
+
+function lmSpark(values, w, h, color, fill){
+
+  const clean = (values || []).filter(function(v){ return isFinite(Number(v)); }).map(Number);
+
+  if(clean.length < 2){
+    return "";
+  }
+
+  let min = Math.min.apply(null, clean);
+  let max = Math.max.apply(null, clean);
+
+  if(max - min < 1e-9){
+    max = min + 1;
+  }
+
+  const pad = 3;
+  const step = (w - pad * 2) / (clean.length - 1);
+
+  const pts = clean.map(function(v, i){
+
+    const x = pad + step * i;
+    const y = pad + (h - pad * 2) * (1 - (v - min) / (max - min));
+
+    return x.toFixed(2) + "," + y.toFixed(2);
+  });
+
+  const line = "M" + pts.join(" L");
+  const gid = "g" + Math.random().toString(36).slice(2, 9);
+
+  let out =
+    '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" ' +
+    'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
+
+  if(fill){
+
+    out +=
+      '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="' + color + '" stop-opacity=".34"/>' +
+      '<stop offset="100%" stop-color="' + color + '" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
+      '<path d="' + line + ' L' + (w - pad) + ',' + (h - pad) + ' L' + pad + ',' + (h - pad) + ' Z" ' +
+      'fill="url(#' + gid + ')"/>';
+  }
+
+  out +=
+    '<path d="' + line + '" fill="none" stroke="' + color + '" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>';
+
+  return out;
+}
+
+
+/* --- kuzatilgan narx qatori (grafik uchun) --- */
+
+function lmReadSeries(){
+
+  try{
+
+    const raw = localStorage.getItem(LM_SERIES_KEY);
+
+    if(!raw){
+      return {};
+    }
+
+    const saved = JSON.parse(raw);
+
+    return (saved && typeof saved === "object") ? saved : {};
+
+  }catch(err){
+    return {};
+  }
+}
+
+function lmPushSeries(key, price, stamp){
+
+  const all = lmReadSeries();
+  let list = Array.isArray(all[key]) ? all[key] : [];
+
+  if(list.length && stamp - list[list.length - 1][0] > 21600000){
+    list = [];
+  }
+
+  if(!list.length || stamp - list[list.length - 1][0] > 20000){
+    list.push([stamp, price]);
+  }
+
+  if(list.length > 96){
+    list = list.slice(list.length - 96);
+  }
+
+  all[key] = list;
+
+  try{
+    localStorage.setItem(LM_SERIES_KEY, JSON.stringify(all));
+  }catch(err){}
+
+  return list;
+}
+
+
+/* --- yangilik holati --- */
+
+function lmFresh(quote){
+
+  const when = Date.parse(quote.last_time || "");
+
+  if(isNaN(when)){
+    return { state:"delay", text:"KECHIKISHLI", note:"Yangilanish vaqti aniqlanmadi" };
+  }
+
+  const mins = (Date.now() - when) / 60000;
+
+  if(String(quote.realTime) === "true" && mins <= 6){
+    return { state:"live", text:"LIVE", note:"Yangilandi: " + lmClock(when) };
+  }
+
+  if(mins <= 30){
+    return {
+      state:"delay",
+      text:"KECHIKISHLI",
+      note:"Birja ma'lumoti • " + lmClock(when) + " holatiga"
+    };
+  }
+
+  return {
+    state:"off",
+    text:"BOZOR YOPIQ",
+    note:"Oxirgi savdo narxi • " + lmClock(when)
+  };
+}
+
+
+/* --- kartalar --- */
+
+function lmMacroCard(cfg, quote){
+
+  if(!quote){
+
+    return '' +
+      '<div class="mkt-card">' +
+        '<div class="mkt-top">' +
+          '<div class="mkt-ico ' + cfg.ico + '">' + escapeHtml(cfg.key) + '</div>' +
+          '<div class="mkt-name"><b>' + escapeHtml(cfg.name) + '</b>' +
+          '<small>' + escapeHtml(cfg.tick) + '</small></div>' +
+        '</div>' +
+        '<div class="mkt-price mkt-skeleton">—</div>' +
+        '<div class="mkt-meta">Ma\'lumot vaqtincha mavjud emas</div>' +
+      '</div>';
+  }
+
+  const last = lmNum(quote.last);
+  const pct = lmNum(quote.change_pct);
+  const low = lmNum(quote.low);
+  const high = lmNum(quote.high);
+  const open = lmNum(quote.open);
+  const prev = lmNum(quote.previous_day_closing);
+  const fresh = lmFresh(quote);
+  const dir = lmDir(pct);
+  const color = dir === "down" ? "#ff6b7a" : (dir === "up" ? "#3ee39c" : "#8b93a1");
+
+  let series = lmPushSeries(cfg.key, last, Date.now()).map(function(p){ return p[1]; });
+
+  if(series.length < 5){
+
+    const seed = [];
+
+    if(isFinite(prev)){
+      seed.push(prev);
+    }
+
+    if(isFinite(open)){
+      seed.push(open);
+    }
+
+    series = seed.concat(series);
+  }
+
+  let chart = "";
+
+  if(series.length >= 3){
+    chart = '<div class="mkt-spark">' +
+      lmSpark(series, 300, 56, color, true) + '</div>';
+  }
+
+  let range = "";
+
+  if(isFinite(low) && isFinite(high) && high > low && isFinite(last)){
+
+    const posRaw = ((last - low) / (high - low)) * 100;
+    const pos = Math.max(2, Math.min(98, posRaw));
+
+    range = '' +
+      '<div class="mkt-range">' +
+        '<div class="mkt-range-bar">' +
+          '<i class="mkt-range-dot" style="left:' + pos.toFixed(1) + '%"></i>' +
+        '</div>' +
+        '<div class="mkt-range-labels">' +
+          '<span>KUN MIN ' + escapeHtml(lmPrice(low, cfg.dec)) + '</span>' +
+          '<span>KUN MAX ' + escapeHtml(lmPrice(high, cfg.dec)) + '</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  let stats = "";
+
+  if(cfg.big){
+
+    stats = '' +
+      '<div class="mkt-stat"><span>OCHILISH</span><b>' +
+        escapeHtml(lmPrice(open, cfg.dec)) + '</b></div>' +
+      '<div class="mkt-stat"><span>OLDINGI YOPILISH</span><b>' +
+        escapeHtml(lmPrice(prev, cfg.dec)) + '</b></div>';
+  }
+
+  const badgeCls =
+    fresh.state === "live" ? "mkt-badge is-live" :
+    fresh.state === "delay" ? "mkt-badge is-delay" : "mkt-badge is-off";
+
+  return '' +
+    '<div class="mkt-card">' +
+      '<div class="mkt-top">' +
+        '<div class="mkt-ico ' + cfg.ico + '">' + escapeHtml(cfg.key) + '</div>' +
+        '<div class="mkt-name" style="flex:1 1 auto"><b>' + escapeHtml(cfg.name) + '</b>' +
+        '<small>' + escapeHtml(cfg.tick) + '</small></div>' +
+        (cfg.big
+          ? '<div class="' + badgeCls + '"><span></span>' + escapeHtml(fresh.text) + '</div>'
+          : '') +
+      '</div>' +
+      '<div class="mkt-price">' + escapeHtml(lmPrice(last, cfg.dec)) +
+        (cfg.key === "XAU" || cfg.key === "OIL" ? '<em>USD</em>' : '') + '</div>' +
+      '<div class="mkt-chg ' + dir + '">' + escapeHtml(lmPct(pct)) + '</div>' +
+      chart +
+      range +
+      stats +
+      '<div class="mkt-meta">' + escapeHtml(fresh.note) + '</div>' +
+    '</div>';
+}
+
+function lmBtcCard(quote, chart){
+
+  if(!quote){
+
+    return '' +
+      '<div class="mkt-card">' +
+        '<div class="mkt-top">' +
+          '<div class="mkt-ico btc">BTC</div>' +
+          '<div class="mkt-name"><b>Bitcoin</b><small>BTC • USD</small></div>' +
+        '</div>' +
+        '<div class="mkt-price mkt-skeleton">—</div>' +
+        '<div class="mkt-meta">Ma\'lumot vaqtincha mavjud emas</div>' +
+      '</div>';
+  }
+
+  const dir = lmDir(quote.change);
+  const color = dir === "down" ? "#ff6b7a" : (dir === "up" ? "#3ee39c" : "#8b93a1");
+
+  let chartBox = "";
+  let extra = "";
+
+  if(chart && chart.length >= 4){
+
+    chartBox = '<div class="mkt-chart">' + lmSpark(chart, 340, 168, color, true) + '</div>';
+
+    const low = Math.min.apply(null, chart);
+    const high = Math.max.apply(null, chart);
+
+    extra = '' +
+      '<div class="mkt-stat"><span>24 SOAT MIN</span><b>' +
+        escapeHtml(lmPrice(low, 2)) + ' $</b></div>' +
+      '<div class="mkt-stat"><span>24 SOAT MAX</span><b>' +
+        escapeHtml(lmPrice(high, 2)) + ' $</b></div>';
+  }
+
+  return '' +
+    '<div class="mkt-card">' +
+      '<div class="mkt-top">' +
+        '<div class="mkt-ico btc">BTC</div>' +
+        '<div class="mkt-name" style="flex:1 1 auto"><b>Bitcoin</b>' +
+        '<small>BTC • USD • 24 SOAT</small></div>' +
+      '</div>' +
+      '<div class="mkt-price">' + escapeHtml(lmPrice(quote.price, 2)) + '<em>USD</em></div>' +
+      '<div class="mkt-chg ' + dir + '">' + escapeHtml(lmPct(quote.change)) + '</div>' +
+      chartBox +
+      extra +
+      '<div class="mkt-meta">Yangilandi: ' + escapeHtml(lmClock(quote.stamp)) + '</div>' +
+    '</div>';
+}
+
+function lmCoinRow(cfg, row){
+
+  if(!row){
+
+    return '' +
+      '<div class="coin-row">' +
+        '<img src="' + cfg.img + '" alt="" loading="lazy">' +
+        '<div class="coin-id"><b>' + escapeHtml(cfg.name) + '</b>' +
+        '<small>' + escapeHtml(cfg.sym) + '</small></div>' +
+        '<div></div>' +
+        '<div class="coin-val"><b class="mkt-skeleton">—</b>' +
+        '<small class="flat">kutilmoqda</small></div>' +
+      '</div>';
+  }
+
+  const dir = lmDir(row.change);
+  const color = dir === "down" ? "#ff6b7a" : (dir === "up" ? "#3ee39c" : "#8b93a1");
+
+  const spark = (row.spark && row.spark.length >= 4)
+    ? '<div class="coin-spark">' + lmSpark(row.spark, 58, 26, color, false) + '</div>'
+    : '<div></div>';
+
+  return '' +
+    '<div class="coin-row">' +
+      '<img src="' + (row.img || cfg.img) + '" alt="" loading="lazy">' +
+      '<div class="coin-id"><b>' + escapeHtml(cfg.name) + '</b>' +
+      '<small>' + escapeHtml(cfg.sym) + '</small></div>' +
+      spark +
+      '<div class="coin-val"><b>' + escapeHtml(lmPrice(row.price, cfg.dec)) + ' $</b>' +
+      '<small class="' + dir + '">' + escapeHtml(lmPct(row.change)) + '</small></div>' +
+    '</div>';
+}
+
+
+/* --- ma'lumot olish --- */
+
+async function lmFetchMacro(){
+
+  const symbols = LM_MACRO.map(function(m){ return m.cnbc; }).join("|");
+
+  const data = await fetchJson(
+    "https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols=" +
+    encodeURIComponent(symbols) +
+    "&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json"
+  );
+
+  const box = data && data.FormattedQuoteResult && data.FormattedQuoteResult.FormattedQuote;
+  const list = Array.isArray(box) ? box : (box ? [box] : []);
+
+  if(!list.length){
+    throw new Error("CNBC_EMPTY");
+  }
+
+  const out = {};
+
+  LM_MACRO.forEach(function(cfg){
+
+    const hit = list.find(function(q){ return q && q.symbol === cfg.cnbc; });
+
+    if(hit && isFinite(lmNum(hit.last))){
+      out[cfg.key] = hit;
+    }
+  });
+
+  return out;
+}
+
+async function lmFetchCoins(){
+
+  const ids = LM_COINS.map(function(c){ return c.id; }).join(",");
+
+  const rows = await fetchJson(
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + ids +
+    "&order=market_cap_desc&sparkline=true&price_change_percentage=24h"
+  );
+
+  if(!Array.isArray(rows) || !rows.length){
+    throw new Error("GECKO_EMPTY");
+  }
+
+  const out = {};
+
+  rows.forEach(function(row){
+
+    if(!row || !isFinite(Number(row.current_price))){
+      return;
+    }
+
+    out[row.id] = {
+      price: Number(row.current_price),
+      change: Number(row.price_change_percentage_24h),
+      img: row.image,
+      spark: (row.sparkline_in_7d && Array.isArray(row.sparkline_in_7d.price))
+        ? row.sparkline_in_7d.price.filter(function(v, i){ return i % 3 === 0; })
+        : []
+    };
+  });
+
+  if(!Object.keys(out).length){
+    throw new Error("GECKO_NO_ROWS");
+  }
+
+  return out;
+}
+
+const LM_BINANCE = {
+  bitcoin:"BTCUSDT", ethereum:"ETHUSDT", binancecoin:"BNBUSDT",
+  ripple:"XRPUSDT", "usd-coin":"USDCUSDT", solana:"SOLUSDT",
+  tron:"TRXUSDT", dogecoin:"DOGEUSDT", cardano:"ADAUSDT",
+  "avalanche-2":"AVAXUSDT", chainlink:"LINKUSDT"
+};
+
+async function lmCoinsFromBinance(){
+
+  const pairs = Object.keys(LM_BINANCE).map(function(id){
+    return '"' + LM_BINANCE[id] + '"';
+  }).join(",");
+
+  const rows = await fetchJson(
+    "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
+    encodeURIComponent("[" + pairs + "]")
+  );
+
+  if(!Array.isArray(rows) || !rows.length){
+    throw new Error("BINANCE_EMPTY");
+  }
+
+  const out = {};
+
+  Object.keys(LM_BINANCE).forEach(function(id){
+
+    const hit = rows.find(function(r){ return r && r.symbol === LM_BINANCE[id]; });
+
+    if(hit && isFinite(Number(hit.lastPrice))){
+      out[id] = {
+        price: Number(hit.lastPrice),
+        change: Number(hit.priceChangePercent),
+        img: null,
+        spark: []
+      };
+    }
+  });
+
+  if(!Object.keys(out).length){
+    throw new Error("BINANCE_NO_ROWS");
+  }
+
+  return out;
+}
+
+async function lmBtcChartFromBinance(){
+
+  const rows = await fetchJson(
+    "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=96"
+  );
+
+  if(!Array.isArray(rows) || rows.length < 4){
+    throw new Error("KLINES_EMPTY");
+  }
+
+  return rows.map(function(r){ return Number(r[4]); })
+    .filter(function(v){ return isFinite(v); });
+}
+
+async function lmFetchBtcChart(){
+
+  const data = await fetchJson(
+    "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1"
+  );
+
+  if(!data || !Array.isArray(data.prices) || data.prices.length < 4){
+    throw new Error("CHART_EMPTY");
+  }
+
+  const step = Math.max(1, Math.floor(data.prices.length / 120));
+
+  return data.prices
+    .filter(function(p, i){ return i % step === 0; })
+    .map(function(p){ return Number(p[1]); })
+    .filter(function(v){ return isFinite(v); });
+}
+
+
+/* --- render --- */
+
+let lmBtcChart = null;
+
+async function lmUpdateMacro(){
+
+  const bigBox = document.getElementById("macroBig");
+  const smallBox = document.getElementById("macroSmall");
+
+  if(!bigBox || !smallBox){
+    return;
+  }
+
+  let data = null;
+
+  try{
+    data = await lmFetchMacro();
+  }catch(err){
+    data = null;
+  }
+
+  if(!data){
+
+    bigBox.innerHTML = LM_MACRO
+      .filter(function(m){ return m.big; })
+      .map(function(m){ return lmMacroCard(m, null); })
+      .join("");
+
+    smallBox.innerHTML = LM_MACRO
+      .filter(function(m){ return !m.big; })
+      .map(function(m){ return lmMacroCard(m, null); })
+      .join("");
+
+    lmBadge("badgeMacro", "off", "MAVJUD EMAS");
+    lmOff("offMacro", true);
+    return;
+  }
+
+  bigBox.innerHTML = LM_MACRO
+    .filter(function(m){ return m.big; })
+    .map(function(m){ return lmMacroCard(m, data[m.key] || null); })
+    .join("");
+
+  smallBox.innerHTML = LM_MACRO
+    .filter(function(m){ return !m.big; })
+    .map(function(m){ return lmMacroCard(m, data[m.key] || null); })
+    .join("");
+
+  lmOff("offMacro", false);
+
+  const states = LM_MACRO
+    .filter(function(m){ return m.big && data[m.key]; })
+    .map(function(m){ return lmFresh(data[m.key]).state; });
+
+  if(states.indexOf("live") >= 0){
+    lmBadge("badgeMacro", "live", "LIVE • " + lmClock(Date.now()));
+  }else if(states.indexOf("delay") >= 0){
+    lmBadge("badgeMacro", "delay", "KECHIKISHLI");
+  }else{
+    lmBadge("badgeMacro", "off", "BOZOR YOPIQ");
+  }
+}
+
+async function lmUpdateCoins(){
+
+  const list = document.getElementById("coinList");
+  const btcBox = document.getElementById("btcCard");
+
+  if(!list || !btcBox){
+    return;
+  }
+
+  let data = null;
+
+  try{
+    data = await lmFetchCoins();
+  }catch(err){
+
+    try{
+      data = await lmCoinsFromBinance();
+    }catch(err2){
+      data = null;
+    }
+  }
+
+  if(!data){
+
+    list.innerHTML = LM_COINS.map(function(c){ return lmCoinRow(c, null); }).join("");
+    btcBox.innerHTML = lmBtcCard(null, null);
+
+    lmBadge("badgeCrypto", "off", "MAVJUD EMAS");
+    lmBadge("badgeLive", "off", "MAVJUD EMAS");
+    lmOff("offCrypto", true);
+    lmOff("offLive", true);
+    return;
+  }
+
+  list.innerHTML = LM_COINS.map(function(c){
+    return lmCoinRow(c, data[c.id] || null);
+  }).join("");
+
+  const btc = data.bitcoin;
+
+  btcBox.innerHTML = btc
+    ? lmBtcCard({ price: btc.price, change: btc.change, stamp: Date.now() }, lmBtcChart)
+    : lmBtcCard(null, null);
+
+  lmOff("offCrypto", false);
+  lmOff("offLive", false);
+
+  lmBadge("badgeCrypto", "live", "LIVE • " + lmClock(Date.now()));
+  lmBadge("badgeLive", "live", "LIVE • " + lmClock(Date.now()));
+}
+
+async function lmUpdateChart(){
+
+  try{
+    lmBtcChart = await lmFetchBtcChart();
+  }catch(err){
+
+    try{
+      lmBtcChart = await lmBtcChartFromBinance();
+    }catch(err2){
+      lmBtcChart = null;
+    }
+  }
+}
+
+async function lmRefresh(){
+
+  await Promise.all([
+    lmUpdateMacro(),
+    lmUpdateCoins()
+  ]);
+}
+
+async function lmInit(){
+
+  const list = document.getElementById("coinList");
+
+  if(!list){
+    return;
+  }
+
+  list.innerHTML = LM_COINS.map(function(c){ return lmCoinRow(c, null); }).join("");
+
+  const btcBox = document.getElementById("btcCard");
+
+  if(btcBox){
+    btcBox.innerHTML = lmBtcCard(null, null);
+  }
+
+  await lmUpdateChart();
+  await lmRefresh();
+
+  if(lmTick){
+    clearInterval(lmTick);
+  }
+
+  lmTick = setInterval(function(){
+
+    if(!document.hidden){
+      lmRefresh();
+    }
+
+  }, 60000);
+
+  if(lmChartTick){
+    clearInterval(lmChartTick);
+  }
+
+  lmChartTick = setInterval(function(){
+
+    if(!document.hidden){
+      lmUpdateChart();
+    }
+
+  }, 300000);
+
+  document.addEventListener("visibilitychange", function(){
+
+    if(!document.hidden){
+      lmRefresh();
+    }
+  });
+}
+
+
 initScreenGuard();
+lmInit();
 
 </script>
 
