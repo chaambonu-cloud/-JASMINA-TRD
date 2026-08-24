@@ -1545,124 +1545,6 @@ a:active{
 }
 
 
-/* ADMIN CRUD */
-
-.admin-section{
-  margin:16px 0 8px;
-  color:var(--gold);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.09em;
-}
-
-.admin-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin:10px 0;
-}
-
-.admin-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 13px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:rgba(255,255,255,.03);
-}
-
-.admin-row b{
-  display:block;
-  color:#fff;
-  font-size:13px;
-}
-
-.admin-row small{
-  display:block;
-  margin-top:3px;
-  color:var(--muted);
-  font-size:11px;
-}
-
-.admin-row .tiny-btn{
-  flex:0 0 auto;
-  width:auto;
-  margin:0;
-  padding:9px 13px;
-  font-size:11px;
-}
-
-.admin-form{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.admin-form select,
-.admin-form input{
-  width:100%;
-  padding:13px 14px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#0a0b0c;
-  color:#fff;
-  font-size:14px;
-}
-
-.admin-form select:focus,
-.admin-form input:focus{
-  outline:none;
-  border-color:rgba(245,189,53,.55);
-}
-
-.tiny-btn{
-  margin-top:8px;
-  padding:10px;
-  font-size:11px;
-}
-
-.admin-empty{
-  padding:16px;
-  border:1px dashed var(--border);
-  border-radius:14px;
-  color:var(--muted);
-  font-size:12px;
-  text-align:center;
-}
-
-.admin-msg-err{
-  color:var(--red) !important;
-}
-
-.admin-msg-ok{
-  color:var(--green) !important;
-}
-
-.trade-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:11px 13px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:rgba(255,255,255,.02);
-  font-size:12px;
-}
-
-.trade-item .up{
-  color:var(--green);
-  font-weight:800;
-}
-
-.trade-item .down{
-  color:var(--red);
-  font-weight:800;
-}
-
-
 /* ADMIN / MAXFIYLIK */
 
 .admin-gate{
@@ -1809,43 +1691,7 @@ a:active{
 </div>
 
 
-<!-- BIR MARTALIK SOZLASH -->
-
-<div class="login-card" id="setupCard" style="display:none;">
-
-<h2>
-  Bazani ulash
-</h2>
-
-<p class="subtitle">
-  Supabase → Settings → API Keys
-  bo'limidagi <b>anon</b> kalitni qo'ying
-</p>
-
-<div class="field">
-<label>PROJECT URL</label>
-<input id="setupUrl" type="text" autocomplete="off"
-  placeholder="https://xxxx.supabase.co">
-</div>
-
-<div class="field">
-<label>ANON (PUBLISHABLE) KALIT</label>
-<input id="setupKey" type="text" autocomplete="off"
-  placeholder="eyJhbGciOi...">
-</div>
-
-<button class="btn" type="button" onclick="saveSetup()">
-  ULASH →
-</button>
-
-<div class="safe" id="setupMsg">
-  🔐 Bu ma'lumot faqat shu qurilmada saqlanadi
-</div>
-
-</div>
-
-
-<div class="login-card" id="loginCard">
+<div class="login-card">
 
 <h2>
   Xush kelibsiz
@@ -2002,8 +1848,8 @@ a:active{
   TO'LANGAN DAROMADLAR
 </div>
 
-<div class="hero-money" id="heroMoney">
-  0 so'm
+<div class="hero-money">
+  457 920 139 so'm
 </div>
 
 <div class="subnote">
@@ -2074,8 +1920,8 @@ a:active{
   YUTUQNI OLISH UCHUN MAVJUD
 </div>
 
-<strong class="value" id="prizeValue">
-  0₽
+<strong class="value">
+  390 000₽
 </strong>
 
 </div>
@@ -2100,8 +1946,8 @@ a:active{
   KOMISSIYA
 </div>
 
-<strong class="value" id="commissionValue">
-  0₽
+<strong class="value">
+  38 000₽
 </strong>
 
 </div>
@@ -2126,22 +1972,12 @@ a:active{
 
 </div>
 
-<strong class="value" id="investUzs">
-  0 so'm
+<strong class="value">
+   58 196 666 so'm
 </strong>
 
-<div class="subnote" id="investRub">
-  0₽
-</div>
-
-<div class="divider"></div>
-
-<div class="status-row">
-<div>
-  <div class="label">JORIY BALANS</div>
-  <strong class="value" id="balanceValue">0₽</strong>
-</div>
-<div class="active-badge" id="profitBadge">0%</div>
+<div class="subnote">
+   390 000₽
 </div>
 
 </div>
@@ -2389,17 +2225,17 @@ a:active{
 
 <div class="client-row">
   <span>DAVLAT</span>
-  <strong id="clientCountry">—</strong>
+  <strong>🇷🇺 ROSSIYA</strong>
 </div>
 
 <div class="client-row">
   <span>VALYUTA</span>
-  <strong id="clientCurrency">—</strong>
+  <strong>RUB — ROSSIYA RUBLI ₽</strong>
 </div>
 
 <div class="client-row">
   <span>KARTA</span>
-  <strong id="clientCard">•••• •••• •••• ••••</strong>
+  <strong>•••• •••• •••• 5537</strong>
 </div>
 
 </div>
@@ -2432,8 +2268,8 @@ a:active{
 
 </div>
 
-<div class="history-value" id="prizeSum">
-  0₽
+<div class="history-value">
+  390 000₽
 </div>
 
 </div>
@@ -2453,26 +2289,11 @@ a:active{
 
 </div>
 
-<div class="history-value" id="prizeCommission">
-  0₽
+<div class="history-value">
+  38 000₽
 </div>
 
 </div>
-
-<div id="userNoteBox" class="admin-note" style="display:none;"></div>
-
-</div>
-
-
-<!-- SAVDO TARIXI -->
-
-<div class="panel" id="tradesPanel" style="display:none;">
-
-<div class="section-title">
-  SAVDO TARIXI
-</div>
-
-<div id="tradesList"></div>
 
 </div>
 
@@ -2556,8 +2377,8 @@ a:active{
   DAVLAT
 </span>
 
-<strong id="profileCountry">
-  —
+<strong>
+  🇷🇺 Rossiya
 </strong>
 
 </div>
@@ -2569,8 +2390,8 @@ a:active{
   MENING KARTAM
 </span>
 
-<strong class="card-number" id="profileCard">
-  •••• •••• •••• ••••
+<strong class="card-number">
+  •••• •••• •••• 5537
 </strong>
 
 </div>
@@ -2629,108 +2450,18 @@ a:active{
       <button class="close-btn" type="button" onclick="closeAdminPanel()">×</button>
     </div>
     <div class="admin-gate">
-
-      <div class="admin-status"><span>BAZA HOLATI</span><strong id="adminDbLabel">● ULANGAN</strong></div>
-
+      <div class="admin-status"><span>MAXFIYLIK HOLATI</span><strong>● FAOL</strong></div>
       <div class="admin-grid">
-        <div class="admin-mini"><span>FOYDALANUVCHILAR</span><strong id="adminCountLabel">0</strong></div>
+        <div class="admin-mini"><span>FOYDALANUVCHI</span><strong id="adminUserLabel">Diyorbek Chorshanbiyev</strong></div>
         <div class="admin-mini"><span>SESSIYA</span><strong id="adminSessionLabel">Faol</strong></div>
+        <div class="admin-mini"><span>INDEXLASH</span><strong>O‘chirilgan</strong></div>
+        <div class="admin-mini"><span>REFERRER</span><strong>Yopiq</strong></div>
       </div>
-
-      <!-- RO'YXAT -->
-      <div id="adminListView">
-        <div class="admin-actions">
-          <button class="btn" type="button" onclick="newUserForm()">+ YANGI MIJOZ</button>
-        </div>
-        <div id="adminUsersList" class="admin-list"></div>
-        <div class="admin-actions">
-          <button class="btn register-btn" type="button" onclick="loadAdminUsers()">YANGILASH</button>
-          <button class="btn admin-danger" type="button" onclick="lockAdmin()">ADMINNI QULFLASH</button>
-        </div>
-      </div>
-
-      <!-- TAHRIRLASH -->
-      <div id="adminEditView" style="display:none;">
-
-        <div class="admin-section">FOYDALANUVCHI MA'LUMOTI</div>
-        <input type="hidden" id="f_id">
-
-        <div class="admin-form">
-          <div class="field"><label>ISM</label><input id="f_name" type="text" placeholder="Ismi"></div>
-          <div class="field"><label>FAMILIYA</label><input id="f_surname" type="text" placeholder="Familiyasi"></div>
-          <div class="field">
-            <label>KIRISH KODI</label>
-            <input id="f_code" type="text" placeholder="Masalan: 4821">
-            <button class="btn register-btn tiny-btn" type="button" onclick="generateCode()">KOD GENERATSIYA</button>
-          </div>
-          <div class="field"><label>TO'LANGAN DAROMAD (so'm)</label><input id="f_paid_income" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>SARMOYA (so'm)</label><input id="f_investment_uzs" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>SARMOYA (₽)</label><input id="f_investment_rub" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>JORIY BALANS (₽)</label><input id="f_balance" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>FOYDA (%)</label><input id="f_profit_percent" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>YUTUQ SUMMASI (₽)</label><input id="f_prize" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>KOMISSIYA (₽)</label><input id="f_commission" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field">
-            <label>YUTUQ HOLATI</label>
-            <select id="f_prize_available">
-              <option value="true">Olish mumkin</option>
-              <option value="false">Yopiq</option>
-            </select>
-          </div>
-          <div class="field"><label>DAVLAT</label><input id="f_country" type="text" placeholder="ROSSIYA"></div>
-          <div class="field"><label>VALYUTA</label><input id="f_currency" type="text" placeholder="RUB"></div>
-          <div class="field"><label>KARTA (oxirgi 4 raqam)</label><input id="f_card_last4" type="text" maxlength="4" inputmode="numeric" placeholder="5537"></div>
-          <div class="field"><label>IZOH (kabinetda ko'rinadi)</label><input id="f_note" type="text" placeholder="Ixtiyoriy"></div>
-          <div class="field">
-            <label>HOLATI</label>
-            <select id="f_status">
-              <option value="active">Faol</option>
-              <option value="blocked">Bloklangan</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="admin-actions">
-          <button class="btn" type="button" onclick="saveUser()">SAQLASH</button>
-          <button class="btn register-btn" type="button" onclick="backToList()">← ORQAGA</button>
-        </div>
-
-        <div id="adminTradeBox" style="display:none;">
-          <div class="admin-section">SAVDO TARIXI</div>
-          <div id="adminTradesList" class="admin-list"></div>
-          <div class="admin-form">
-            <div class="field"><label>JUFTLIK</label><input id="t_symbol" type="text" placeholder="BTC/USDT"></div>
-            <div class="field">
-              <label>YO'NALISH</label>
-              <select id="t_direction">
-                <option value="up">O'sish (+)</option>
-                <option value="down">Tushish (−)</option>
-              </select>
-            </div>
-            <div class="field"><label>SUMMA</label><input id="t_amount" type="number" inputmode="decimal" placeholder="0"></div>
-            <div class="field"><label>NATIJA (+/−)</label><input id="t_result" type="number" inputmode="decimal" placeholder="0"></div>
-          </div>
-          <div class="admin-actions">
-            <button class="btn register-btn" type="button" onclick="addTrade()">+ SAVDO QO'SHISH</button>
-          </div>
-        </div>
-
-        <div class="admin-actions">
-          <button class="btn admin-danger" type="button" onclick="deleteUser()">FOYDALANUVCHINI O'CHIRISH</button>
-        </div>
-      </div>
-
-      <div class="admin-section">MIJOZLAR UCHUN HAVOLA</div>
-      <div class="admin-form">
-        <input id="clientLinkBox" type="text" readonly placeholder="Havolani yasash uchun tugmani bosing">
-      </div>
+      <p class="admin-note">Bu statik sahifa uchun maxfiylik paneli. Haqiqiy ishlab chiqarish xavfsizligi uchun login va admin tekshiruvi server tomonida bajarilishi kerak.</p>
       <div class="admin-actions">
-        <button class="btn register-btn" type="button" onclick="copyClientLink()">HAVOLANI NUSXALASH</button>
-        <button class="btn admin-danger" type="button" onclick="resetConfig()">ULANISHNI O'CHIRISH</button>
+        <button class="btn register-btn" type="button" onclick="lockDashboard()">KABINETNI QULFLASH</button>
+        <button class="btn admin-danger" type="button" onclick="lockAdmin()">ADMINNI QULFLASH</button>
       </div>
-
-      <p class="admin-note" id="adminMsg">Ma'lumotlar Supabase bazasida saqlanadi — o'zgartirish barcha qurilmalarda ko'rinadi.</p>
-
     </div>
   </div>
 </div>
@@ -2741,252 +2472,16 @@ a:active{
 "use strict";
 
 
-/* ---------- SUPABASE SOZLAMASI ---------- */
-
-const SUPABASE_URL = "https://nvflfwaykadmgerprbmh.supabase.co";
-const SUPABASE_ANON_KEY = "__SUPABASE_ANON_KEY__";
-
-const ADMIN = {
-  sessionMs: 55 * 60 * 1000
+const USER = {
+  name:"Diyorbek",
+  surname:"Chorshanbiyev",
+  codeHash:"158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab"
 };
 
-let adminToken = null;
-let adminUsers = [];
-let currentUser = null;
-
-const CONFIG_KEY = "jasmina_sb_config";
-
-function builtinUrl(){
-  return SUPABASE_URL.indexOf("__SUPABASE") === 0 ? "" : SUPABASE_URL;
-}
-
-function builtinKey(){
-  return SUPABASE_ANON_KEY.indexOf("__SUPABASE") === 0 ? "" : SUPABASE_ANON_KEY;
-}
-
-function storedConfig(){
-  try{
-    const raw = localStorage.getItem(CONFIG_KEY);
-    return raw ? JSON.parse(raw) : null;
-  }catch(err){
-    return null;
-  }
-}
-
-function getConfig(){
-
-  const stored = storedConfig();
-
-  const url = (stored && stored.url) || builtinUrl();
-  const key = (stored && stored.key) || builtinKey();
-
-  if(url && key){
-    return {url: url, key: key};
-  }
-
-  return null;
-}
-
-function encodeConfig(config){
-  return btoa(unescape(encodeURIComponent(JSON.stringify(config))))
-    .replace(/=+$/, "");
-}
-
-function decodeConfig(text){
-  try{
-    return JSON.parse(decodeURIComponent(escape(atob(text))));
-  }catch(err){
-    return null;
-  }
-}
-
-function saveSetup(){
-
-  const url = document.getElementById("setupUrl").value.trim().replace(/\/+$/, "");
-  const key = document.getElementById("setupKey").value.trim();
-  const msg = document.getElementById("setupMsg");
-
-  if(!/^https:\/\/.+/.test(url)){
-    msg.textContent = "Project URL https:// bilan boshlanishi kerak.";
-    return;
-  }
-
-  if(key.length < 20){
-    msg.textContent = "Anon kalit to'liq kiritilmagan.";
-    return;
-  }
-
-  localStorage.setItem(CONFIG_KEY, JSON.stringify({url: url, key: key}));
-
-  document.getElementById("setupCard").style.display = "none";
-  document.getElementById("loginCard").style.display = "block";
-}
-
-function applyConfigFromLink(){
-
-  const match = window.location.search.match(/[?&]sb=([^&]+)/);
-
-  if(!match){
-    return;
-  }
-
-  const config = decodeConfig(match[1]);
-
-  if(config && config.url && config.key){
-    localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-  }
-
-  history.replaceState(null, "", window.location.pathname);
-}
-
-function initConfigScreen(){
-
-  applyConfigFromLink();
-
-  const ready = !!getConfig();
-
-  const urlInput = document.getElementById("setupUrl");
-
-  if(urlInput && !urlInput.value){
-    const stored = storedConfig();
-    urlInput.value = (stored && stored.url) || builtinUrl();
-  }
-
-  const setupCard = document.getElementById("setupCard");
-  const loginCard = document.getElementById("loginCard");
-
-  if(setupCard && loginCard){
-    setupCard.style.display = ready ? "none" : "block";
-    loginCard.style.display = ready ? "block" : "none";
-  }
-}
-
-function copyClientLink(){
-
-  const config = getConfig();
-
-  if(!config){
-    adminMsg("Baza ulanmagan.", "err");
-    return;
-  }
-
-  const link = window.location.origin +
-    window.location.pathname +
-    "?sb=" + encodeConfig(config);
-
-  const box = document.getElementById("clientLinkBox");
-
-  if(box){
-    box.value = link;
-    box.select();
-  }
-
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(link).then(function(){
-      adminMsg("Mijozlar uchun havola nusxalandi.", "ok");
-    }).catch(function(){
-      adminMsg("Havola quyida — qo'lda nusxalang.");
-    });
-  }else{
-    adminMsg("Havola quyida — qo'lda nusxalang.");
-  }
-}
-
-function resetConfig(){
-
-  if(!confirm("Baza ulanishi shu qurilmadan o'chiriladi. Davom etamizmi?")){
-    return;
-  }
-
-  localStorage.removeItem(CONFIG_KEY);
-  location.reload();
-}
-
-async function rpc(fn, args){
-
-  const config = getConfig();
-
-  if(!config){
-    throw new Error("Baza sozlanmagan (Supabase URL/kalit kiritilmagan).");
-  }
-
-  const res = await fetch(config.url + "/rest/v1/rpc/" + fn, {
-    method:"POST",
-    headers:{
-      "apikey": config.key,
-      "Authorization": "Bearer " + config.key,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(args || {})
-  });
-
-  let payload = null;
-
-  try{
-    payload = await res.json();
-  }catch(err){
-    payload = null;
-  }
-
-  if(!res.ok){
-    const raw = (payload && (payload.message || payload.hint || payload.details)) || ("HTTP " + res.status);
-    throw new Error(translateError(String(raw)));
-  }
-
-  return payload;
-}
-
-function translateError(raw){
-
-  if(raw.indexOf("LOGIN_FAILED") > -1){
-    return "Ism, familiya yoki kirish kodi noto'g'ri.";
-  }
-  if(raw.indexOf("ADMIN_PASSWORD_INVALID") > -1){
-    return "Admin paroli noto'g'ri.";
-  }
-  if(raw.indexOf("ADMIN_SESSION_INVALID") > -1){
-    return "Admin sessiyasi tugagan, qaytadan kiring.";
-  }
-  if(raw.indexOf("duplicate key") > -1 && raw.indexOf("code") > -1){
-    return "Bu kirish kodi allaqachon band. Boshqa kod tanlang.";
-  }
-  if(raw.indexOf("NAME_REQUIRED") > -1){
-    return "Ism va familiya majburiy.";
-  }
-  if(raw.indexOf("CODE_REQUIRED") > -1){
-    return "Kirish kodi majburiy.";
-  }
-  if(raw.indexOf("USER_NOT_FOUND") > -1){
-    return "Foydalanuvchi topilmadi.";
-  }
-  return raw;
-}
-
-function fmtNumber(value){
-
-  const number = Number(value || 0);
-
-  return number
-    .toLocaleString("ru-RU", {maximumFractionDigits:2})
-    .replace(/\u00a0/g, " ");
-}
-
-function fmtSum(value){
-  return fmtNumber(value) + " so'm";
-}
-
-function fmtRub(value){
-  return fmtNumber(value) + "₽";
-}
-
-function setText(id, value){
-
-  const element = document.getElementById(id);
-
-  if(element){
-    element.textContent = value;
-  }
-}
+const ADMIN = {
+  passwordHash:"78c9d6d639f1657a6a01be8e55c5b532f005454cf0f3897006b60d2c4d4a80a7",
+  sessionMs: 5 * 60 * 1000
+};
 
 let adminUnlockedUntil = 0;
 let dashboardLastActivity = Date.now();
@@ -3069,7 +2564,7 @@ function setUserDisplay(
       displayName,
 
     investmentTitle:
-      `${upperName} SARMOYASI`,
+      `${upperName} YUTUG'I`,
 
     prizeTitle:
       `${upperName} YUTUG'I`
@@ -3180,111 +2675,47 @@ async function continueApp(){
   }
 
 
-  let data = null;
+  const enteredUser =
+    normalizeText(
+      name + " " + surname
+    );
 
-  try{
-    data = await rpc("user_login", {
-      p_name: name,
-      p_surname: surname,
-      p_code: code
-    });
-  }catch(err){
-    alert(err.message);
+
+  const allowedUser =
+    normalizeText(
+       USER.name +
+      " " +
+      USER.surname
+    );
+
+
+  if(
+    enteredUser !==
+    allowedUser
+    ||
+    (await sha256(code)) !==
+    USER.codeHash
+  ){
+
+    alert(
+      "Ism, familiya yoki kirish kodi noto'g'ri."
+    );
+
     return;
+
   }
 
-  currentUser = data;
 
   setUserDisplay(
-    data.name,
-    data.surname
+    name,
+    surname
   );
 
-  renderUserData(data);
 
   showScreen(
     "dashboard"
   );
 
-}
-
-
-/* KABINETNI TO'LDIRISH */
-
-function renderUserData(user){
-
-  setText("heroMoney", fmtSum(user.paid_income));
-  setText("prizeValue", fmtRub(user.prize));
-  setText("commissionValue", fmtRub(user.commission));
-  setText("investUzs", fmtSum(user.investment_uzs));
-  setText("investRub", fmtRub(user.investment_rub));
-  setText("balanceValue", fmtRub(user.balance));
-  setText("profitBadge", fmtNumber(user.profit_percent) + "%");
-  setText("prizeSum", fmtRub(user.prize));
-  setText("prizeCommission", fmtRub(user.commission));
-
-  setText("clientCountry", String(user.country || "—").toUpperCase());
-  setText("clientCurrency", String(user.currency || "—").toUpperCase());
-  setText("profileCountry", user.country || "—");
-
-  const card = String(user.card_last4 || "").slice(-4);
-  const cardText = card
-    ? "•••• •••• •••• " + card
-    : "•••• •••• •••• ••••";
-
-  setText("clientCard", cardText);
-  setText("profileCard", cardText);
-
-  const noteBox = document.getElementById("userNoteBox");
-
-  if(noteBox){
-    if(user.note){
-      noteBox.textContent = user.note;
-      noteBox.style.display = "block";
-    }else{
-      noteBox.style.display = "none";
-    }
-  }
-
-  const tradesPanel = document.getElementById("tradesPanel");
-  const tradesList = document.getElementById("tradesList");
-  const trades = Array.isArray(user.trades) ? user.trades : [];
-
-  if(tradesPanel && tradesList){
-
-    if(!trades.length){
-      tradesPanel.style.display = "none";
-      tradesList.innerHTML = "";
-    }else{
-      tradesPanel.style.display = "block";
-      tradesList.innerHTML = trades.map(function(trade){
-
-        const cls = Number(trade.result) < 0 ? "down" : "up";
-        const sign = Number(trade.result) < 0 ? "" : "+";
-        const date = new Date(trade.traded_at)
-          .toLocaleDateString("ru-RU");
-
-        return (
-          '<div class="trade-item">' +
-            "<div><strong>" + escapeHtml(trade.symbol) + "</strong>" +
-            "<small>" + date + " • " + fmtNumber(trade.amount) + "</small></div>" +
-            '<div class="' + cls + '">' + sign + fmtNumber(trade.result) + "</div>" +
-          "</div>"
-        );
-
-      }).join("");
-    }
-  }
-}
-
-function escapeHtml(text){
-
-  return String(text == null ? "" : text)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#39;");
 }
 
 
@@ -3325,384 +2756,24 @@ function closeAdminPanel(){
 }
 
 async function unlockAdmin(){
-
   const input = document.getElementById("adminPassword");
-  const password = input ? input.value : "";
-
-  if(!password){
-    alert("Admin parolini kiriting.");
+  const hash = await sha256(input ? input.value : "");
+  if(hash !== ADMIN.passwordHash){
+    alert("Admin paroli noto‘g‘ri.");
+    if(input) input.value="";
     return;
   }
-
-  let session = null;
-
-  try{
-    session = await rpc("admin_login", {p_password: password});
-  }catch(err){
-    alert(err.message);
-    if(input){ input.value = ""; }
-    return;
-  }
-
-  adminToken = session.token;
   adminUnlockedUntil = Date.now() + ADMIN.sessionMs;
-
-  if(input){ input.value = ""; }
-
   closeAdminLogin();
-
   const panel = document.getElementById("adminPanelModal");
   panel.classList.add("show");
   panel.setAttribute("aria-hidden","false");
-
-  backToList();
-  loadAdminUsers();
 }
 
 function lockAdmin(){
-
-  if(adminToken){
-    rpc("admin_logout", {p_token: adminToken}).catch(function(){});
-  }
-
-  adminToken = null;
-  adminUsers = [];
   adminUnlockedUntil = 0;
   closeAdminPanel();
   closeAdminLogin();
-}
-
-
-/* ---------- ADMIN: BOSHQARUV ---------- */
-
-function adminMsg(text, kind){
-
-  const box = document.getElementById("adminMsg");
-
-  if(!box){
-    return;
-  }
-
-  box.textContent = text;
-  box.classList.remove("admin-msg-err", "admin-msg-ok");
-
-  if(kind === "err"){
-    box.classList.add("admin-msg-err");
-  }
-  if(kind === "ok"){
-    box.classList.add("admin-msg-ok");
-  }
-}
-
-function backToList(){
-  document.getElementById("adminEditView").style.display = "none";
-  document.getElementById("adminListView").style.display = "block";
-}
-
-function showEditView(){
-  document.getElementById("adminListView").style.display = "none";
-  document.getElementById("adminEditView").style.display = "block";
-}
-
-async function loadAdminUsers(){
-
-  if(!adminToken){
-    openAdminLogin();
-    return;
-  }
-
-  const list = document.getElementById("adminUsersList");
-  list.innerHTML = '<div class="admin-empty">Yuklanmoqda...</div>';
-
-  try{
-    adminUsers = await rpc("admin_list_users", {p_token: adminToken}) || [];
-  }catch(err){
-    list.innerHTML = '<div class="admin-empty">' + escapeHtml(err.message) + "</div>";
-    setText("adminDbLabel", "● XATO");
-    return;
-  }
-
-  setText("adminDbLabel", "● ULANGAN");
-  setText("adminCountLabel", String(adminUsers.length));
-
-  if(!adminUsers.length){
-    list.innerHTML = '<div class="admin-empty">Hozircha foydalanuvchi yo\'q. "+ YANGI FOYDALANUVCHI" tugmasini bosing.</div>';
-    return;
-  }
-
-  list.innerHTML = adminUsers.map(function(user){
-
-    return (
-      '<div class="admin-row">' +
-        "<div><b>" + escapeHtml(user.name + " " + user.surname) + "</b>" +
-        "<small>Kod: " + escapeHtml(user.code) +
-        " • " + fmtRub(user.balance) +
-        " • " + (user.status === "active" ? "faol" : "bloklangan") +
-        "</small></div>" +
-        '<button class="btn register-btn tiny-btn" type="button" onclick="editUser(\'' +
-        user.id + '\')">TAHRIR</button>' +
-      "</div>"
-    );
-
-  }).join("");
-}
-
-function fieldValue(id){
-  const element = document.getElementById(id);
-  return element ? element.value : "";
-}
-
-function setField(id, value){
-  const element = document.getElementById(id);
-  if(element){
-    element.value = value == null ? "" : String(value);
-  }
-}
-
-function newUserForm(){
-
-  setField("f_id", "");
-  setField("f_name", "");
-  setField("f_surname", "");
-  setField("f_code", "");
-  setField("f_paid_income", 0);
-  setField("f_investment_uzs", 0);
-  setField("f_investment_rub", 0);
-  setField("f_balance", 0);
-  setField("f_profit_percent", 0);
-  setField("f_prize", 0);
-  setField("f_commission", 0);
-  setField("f_prize_available", "true");
-  setField("f_country", "ROSSIYA");
-  setField("f_currency", "RUB");
-  setField("f_card_last4", "");
-  setField("f_note", "");
-  setField("f_status", "active");
-
-  document.getElementById("adminTradeBox").style.display = "none";
-
-  adminMsg("Yangi foydalanuvchi: ism, familiya va kirish kodini kiriting.");
-  showEditView();
-}
-
-function editUser(id){
-
-  const user = adminUsers.find(function(row){ return row.id === id; });
-
-  if(!user){
-    return;
-  }
-
-  setField("f_id", user.id);
-  setField("f_name", user.name);
-  setField("f_surname", user.surname);
-  setField("f_code", user.code);
-  setField("f_paid_income", user.paid_income);
-  setField("f_investment_uzs", user.investment_uzs);
-  setField("f_investment_rub", user.investment_rub);
-  setField("f_balance", user.balance);
-  setField("f_profit_percent", user.profit_percent);
-  setField("f_prize", user.prize);
-  setField("f_commission", user.commission);
-  setField("f_prize_available", user.prize_available ? "true" : "false");
-  setField("f_country", user.country);
-  setField("f_currency", user.currency);
-  setField("f_card_last4", user.card_last4);
-  setField("f_note", user.note);
-  setField("f_status", user.status);
-
-  document.getElementById("adminTradeBox").style.display = "block";
-  renderAdminTrades(user);
-
-  adminMsg("Tahrirlash: " + user.name + " " + user.surname);
-  showEditView();
-}
-
-function renderAdminTrades(user){
-
-  const box = document.getElementById("adminTradesList");
-  const trades = Array.isArray(user.trades) ? user.trades : [];
-
-  if(!trades.length){
-    box.innerHTML = '<div class="admin-empty">Savdo yozuvi yo\'q.</div>';
-    return;
-  }
-
-  box.innerHTML = trades.map(function(trade){
-
-    const cls = Number(trade.result) < 0 ? "down" : "up";
-    const sign = Number(trade.result) < 0 ? "" : "+";
-
-    return (
-      '<div class="trade-item">' +
-        "<div><strong>" + escapeHtml(trade.symbol) + "</strong> " +
-        '<span class="' + cls + '">' + sign + fmtNumber(trade.result) + "</span></div>" +
-        '<button class="btn admin-danger tiny-btn" type="button" onclick="removeTrade(\'' +
-        trade.id + '\')">O\'CHIRISH</button>' +
-      "</div>"
-    );
-
-  }).join("");
-}
-
-function generateCode(){
-
-  const code = String(Math.floor(1000 + Math.random() * 9000));
-  setField("f_code", code);
-  adminMsg("Yangi kod tayyor: " + code, "ok");
-}
-
-async function saveUser(){
-
-  if(!adminToken){
-    openAdminLogin();
-    return;
-  }
-
-  const payload = {
-    id: fieldValue("f_id"),
-    name: fieldValue("f_name"),
-    surname: fieldValue("f_surname"),
-    code: fieldValue("f_code"),
-    status: fieldValue("f_status"),
-    paid_income: Number(fieldValue("f_paid_income") || 0),
-    prize: Number(fieldValue("f_prize") || 0),
-    commission: Number(fieldValue("f_commission") || 0),
-    investment_uzs: Number(fieldValue("f_investment_uzs") || 0),
-    investment_rub: Number(fieldValue("f_investment_rub") || 0),
-    balance: Number(fieldValue("f_balance") || 0),
-    profit_percent: Number(fieldValue("f_profit_percent") || 0),
-    prize_available: fieldValue("f_prize_available") === "true",
-    country: fieldValue("f_country"),
-    currency: fieldValue("f_currency"),
-    card_last4: fieldValue("f_card_last4"),
-    note: fieldValue("f_note")
-  };
-
-  if(!payload.name.trim() || !payload.surname.trim()){
-    adminMsg("Ism va familiya majburiy.", "err");
-    return;
-  }
-
-  if(!payload.code.trim()){
-    adminMsg("Kirish kodi majburiy.", "err");
-    return;
-  }
-
-  try{
-    const saved = await rpc("admin_save_user", {
-      p_token: adminToken,
-      p_data: payload
-    });
-    setField("f_id", saved.id);
-    adminMsg("Saqlandi. Kirish kodi: " + saved.code, "ok");
-    document.getElementById("adminTradeBox").style.display = "block";
-  }catch(err){
-    adminMsg(err.message, "err");
-    return;
-  }
-
-  await loadAdminUsers();
-
-  const user = adminUsers.find(function(row){
-    return row.id === fieldValue("f_id");
-  });
-
-  if(user){
-    renderAdminTrades(user);
-  }
-}
-
-async function deleteUser(){
-
-  const id = fieldValue("f_id");
-
-  if(!id){
-    backToList();
-    return;
-  }
-
-  if(!confirm("Bu foydalanuvchi va uning barcha ma'lumotlari o'chiriladi. Davom etamizmi?")){
-    return;
-  }
-
-  try{
-    await rpc("admin_delete_user", {p_token: adminToken, p_id: id});
-  }catch(err){
-    adminMsg(err.message, "err");
-    return;
-  }
-
-  adminMsg("Foydalanuvchi o'chirildi.", "ok");
-  backToList();
-  loadAdminUsers();
-}
-
-async function addTrade(){
-
-  const userId = fieldValue("f_id");
-
-  if(!userId){
-    adminMsg("Avval foydalanuvchini saqlang.", "err");
-    return;
-  }
-
-  const symbol = fieldValue("t_symbol").trim();
-
-  if(!symbol){
-    adminMsg("Juftlik nomini kiriting (masalan BTC/USDT).", "err");
-    return;
-  }
-
-  try{
-    await rpc("admin_add_trade", {
-      p_token: adminToken,
-      p_user_id: userId,
-      p_symbol: symbol,
-      p_direction: fieldValue("t_direction"),
-      p_amount: Number(fieldValue("t_amount") || 0),
-      p_result: Number(fieldValue("t_result") || 0)
-    });
-  }catch(err){
-    adminMsg(err.message, "err");
-    return;
-  }
-
-  setField("t_symbol", "");
-  setField("t_amount", "");
-  setField("t_result", "");
-
-  adminMsg("Savdo qo'shildi.", "ok");
-
-  await loadAdminUsers();
-
-  const user = adminUsers.find(function(row){ return row.id === userId; });
-
-  if(user){
-    renderAdminTrades(user);
-  }
-}
-
-async function removeTrade(id){
-
-  try{
-    await rpc("admin_delete_trade", {p_token: adminToken, p_id: id});
-  }catch(err){
-    adminMsg(err.message, "err");
-    return;
-  }
-
-  adminMsg("Savdo o'chirildi.", "ok");
-
-  const userId = fieldValue("f_id");
-
-  await loadAdminUsers();
-
-  const user = adminUsers.find(function(row){ return row.id === userId; });
-
-  if(user){
-    renderAdminTrades(user);
-  }
 }
 
 function lockDashboard(){
@@ -3711,9 +2782,8 @@ function lockDashboard(){
 }
 
 function openAdminPanel(){
-  if(adminToken && Date.now() < adminUnlockedUntil){
+  if(Date.now() < adminUnlockedUntil){
     document.getElementById("adminPanelModal").classList.add("show");
-    loadAdminUsers();
   }else{
     openAdminLogin();
   }
@@ -3786,14 +2856,6 @@ function closeProfile(){
 
 function withdrawPrize(){
 
-  if(currentUser && currentUser.prize_available === false){
-    alert(
-      "Yutuqni olish hozircha yopiq.\n\n" +
-      "Batafsil ma'lumot uchun admin bilan bog'laning."
-    );
-    return;
-  }
-
   alert(
     "DIQQAT ! \n\n" +
     " SIZ YUTUQNI OLISH UCHUN BAZA " +
@@ -3807,7 +2869,6 @@ function withdrawPrize(){
 
 function logoutUser(){
 
-  currentUser = null;
   adminUnlockedUntil = 0;
   closeAdminPanel();
   closeAdminLogin();
@@ -4101,11 +3162,6 @@ document.addEventListener(
     });
   }
 });
-
-
-/* BOSHLANG'ICH HOLAT */
-
-initConfigScreen();
 
 </script>
 
