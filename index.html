@@ -9,6 +9,10 @@
 
 <title>JASMINA TREDING</title>
 
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet"
+  href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&display=swap">
+
 <style>
 
 *{
@@ -1928,6 +1932,573 @@ a:active{
   border:1px solid rgba(255,83,100,.22);
 }
 
+/* ===== PREMIUM FINTECH QAYTA DIZAYN ===== */
+
+:root{
+  --bg:#08090a;
+  --card:#101315;
+  --muted:#8b929b;
+  --green:#2fbe86;
+  --red:#e8566a;
+  --gold:#e8b341;
+  --border:rgba(255,255,255,.07);
+}
+
+body{
+  background:#050506;
+  font-family:
+    "Satoshi",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.005em;
+}
+
+.app{
+  padding:26px 16px 28px;
+  background:
+    linear-gradient(180deg,#0b0c0e,#060708 55%,#08090a);
+}
+
+.app::before{
+  background-size:46px 46px;
+  opacity:.55;
+}
+
+.market-bg{
+  opacity:.05;
+}
+
+
+/* Panellar — tekis va ixcham */
+
+.login-card,
+.panel{
+  background:
+    linear-gradient(180deg,#111416,#0c0e10);
+  border-color:var(--border);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.32);
+}
+
+.panel{
+  padding:15px;
+  margin-bottom:10px;
+  border-radius:16px;
+  animation:panelIn .26s ease both;
+}
+
+.panel::before{
+  content:none;
+  display:none;
+}
+
+.hero-panel,
+.investment{
+  animation:panelIn .26s ease both;
+}
+
+.panel:nth-of-type(2){ animation-delay:.03s; }
+.panel:nth-of-type(3){ animation-delay:.05s; }
+.panel:nth-of-type(4){ animation-delay:.07s; }
+.panel:nth-of-type(5){ animation-delay:.08s; }
+
+
+/* Kirish ekrani */
+
+.brand{ margin-bottom:16px; }
+
+.logo{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  font-size:24px;
+  font-weight:800;
+  background:linear-gradient(180deg,#f2c85c,#d29a12);
+  box-shadow:none;
+}
+
+.brand h1{
+  margin-top:13px;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:-.4px;
+}
+
+.brand p{
+  margin-top:5px;
+  font-size:12px;
+}
+
+.profile-wrap{
+  width:100px;
+  height:100px;
+  margin:14px auto 20px;
+}
+
+.ring{
+  inset:-3px;
+  background:
+    conic-gradient(#f0c65c,#5d4a1d,#e8b341,#5d4a1d,#f0c65c);
+  animation:none;
+}
+
+.profile{
+  inset:2px;
+  border-width:3px;
+}
+
+.login-card{
+  padding:19px 17px;
+  border-radius:20px;
+}
+
+.login-card h2{
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.3px;
+}
+
+.subtitle{
+  margin:6px 0 17px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+
+/* Maydon va tugmalar */
+
+.field{ margin-bottom:12px; }
+
+.field label{
+  margin:0 0 6px 2px;
+  color:#9aa1aa;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.7px;
+}
+
+.field input{
+  height:48px;
+  padding:0 14px;
+  border-radius:12px;
+  background:#0a0c0d;
+  border-color:rgba(255,255,255,.08);
+  font-size:15px;
+}
+
+.field input:focus{
+  border-color:rgba(232,179,65,.5);
+  box-shadow:0 0 0 2px rgba(232,179,65,.08);
+}
+
+.btn{
+  min-height:48px;
+  margin-top:8px;
+  border-radius:12px;
+  color:#15110a;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.4px;
+  background:linear-gradient(180deg,#f0c559,#d69b14);
+}
+
+.register-btn,
+.logout{
+  margin-top:8px;
+  color:#e6e8ea;
+  background:#12161a;
+  border-color:rgba(255,255,255,.10);
+}
+
+.admin-danger{
+  color:#fff;
+}
+
+.withdraw-btn{
+  animation:none;
+  box-shadow:none;
+}
+
+.safe{ margin-top:12px; font-size:9.5px; }
+
+.footer{ margin-top:18px; font-size:9.5px; }
+
+
+/* Kabinet sarlavhasi */
+
+.top{ margin-bottom:13px; gap:12px; }
+
+.top-label{
+  color:#8b929b;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.1px;
+}
+
+#fullName{
+  margin-top:4px;
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.4px;
+}
+
+.avatar-button{
+  width:42px;
+  height:42px;
+  font-size:18px;
+  background:#14171a;
+  border:1px solid rgba(232,179,65,.35);
+  box-shadow:none;
+}
+
+.online-dot{
+  width:9px;
+  height:9px;
+  border-width:2px;
+  box-shadow:none;
+}
+
+.trd{
+  padding:8px 10px;
+  margin-bottom:11px;
+  border-radius:11px;
+  color:#9aa1aa;
+  font-size:8.5px;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+
+/* Hero karta */
+
+.hero-panel{
+  padding:16px 15px;
+  background:
+    linear-gradient(180deg,#15150f,#0c0d0e);
+  border-color:rgba(232,179,65,.15);
+}
+
+.label{
+  color:#8b929b;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.hero-money{
+  margin-top:7px;
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-.6px;
+  font-variant-numeric:tabular-nums;
+}
+
+.subnote{
+  margin-top:5px;
+  color:#7d848d;
+  font-size:10.5px;
+}
+
+.divider{
+  margin:13px 0;
+  background:rgba(255,255,255,.06);
+}
+
+.active{
+  margin-top:4px;
+  font-size:12.5px;
+  font-weight:700;
+}
+
+.active-badge{
+  padding:5px 9px;
+  border-radius:8px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.3px;
+  font-variant-numeric:tabular-nums;
+}
+
+.section-title{
+  margin-bottom:4px;
+  color:#8b929b;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+
+/* Ko'rsatkichlar ro'yxati */
+
+.stat-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.stat-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 0 10px;
+  border-top:1px solid rgba(255,255,255,.055);
+}
+
+.stat-row:first-child{
+  padding-top:8px;
+  border-top:0;
+}
+
+.stat-row:last-child{
+  padding-bottom:2px;
+}
+
+.stat-label{
+  display:block;
+  color:#8b929b;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.9px;
+}
+
+.stat-value{
+  display:block;
+  margin-top:5px;
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:-.4px;
+  font-variant-numeric:tabular-nums;
+}
+
+.stat-row.gold .stat-value{
+  color:var(--gold);
+}
+
+.stat-hint{
+  display:none;
+}
+
+.admin-note{
+  margin-top:12px;
+}
+
+
+/* Sarmoya karta */
+
+.investment{
+  background:
+    linear-gradient(180deg,#0e1412,#0b0d0d);
+  border-color:rgba(47,190,134,.16);
+}
+
+.value{
+  margin-top:5px;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:-.3px;
+  font-variant-numeric:tabular-nums;
+}
+
+.investment .value{
+  margin-top:6px;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+
+/* Valyuta */
+
+.currency-grid{
+  gap:7px;
+  margin-top:11px;
+}
+
+.currency{
+  padding:11px 4px;
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+}
+
+.currency b{ font-size:12.5px; font-weight:700; }
+
+.currency small{ margin-top:3px; font-size:8.5px; }
+
+.currency.active{
+  background:rgba(232,179,65,.10);
+  border-color:rgba(232,179,65,.38);
+}
+
+.currency.active b{ color:var(--gold); }
+
+
+/* Bank logosi */
+
+.bank-logo-row img{ height:22px; border-radius:6px; }
+
+
+/* Birja */
+
+.crypto-panel{
+  background:
+    linear-gradient(180deg,#111416,#0c0e10);
+}
+
+.crypto-head{
+  padding:14px 14px 11px;
+}
+
+.crypto-title{
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:-.2px;
+}
+
+.crypto-subtitle{ margin-top:3px; font-size:9.5px; }
+
+.market-head{
+  padding:10px 14px 6px;
+  font-size:8.5px;
+  font-weight:600;
+  letter-spacing:.6px;
+}
+
+.coin{ padding:11px 14px; }
+
+.coin-logo{
+  width:32px;
+  height:32px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.symbol{ font-size:12.5px; font-weight:700; white-space:nowrap; }
+
+.price{
+  font-size:12.5px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.price small{ margin-top:2px; font-size:8.5px; }
+
+.change{
+  padding:6px 4px;
+  border-radius:8px;
+  font-size:9.5px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  animation:none;
+}
+
+.up{
+  background:rgba(47,190,134,.13);
+  color:#3ddb9b;
+}
+
+.down{
+  background:rgba(232,86,106,.13);
+  color:#ff8391;
+}
+
+.crypto-warning{
+  padding:10px 14px 13px;
+  font-size:8.5px;
+}
+
+
+/* Muddat */
+
+.countdown{
+  margin-top:8px;
+  font-size:31px;
+  letter-spacing:.5px;
+}
+
+.countdown-state{
+  margin-top:9px;
+  padding:4px 10px;
+  font-size:8.5px;
+}
+
+.countdown-note{
+  margin-top:9px;
+  font-size:9.5px;
+}
+
+
+/* Mijoz qatorlari */
+
+.client-row{ padding:11px 0; }
+
+.client-row span{ font-size:10px; opacity:.6; letter-spacing:.4px; }
+
+.client-row strong{
+  font-size:12.5px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.locked{
+  margin-top:11px;
+  padding:16px 14px;
+  border-radius:14px;
+}
+
+.lock-icon{
+  width:38px;
+  height:38px;
+  margin:0 auto 10px;
+  border-radius:12px;
+}
+
+.history-item{ padding:11px 0; }
+
+.history-value{
+  font-size:12.5px;
+  font-variant-numeric:tabular-nums;
+}
+
+
+/* Bosh sahifa statistikasi */
+
+.home-stats{ margin:14px 0 2px; gap:8px; }
+
+.home-stat{ padding:12px 11px; border-radius:14px; }
+
+.home-stat span{ font-size:8px; }
+
+.home-stat b{
+  margin:7px 0 4px;
+  font-size:clamp(13px,4vw,17px);
+  font-variant-numeric:tabular-nums;
+}
+
+
+/* Modal */
+
+.modal-card{
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#141719,#0b0d0e);
+  box-shadow:0 18px 44px rgba(0,0,0,.55);
+}
+
+.modal-top{ margin-bottom:15px; }
+
+.modal-top h3{ font-size:16px; font-weight:800; letter-spacing:-.2px; }
+
+.close-btn{ width:32px; height:32px; border-radius:10px; font-size:16px; }
+
+.profile-avatar{
+  width:58px;
+  height:58px;
+  margin:0 auto 10px;
+  font-size:27px;
+}
+
+
 /* ===== ADMIN PANEL — MOBIL KOMPAKT KO'RINISH (faqat kichik ekran) ===== */
 
 @media (max-width:480px){
@@ -2497,85 +3068,44 @@ a:active{
 </div>
 
 
-<!-- FOYDALANUVCHI -->
+<!-- HISOB KO'RSATKICHLARI -->
 
 <div class="panel">
 
-<div class="row">
-
-<div>
-
-<div class="label">
-  FOYDALANUVCHI
+<div class="section-title">
+  HISOB KO'RSATKICHLARI
 </div>
 
-<strong
-  class="value"
-  id="dashboardUserName">
+<div class="stat-list">
 
-  DIYORBEK CHORSHANBIYEV
-
-</strong>
-
+<div class="stat-row gold">
+  <div>
+    <span class="stat-label">YUTUQ SUMMASI</span>
+    <strong class="stat-value" id="prizeValue">0</strong>
+  </div>
+  <span class="stat-hint" id="prizeIcon">—</span>
 </div>
 
-<div class="icon">
-  👤
+<div class="stat-row">
+  <div>
+    <span class="stat-label">JORIY BALANS</span>
+    <strong class="stat-value" id="balanceValue">0</strong>
+  </div>
+  <span class="active-badge" id="profitBadge">0%</span>
 </div>
 
-</div>
-</div>
-
-
-<!-- YUTUQ -->
-
-<div class="panel">
-
-<div class="row">
-
-<div>
-
-<div class="label">
-  YUTUQNI OLISH UCHUN MAVJUD
-</div>
-
-<strong class="value" id="prizeValue">
-  0
-</strong>
-
-</div>
-
-<div class="icon" id="prizeIcon">
-  —
+<div class="stat-row">
+  <div>
+    <span class="stat-label">KOMISSIYA</span>
+    <strong class="stat-value" id="commissionValue">0</strong>
+  </div>
+  <span class="stat-hint">%</span>
 </div>
 
 </div>
-</div>
 
+<div id="userNoteBox" class="admin-note" style="display:none;"></div>
 
-<!-- KOMISSIYA -->
-
-<div class="panel">
-
-<div class="row">
-
-<div>
-
-<div class="label">
-  KOMISSIYA
-</div>
-
-<strong class="value" id="commissionValue">
-  0
-</strong>
-
-</div>
-
-<div class="icon">
-  %
-</div>
-
-</div>
 </div>
 
 
@@ -2587,7 +3117,7 @@ a:active{
   class="label"
   id="investmentTitle">
 
-  DIYORBEK CHORSHANBIYEV
+  DAROMAD OLINGAN
 
 </div>
 
@@ -2597,16 +3127,6 @@ a:active{
 
 <div class="subnote" id="investRub">
   0
-</div>
-
-<div class="divider"></div>
-
-<div class="status-row">
-<div>
-  <div class="label">JORIY BALANS</div>
-  <strong class="value" id="balanceValue">0</strong>
-</div>
-<div class="active-badge" id="profitBadge">0%</div>
 </div>
 
 </div>
@@ -2862,55 +3382,7 @@ a:active{
 </div>
 
 
-<!-- YUTUQ HOLATI -->
 
-<div class="panel">
-
-<div
-  class="section-title"
-  id="prizeTitle">
-
-  DIYORBEK CHORSHANBIYEV YUTUG'I
-
-</div>
-
-
-<div class="history-item">
-
-<div>
-
-<strong>
-  Yutuq summasi
-</strong>
-
-</div>
-
-<div class="history-value" id="prizeSum">
-  0
-</div>
-
-</div>
-
-
-<div class="history-item">
-
-<div>
-
-<strong>
-  KOMISSIYA
-</strong>
-
-</div>
-
-<div class="history-value" id="prizeCommission">
-  0
-</div>
-
-</div>
-
-<div id="userNoteBox" class="admin-note" style="display:none;"></div>
-
-</div>
 
 
 <!-- YUTUQ MUDDATI -->
