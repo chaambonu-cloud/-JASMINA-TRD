@@ -2648,6 +2648,16 @@ body{
 .geo-note.ok{ color:#7fd18a; }
 .geo-note.bad{ color:#e08b8b; }
 
+.addr-note{
+  margin:6px 0 0;
+  font-size:10.5px;
+  line-height:1.5;
+  color:var(--muted);
+}
+
+.addr-note.bad{ color:#e08b8b; }
+.addr-note.ok{ color:#7fd18a; }
+
 /* ===== KABINET WATERMARK ===== */
 
 .wm-layer{
@@ -4094,6 +4104,41 @@ body{
   background:rgba(236,183,72,.10);
 }
 
+.req-badge.nogeo{
+  color:#9fb0c4;
+  border-color:rgba(159,176,196,.30);
+  background:rgba(159,176,196,.10);
+}
+
+.req-cmp{
+  margin:10px 0 4px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;
+  background:rgba(255,255,255,.03);
+}
+
+.req-cmp-title{
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.5px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.req-cmp-line{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
+  line-height:1.6;
+}
+
+.req-cmp-line span{ color:var(--muted); flex:0 0 auto; }
+.req-cmp-line b{ text-align:right; word-break:break-word; }
+.req-cmp-line.miss b{ color:#efc978; }
+.req-cmp-line.same b{ color:#7fd18a; }
+
 .req-note{
   margin-top:9px;
   padding:9px 11px;
@@ -5150,7 +5195,11 @@ body{
     <div class="field">
       <label>MANZIL</label>
       <input id="r_address" type="text" autocomplete="street-address"
-             placeholder="Ko'cha, uy, kvartira">
+             placeholder="Ko'cha, uy, kvartira"
+             oninput="onAddressInput()">
+      <div class="addr-note" id="r_addr_note">
+        Ko'cha nomi va uy raqamini yozing. Masalan: Amir Temur ko'chasi, 12-uy, 5-xona.
+      </div>
     </div>
 
     <button class="btn geo-btn" type="button" id="r_geo" onclick="detectLocation()">
@@ -5833,6 +5882,18 @@ function translateError(raw){
   }
   if(raw.indexOf("CITY_REQUIRED") > -1){
     return "Shaharni kiriting.";
+  }
+  if(raw.indexOf("ADDRESS_SHORT") > -1){
+    return "Manzil juda qisqa. Ko'cha nomi va uy raqamini to'liq yozing.";
+  }
+  if(raw.indexOf("ADDRESS_NO_NUMBER") > -1){
+    return "Manzilda uy raqami ko'rsatilmagan. Masalan: Navoiy ko'chasi, 24-uy.";
+  }
+  if(raw.indexOf("ADDRESS_NO_STREET") > -1){
+    return "Manzilda ko'cha yoki mahalla nomini yozing.";
+  }
+  if(raw.indexOf("ADDRESS_FAKE") > -1){
+    return "Manzil haqiqiy emasga o'xshaydi. Tasodifiy harflar emas, aniq manzilni yozing.";
   }
   if(raw.indexOf("ADDRESS_REQUIRED") > -1){
     return "Manzilni to'liq kiriting.";
@@ -7067,6 +7128,7 @@ function openRegister(){
   if(phoneEl){ phoneEl.value = ""; }
   if(cityEl){ cityEl.value = ""; }
   if(addrEl){ addrEl.value = ""; }
+  addrNote("Ko'cha nomi va uy raqamini yozing. Masalan: Amir Temur ko'chasi, 12-uy, 5-xona.", "");
 
   geoLat = null;
   geoLon = null;
@@ -7379,6 +7441,99 @@ async function detectLocation(silent){
   return { ok: true, filled: filled };
 }
 
+/* ===== MANZIL SIFATINI TEKSHIRISH ===== */
+/* Xato bo'lsa matn qaytaradi, hammasi joyida bo'lsa "" qaytaradi. */
+
+function addressProblem(raw){
+
+  const s = String(raw || "").trim().replace(/\s+/g, " ");
+
+  if(s.length < 8){
+    return "Manzil juda qisqa. Ko'cha nomi va uy raqamini yozing (kamida 8 belgi).";
+  }
+
+  if(!/[0-9]/.test(s)){
+    return "Manzilda uy raqami bo'lishi shart. Masalan: Navoiy ko'chasi, 24-uy.";
+  }
+
+  /* Harflar (lotin + kirill) — ko'cha nomi bormi? */
+  const letters = s.replace(/[^a-zA-Z\u0400-\u04FF\u2018\u2019']/g, "")
+                   .replace(/[\u2018\u2019']/g, "");
+
+  if(letters.length < 5){
+    return "Manzilda ko'cha yoki mahalla nomini to'liq yozing.";
+  }
+
+  /* Bitta belgi 4 va undan ko'p marta ketma-ket: "aaaa", "1111" */
+  if(/(.)\1{3,}/.test(s)){
+    return "Manzil noto'g'ri: bir xil belgi ketma-ket takrorlangan.";
+  }
+
+  /* Turli harflar soni juda kam: "abab abab 12" kabi */
+  const uniq = {};
+  const low = letters.toLowerCase();
+
+  for(let i = 0; i < low.length; i++){ uniq[low[i]] = 1; }
+
+  if(Object.keys(uniq).length < 4){
+    return "Manzil haqiqiy emasga o'xshaydi. Aniq ko'cha nomini yozing.";
+  }
+
+  /* Klaviaturani bosib yuborish: qwerty, asdf, zxcv, 12345 */
+  const rows = [
+    "qwertyuiop", "asdfghjkl", "zxcvbnm",
+    "йцукенгшщзхъ", "фывапролджэ", "ячсмитьбю"
+  ];
+
+  for(let i = 0; i < rows.length; i++){
+    for(let j = 0; j + 4 <= rows[i].length; j++){
+      if(low.indexOf(rows[i].substr(j, 4)) > -1){
+        return "Manzil haqiqiy emasga o'xshaydi. Tasodifiy harflar emas, aniq manzilni yozing.";
+      }
+    }
+  }
+
+  /* Ketma-ket 5 ta o'sib boruvchi raqam: "12345" */
+  if(/(?:01234|12345|23456|34567|45678|56789)/.test(s)){
+    return "Manzil haqiqiy emasga o'xshaydi. Uy raqamini to'g'ri yozing.";
+  }
+
+  /* Faqat belgi va bo'shliqlardan iborat bo'lmasin */
+  if(!/[a-zA-Z\u0400-\u04FF]{3,}/.test(s)){
+    return "Manzilda kamida bitta to'liq so'z bo'lishi kerak.";
+  }
+
+  return "";
+}
+
+function addrNote(text, cls){
+
+  const el = document.getElementById("r_addr_note");
+  if(!el){ return; }
+
+  el.textContent = text;
+  el.className = "addr-note" + (cls ? " " + cls : "");
+}
+
+function onAddressInput(){
+
+  const el = document.getElementById("r_address");
+  const val = el ? (el.value || "") : "";
+
+  if(!val.trim()){
+    addrNote("Ko'cha nomi va uy raqamini yozing. Masalan: Amir Temur ko'chasi, 12-uy, 5-xona.", "");
+    return;
+  }
+
+  const problem = addressProblem(val);
+
+  if(problem){
+    addrNote(problem, "bad");
+  }else{
+    addrNote("Manzil to'g'ri ko'rinishda kiritilgan.", "ok");
+  }
+}
+
 async function submitRequest(){
 
   const btn = document.getElementById("r_submit");
@@ -7417,8 +7572,13 @@ async function submitRequest(){
     return;
   }
 
-  if(address.length < 4){
-    alert("Manzilni to'liq kiriting (ko'cha, uy).");
+  const addrProblem = addressProblem(address);
+
+  if(addrProblem){
+    addrNote(addrProblem, "bad");
+    alert(addrProblem);
+    const ael = document.getElementById("r_address");
+    if(ael){ ael.focus(); }
     return;
   }
 
@@ -7764,6 +7924,72 @@ function escapeText(value){
     .replace(/"/g, "&quot;");
 }
 
+/* ===== TEKSHIRUV: KIRITILGAN vs ANIQLANGAN ===== */
+
+function normPlace(value){
+  return String(value == null ? "" : value)
+    .toLowerCase()
+    .replace(/[^a-z\u0400-\u04FF]/g, "");
+}
+
+function placeMatch(a, b){
+
+  const x = normPlace(a);
+  const y = normPlace(b);
+
+  if(!x || !y){ return null; }
+  if(x === y){ return true; }
+  if(x.length >= 4 && y.indexOf(x) > -1){ return true; }
+  if(y.length >= 4 && x.indexOf(y) > -1){ return true; }
+
+  return false;
+}
+
+function cmpLine(label, value, state){
+
+  const cls = state === true ? " same" : (state === false ? " miss" : "");
+
+  return '<div class="req-cmp-line' + cls + '"><span>' + label + '</span><b>' +
+         escapeText(value) + '</b></div>';
+}
+
+function buildCheckCompare(r){
+
+  const gpsCity = r.geo_city || "";
+  const ipCity  = r.ip_city || "";
+  const detCity = gpsCity || ipCity;
+  const detSrc  = gpsCity ? "GPS" : (ipCity ? "IP" : "");
+
+  let out = '<div class="req-cmp">' +
+    '<div class="req-cmp-title">TEKSHIRUV — KIRITILGAN / ANIQLANGAN</div>' +
+    cmpLine("YOZGAN SHAHAR", r.city || "—", null);
+
+  if(detCity){
+    out += cmpLine("ANIQLANGAN (" + detSrc + ")", detCity, placeMatch(r.city, detCity));
+  }else{
+    out += cmpLine("ANIQLANGAN", "aniqlanmadi", null);
+  }
+
+  out += cmpLine("YOZGAN MANZIL", r.address || "—", null);
+
+  const problem = typeof addressProblem === "function"
+    ? addressProblem(r.address || "")
+    : "";
+
+  out += cmpLine("MANZIL SIFATI", problem ? problem : "qoidaga mos", problem ? false : true);
+
+  if(r.lat != null && r.lon != null){
+    out += '<div class="req-cmp-line"><span>XARITA</span><b>' +
+      '<a href="https://maps.google.com/?q=' +
+      encodeURIComponent(Number(r.lat) + "," + Number(r.lon)) +
+      '" target="_blank" rel="noopener" style="color:#7fb8ff">Google Maps</a></b></div>';
+  }
+
+  out += '</div>';
+
+  return out;
+}
+
 async function loadAdminRequests(){
 
   const list = document.getElementById("adminRequestsList");
@@ -7809,6 +8035,10 @@ async function loadAdminRequests(){
       badge = '<div class="req-badge auto">AVTO RAD ETILDI</div>';
     }else if(r.check_status === "city_warning" && r.status === "new"){
       badge = '<div class="req-badge warn">SHAHAR MOS EMAS</div>';
+    }else if(r.check_status === "addr_warning" && r.status === "new"){
+      badge = '<div class="req-badge warn">MANZIL SHUBHALI</div>';
+    }else if(r.check_status === "no_geo" && r.status === "new"){
+      badge = '<div class="req-badge nogeo">JOYLASHUV YO\'Q</div>';
     }
 
     html += '<div class="req-card">' +
@@ -7824,6 +8054,8 @@ async function loadAdminRequests(){
       '<div class="req-row"><span>TELEFON</span><b>' + escapeText(r.phone || "—") + '</b></div>' +
       '<div class="req-row"><span>QURILMA</span><b>' + escapeText(deviceLine(r)) + '</b></div>' +
       '<div class="req-row"><span>SANA</span><b>' + reqDate(r.created_at) + '</b></div>';
+
+    html += buildCheckCompare(r);
 
     if(r.lat != null && r.lon != null){
       html += '<div class="req-row"><span>GPS</span><b>' +
