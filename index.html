@@ -2658,6 +2658,23 @@ body{
 .addr-note.bad{ color:#e08b8b; }
 .addr-note.ok{ color:#7fd18a; }
 
+.addr-note.warn{
+  color:#f0cd80;
+  margin-top:7px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid rgba(236,183,72,.30);
+  background:rgba(236,183,72,.09);
+  font-size:11px;
+}
+
+.addr-note.warn b{ color:#fff; }
+
+.field input.need-fix{
+  border-color:rgba(236,183,72,.65);
+  box-shadow:0 0 0 3px rgba(236,183,72,.10);
+}
+
 /* ===== KABINET WATERMARK ===== */
 
 .wm-layer{
@@ -5210,6 +5227,7 @@ body{
       Joylashuv SO'ROV YUBORISH bosilganda avtomatik aniqlanadi — brauzer ruxsat
       so'raydi. Oldin tekshirib ko'rmoqchi bo'lsangiz, shu tugmani bosing: davlat,
       shahar va manzil to'ldiriladi va keyin o'zingiz tahrirlashingiz mumkin.
+      Diqqat: joylashuv ko'pincha uy raqamini bermaydi — uni o'zingiz qo'shishingiz kerak.
     </div>
 
     <div class="field">
@@ -7127,7 +7145,7 @@ function openRegister(){
   if(surnEl){ surnEl.value = ""; }
   if(phoneEl){ phoneEl.value = ""; }
   if(cityEl){ cityEl.value = ""; }
-  if(addrEl){ addrEl.value = ""; }
+  if(addrEl){ addrEl.value = ""; addrEl.classList.remove("need-fix"); }
   addrNote("Ko'cha nomi va uy raqamini yozing. Masalan: Amir Temur ko'chasi, 12-uy, 5-xona.", "");
 
   geoLat = null;
@@ -7136,7 +7154,8 @@ function openRegister(){
 
   geoNote("Tugmani bosganingizda brauzer ruxsat so'raydi. Ruxsat bersangiz " +
           "davlat, shahar va manzil avtomatik to'ldiriladi \u2014 keyin " +
-          "o'zingiz tahrirlashingiz mumkin.", "");
+          "o'zingiz tahrirlashingiz mumkin. Joylashuv ko'pincha uy raqamini " +
+          "bermaydi \u2014 uni manzil oxiriga o'zingiz qo'shing.", "");
 
   pickCountry("UZ", true);
   closeCountryList();
@@ -7361,6 +7380,8 @@ async function applyDetectedPlace(lat, lon, overwrite){
   if(addrInput && place.address && (overwrite || !addrInput.value.trim())){
     addrInput.value = place.address;
     filled.push("manzil");
+
+    if(typeof onAddressInput === "function"){ onAddressInput(); }
   }
 
   return filled;
@@ -7431,8 +7452,17 @@ async function detectLocation(silent){
   finish();
 
   if(filled.length){
-    geoNote("Aniqlandi: " + filled.join(", ") +
-            ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
+
+    const needNumber = addrGeoHint();
+
+    if(needNumber){
+      geoNote("Aniqlandi: " + filled.join(", ") +
+              ". Endi manzilga uy raqamini qo'shing — pastdagi ko'rsatmaga qarang.", "ok");
+    }else{
+      geoNote("Aniqlandi: " + filled.join(", ") +
+              ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
+    }
+
   }else{
     geoNote("Joylashuv olindi, lekin manzil nomi aniqlanmadi. " +
             "Shahar va manzilni qo'lda kiriting.", "bad");
@@ -7506,13 +7536,59 @@ function addressProblem(raw){
   return "";
 }
 
-function addrNote(text, cls){
+function addrNote(text, cls, html){
 
   const el = document.getElementById("r_addr_note");
   if(!el){ return; }
 
-  el.textContent = text;
+  if(html){
+    el.innerHTML = text;
+  }else{
+    el.textContent = text;
+  }
+
   el.className = "addr-note" + (cls ? " " + cls : "");
+}
+
+function addrMark(on){
+
+  const el = document.getElementById("r_address");
+  if(!el){ return; }
+
+  if(on){ el.classList.add("need-fix"); }
+  else{ el.classList.remove("need-fix"); }
+}
+
+/* GPS manzil to'ldirdi, lekin uy raqami yo'q — aniq ko'rsatma beramiz. */
+function addrGeoHint(){
+
+  const el = document.getElementById("r_address");
+  if(!el){ return false; }
+
+  const val = (el.value || "").trim().replace(/\s+/g, " ");
+
+  if(!val){ return false; }
+  if(/[0-9]/.test(val)){ return false; }
+
+  const sample = escapeText(val) + ", 12-uy, 5-xona";
+
+  addrNote(
+    "Joylashuv aniqlandi, lekin <b>uy raqami topilmadi</b>. GPS faqat ko'cha yoki mahalla nomini beradi." +
+    "<br>1) Manzil oxiriga vergul qo'ying." +
+    "<br>2) Uy raqamini yozing (kerak bo'lsa xona/kvartira ham)." +
+    "<br>Namuna: <b>" + sample + "</b>",
+    "warn",
+    true
+  );
+
+  addrMark(true);
+
+  try{
+    el.focus({ preventScroll: true });
+    el.setSelectionRange(val.length, val.length);
+  }catch(e){}
+
+  return true;
 }
 
 function onAddressInput(){
@@ -7521,17 +7597,27 @@ function onAddressInput(){
   const val = el ? (el.value || "") : "";
 
   if(!val.trim()){
+    addrMark(false);
     addrNote("Ko'cha nomi va uy raqamini yozing. Masalan: Amir Temur ko'chasi, 12-uy, 5-xona.", "");
     return;
   }
 
   const problem = addressProblem(val);
 
-  if(problem){
-    addrNote(problem, "bad");
-  }else{
+  if(!problem){
+    addrMark(false);
     addrNote("Manzil to'g'ri ko'rinishda kiritilgan.", "ok");
+    return;
   }
+
+  /* Uy raqami yo'q bo'lsa — to'liq ko'rsatma, boshqa xatolarda qisqa izoh */
+  if(!/[0-9]/.test(val)){
+    addrGeoHint();
+    return;
+  }
+
+  addrMark(true);
+  addrNote(problem, "bad");
 }
 
 async function submitRequest(){
@@ -7575,12 +7661,34 @@ async function submitRequest(){
   const addrProblem = addressProblem(address);
 
   if(addrProblem){
+
+    /* Uy raqami yo'q holati — qadam-baqadam ko'rsatma */
+    if(!/[0-9]/.test(address)){
+
+      addrGeoHint();
+
+      alert(
+        "MANZILDA UY RAQAMI YO'Q\n\n" +
+        "Joylashuv faqat ko'cha yoki mahalla nomini aniqlagan.\n\n" +
+        "1) Manzil oxiriga vergul qo'ying\n" +
+        "2) Uy raqamini yozing, kerak bo'lsa xona raqamini ham\n\n" +
+        "Namuna:\n" + address + ", 12-uy, 5-xona"
+      );
+
+      return;
+    }
+
+    addrMark(true);
     addrNote(addrProblem, "bad");
     alert(addrProblem);
+
     const ael = document.getElementById("r_address");
     if(ael){ ael.focus(); }
+
     return;
   }
+
+  addrMark(false);
 
   const digits = phone.replace(/[^0-9]/g, "");
 
