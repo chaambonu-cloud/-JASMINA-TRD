@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self), payment=()">
 
 <title>JASMINA TRD — Jasmina Treding rasmiy sayti | Mijoz kabineti</title>
 <meta name="description" content="JASMINA TRD (Jasmina Treding) rasmiy sayti. Mijozlar kabineti: to'langan daromadlar, joriy balans, yutuq summasi va jonli birja kurslari. Ro'yxatdan o'tish so'rovini yuboring.">
@@ -4244,22 +4244,6 @@ body{
 <div class="field">
 
 <label>
-  ISM
-</label>
-
-<input
-  id="name"
-  type="text"
-  autocomplete="off"
-  autocapitalize="words"
-  placeholder="Ismingiz">
-
-</div>
-
-
-<div class="field">
-
-<label>
   FAMILIYA
 </label>
 
@@ -4269,6 +4253,22 @@ body{
   autocomplete="off"
   autocapitalize="words"
   placeholder="Familiyangiz">
+
+</div>
+
+
+<div class="field">
+
+<label>
+  ISM
+</label>
+
+<input
+  id="name"
+  type="text"
+  autocomplete="off"
+  autocapitalize="words"
+  placeholder="Ismingiz">
 
 </div>
 
@@ -5121,13 +5121,13 @@ body{
     </div>
 
     <div class="field">
-      <label>ISM</label>
-      <input id="r_name" type="text" autocomplete="given-name" placeholder="Ismingiz">
+      <label>FAMILIYA</label>
+      <input id="r_surname" type="text" autocomplete="family-name" placeholder="Familiyangiz">
     </div>
 
     <div class="field">
-      <label>FAMILIYA</label>
-      <input id="r_surname" type="text" autocomplete="family-name" placeholder="Familiyangiz">
+      <label>ISM</label>
+      <input id="r_name" type="text" autocomplete="given-name" placeholder="Ismingiz">
     </div>
 
     <div class="field">
@@ -5158,8 +5158,9 @@ body{
     </button>
 
     <div class="geo-note" id="r_geo_note">
-      Tugmani bosganingizda brauzer ruxsat so'raydi. Ruxsat bersangiz davlat,
-      shahar va manzil avtomatik to'ldiriladi — keyin o'zingiz tahrirlashingiz mumkin.
+      Joylashuv SO'ROV YUBORISH bosilganda avtomatik aniqlanadi — brauzer ruxsat
+      so'raydi. Oldin tekshirib ko'rmoqchi bo'lsangiz, shu tugmani bosing: davlat,
+      shahar va manzil to'ldiriladi va keyin o'zingiz tahrirlashingiz mumkin.
     </div>
 
     <div class="field">
@@ -5200,7 +5201,6 @@ body{
     </button>
   </div>
 </div>
-
 
 <!-- SARMOYA KIRITISH OYNASI -->
 
@@ -5469,8 +5469,8 @@ body{
         <input type="hidden" id="f_id">
 
         <div class="admin-form">
-          <div class="field"><label>ISM</label><input id="f_name" type="text" placeholder="Ismi"></div>
           <div class="field"><label>FAMILIYA</label><input id="f_surname" type="text" placeholder="Familiyasi"></div>
+          <div class="field"><label>ISM</label><input id="f_name" type="text" placeholder="Ismi"></div>
           <div class="field wide">
             <label>KIRISH KODI</label>
             <input id="f_code" type="text" placeholder="Masalan: 4821">
@@ -5805,7 +5805,7 @@ function translateError(raw){
     return "Yangi parol kamida 12 belgidan bo'lishi kerak.";
   }
   if(raw.indexOf("LOGIN_FAILED") > -1){
-    return "Ism, familiya yoki kirish kodi noto'g'ri.";
+    return "Familiya, ism yoki kirish kodi noto'g'ri.";
   }
   if(raw.indexOf("ADMIN_PASSWORD_INVALID") > -1){
     return "Admin paroli noto'g'ri.";
@@ -5817,7 +5817,7 @@ function translateError(raw){
     return "Bu kirish kodi allaqachon band. Boshqa kod tanlang.";
   }
   if(raw.indexOf("NAME_REQUIRED") > -1){
-    return "Ism va familiya majburiy.";
+    return "Familiya va ism majburiy.";
   }
   if(raw.indexOf("CODE_REQUIRED") > -1){
     return "Kirish kodi majburiy.";
@@ -6426,7 +6426,7 @@ async function continueApp(){
   ){
 
     alert(
-      "Ism, familiya va kirish kodini kiriting."
+      "Familiya, ism va kirish kodini kiriting."
     );
 
     return;
@@ -7036,6 +7036,7 @@ const COUNTRY_LIST = [
 ];
 
 let regCountry = null;
+let countryChosenByUser = false;
 
 function normText(v){
   return String(v || "")
@@ -7154,6 +7155,10 @@ function pickCountry(code, silent){
 
   regCountry = found;
 
+  /* silent=true — dastur o'zi tanladi (boshlang'ich qiymat yoki joylashuv).
+     silent bo'lmasa — foydalanuvchi ro'yxatdan o'zi tanladi. */
+  if(!silent){ countryChosenByUser = true; }
+
   const input = document.getElementById("r_country");
   const dial  = document.getElementById("r_dial");
 
@@ -7182,7 +7187,7 @@ let geoLat = null;
 let geoLon = null;
 let geoSource = "";
 let geoCountryCode = "";
-let geoCityName = "";
+let geoCityName    = "";
 
 function geoNote(text, kind){
 
@@ -7201,7 +7206,7 @@ async function reverseGeocode(lat, lon){
   try{
     const res = await fetch(
       "https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18" +
-      "&accept-language=uz&lat=" + lat + "&lon=" + lon,
+      "&accept-language=uz,en&lat=" + lat + "&lon=" + lon,
       { headers: { "Accept": "application/json" } }
     );
 
@@ -7246,76 +7251,88 @@ async function reverseGeocode(lat, lon){
   return out;
 }
 
-async function detectLocation(){
+/* getCurrentPosition ustidan Promise — await qilish uchun */
+function getPositionOnce(opts){
 
-  const btn = document.getElementById("r_geo");
+  return new Promise(function(resolve, reject){
 
-  if(!navigator.geolocation){
-    geoNote("Brauzeringiz joylashuvni aniqlashni qo'llab-quvvatlamaydi. " +
-            "Ma'lumotlarni qo'lda kiriting.", "bad");
-    return;
+    if(!navigator.geolocation){
+      reject({ code: 0 });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(resolve, reject, opts);
+  });
+}
+
+/* Koordinatadan davlat / shahar / manzilni to'ldirish.
+   overwrite=false bo'lsa foydalanuvchi qo'lda yozgan qiymat saqlanadi. */
+async function applyDetectedPlace(lat, lon, overwrite){
+
+  const place = await reverseGeocode(lat, lon);
+  const filled = [];
+
+  geoCountryCode = String(place.country || "").toUpperCase();
+  geoCityName    = place.city || "";
+
+  if(place.country){
+
+    const match = COUNTRY_LIST.filter(function(c){
+      return c.c === place.country;
+    })[0];
+
+    if(match && (overwrite || !countryChosenByUser)){
+      pickCountry(match.c, true);
+      filled.push("davlat");
+    }
   }
 
-  geoNote("Brauzer ruxsatini kutamiz...", "");
+  const cityInput = document.getElementById("r_city");
+  const addrInput = document.getElementById("r_address");
 
-  if(btn){ btn.disabled = true; btn.textContent = "ANIQLANMOQDA..."; }
+  if(cityInput && place.city && (overwrite || !cityInput.value.trim())){
+    cityInput.value = place.city;
+    filled.push("shahar");
+  }
+
+  if(addrInput && place.address && (overwrite || !addrInput.value.trim())){
+    addrInput.value = place.address;
+    filled.push("manzil");
+  }
+
+  return filled;
+}
+
+/* silent=true — SO'ROV YUBORISH bosilganda avtomatik chaqiriladi.
+   Hech qachon xato tashlamaydi, natijani obyekt qilib qaytaradi. */
+async function detectLocation(silent){
+
+  const btn = document.getElementById("r_geo");
 
   function finish(){
     if(btn){ btn.disabled = false; btn.textContent = "JOYLASHUVNI ANIQLASH"; }
   }
 
-  navigator.geolocation.getCurrentPosition(async function(pos){
+  if(!navigator.geolocation){
+    geoNote("Brauzeringiz joylashuvni aniqlashni qo'llab-quvvatlamaydi. " +
+            "Ma'lumotlarni qo'lda kiriting.", "bad");
+    return { ok: false, reason: "unsupported" };
+  }
 
-    geoLat = Number(pos.coords.latitude.toFixed(6));
-    geoLon = Number(pos.coords.longitude.toFixed(6));
-    geoSource = "gps";
-    geoCountryCode = "";
-    geoCityName = "";
+  geoNote(silent ? "Joylashuv aniqlanmoqda, ruxsat bersangiz kifoya..."
+                 : "Brauzer ruxsatini kutamiz...", "");
 
-    geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
+  if(btn){ btn.disabled = true; btn.textContent = "ANIQLANMOQDA..."; }
 
-    const place = await reverseGeocode(geoLat, geoLon);
+  let pos = null;
 
-    geoCountryCode = String(place.country || "").toUpperCase();
-    geoCityName = place.city || "";
-
-    let filled = [];
-
-    if(place.country){
-      const match = COUNTRY_LIST.filter(function(c){
-        return c.c === place.country;
-      })[0];
-
-      if(match){
-        pickCountry(match.c, true);
-        filled.push("davlat");
-      }
-    }
-
-    const cityInput = document.getElementById("r_city");
-    const addrInput = document.getElementById("r_address");
-
-    if(cityInput && place.city){
-      cityInput.value = place.city;
-      filled.push("shahar");
-    }
-
-    if(addrInput && place.address){
-      addrInput.value = place.address;
-      filled.push("manzil");
-    }
-
-    finish();
-
-    if(filled.length){
-      geoNote("Aniqlandi: " + filled.join(", ") +
-              ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
-    }else{
-      geoNote("Joylashuv olindi, lekin manzil aniqlanmadi. " +
-              "Shahar va manzilni qo'lda kiriting.", "bad");
-    }
-
-  }, function(err){
+  try{
+    pos = await getPositionOnce({
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 60000
+    });
+  }catch(err){
 
     finish();
 
@@ -7327,11 +7344,38 @@ async function detectLocation(){
 
     if(err && err.code === 1){
       geoNote("Ruxsat berilmadi. Davlat, shahar va manzilni qo'lda kiriting.", "bad");
-    }else{
-      geoNote("Joylashuvni aniqlab bo'lmadi. Ma'lumotlarni qo'lda kiriting.", "bad");
+      return { ok: false, reason: "denied" };
     }
 
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+    geoNote("Joylashuvni aniqlab bo'lmadi. Ma'lumotlarni qo'lda kiriting.", "bad");
+    return { ok: false, reason: "failed" };
+  }
+
+  geoLat = Number(pos.coords.latitude.toFixed(6));
+  geoLon = Number(pos.coords.longitude.toFixed(6));
+  geoSource = "gps";
+
+  geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
+
+  let filled = [];
+
+  try{
+    filled = await applyDetectedPlace(geoLat, geoLon, !silent);
+  }catch(errGeo){
+    filled = [];
+  }
+
+  finish();
+
+  if(filled.length){
+    geoNote("Aniqlandi: " + filled.join(", ") +
+            ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
+  }else{
+    geoNote("Joylashuv olindi, lekin manzil nomi aniqlanmadi. " +
+            "Shahar va manzilni qo'lda kiriting.", "bad");
+  }
+
+  return { ok: true, filled: filled };
 }
 
 async function submitRequest(){
@@ -7341,13 +7385,25 @@ async function submitRequest(){
   const name    = (document.getElementById("r_name").value || "").trim();
   const surname = (document.getElementById("r_surname").value || "").trim();
   const phone   = (document.getElementById("r_phone").value || "").trim();
-  const city    = (document.getElementById("r_city").value || "").trim();
-  const address = (document.getElementById("r_address").value || "").trim();
 
   if(!name || !surname){
-    alert("Ism va familiyani kiriting.");
+    alert("Familiya va ismni kiriting.");
     return;
   }
+
+  /* JOYLASHUVNI AVTOMATIK ANIQLASH — so'rov yuborilishidan oldin.
+     Avval tugma bilan aniqlangan bo'lsa qayta so'ralmaydi. */
+  if(geoLat === null || geoLon === null){
+
+    if(btn){ btn.disabled = true; btn.textContent = "JOYLASHUV ANIQLANMOQDA..."; }
+
+    await detectLocation(true);
+
+    if(btn){ btn.disabled = false; btn.textContent = "SO'ROV YUBORISH"; }
+  }
+
+  const city    = (document.getElementById("r_city").value || "").trim();
+  const address = (document.getElementById("r_address").value || "").trim();
 
   if(!regCountry){
     alert("Ro'yxatdan davlatingizni tanlang.");
@@ -7453,7 +7509,7 @@ async function submitRequest(){
 
   alert(
     "SO'ROVINGIZ YUBORILDI\n\n" +
-    name + " " + surname + "\n" +
+    surname + " " + name + "\n" +
     regCountry.n + ", " + city + "\n" +
     fullPhone + "\n\n" +
     "Admin so'rovni tekshiradi. Qabul qilinganidan keyin sizga kirish kodi beriladi."
@@ -7553,6 +7609,7 @@ async function showIpInfo(id, ip){
   box.textContent = lines.join("\n");
   box.style.whiteSpace = "pre-wrap";
 }
+
 
 /* MAXFIY ADMIN */
 
@@ -7755,11 +7812,11 @@ async function loadAdminRequests(){
 
     html += '<div class="req-card">' +
       '<div class="req-top">' +
-        '<div class="req-name">' + escapeText(r.name) + ' ' + escapeText(r.surname) + '</div>' +
+        '<div class="req-name">' + escapeText(r.surname) + ' ' + escapeText(r.name) + '</div>' +
         badge +
       '</div>' +
-      '<div class="req-row"><span>ISM</span><b>' + escapeText(r.name) + '</b></div>' +
       '<div class="req-row"><span>FAMILIYA</span><b>' + escapeText(r.surname) + '</b></div>' +
+      '<div class="req-row"><span>ISM</span><b>' + escapeText(r.name) + '</b></div>' +
       '<div class="req-row"><span>DAVLAT</span><b>' + escapeText(r.country || "—") + '</b></div>' +
       '<div class="req-row"><span>SHAHAR</span><b>' + escapeText(r.city || "—") + '</b></div>' +
       '<div class="req-row"><span>MANZIL</span><b>' + escapeText(r.address || "—") + '</b></div>' +
@@ -7798,17 +7855,17 @@ async function loadAdminRequests(){
         '<div class="ip-box" id="ipbox_' + r.id + '" style="display:none"></div>';
     }
 
-    if(r.status === "new"){
-      html += '<div class="req-actions">' +
-        '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id + '\')">QABUL QILISH</button>' +
-        '<button class="btn req-no" type="button" onclick="rejectRequest(\'' + r.id + '\')">RAD ETISH</button>' +
-      '</div>';
-    }
-
     if(r.check_status === "auto_rejected" && r.status === "rejected" && !r.code){
       html += '<div class="req-actions one">' +
         '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id +
         '\')">BARIBIR QABUL QILISH</button>' +
+      '</div>';
+    }
+
+    if(r.status === "new"){
+      html += '<div class="req-actions">' +
+        '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id + '\')">QABUL QILISH</button>' +
+        '<button class="btn req-no" type="button" onclick="rejectRequest(\'' + r.id + '\')">RAD ETISH</button>' +
       '</div>';
     }
 
@@ -7825,7 +7882,7 @@ async function loadAdminRequests(){
 async function approveRequest(id){
 
   const row = adminRequests.filter(function(r){ return r.id === id; })[0];
-  const who = row ? (row.name + " " + row.surname) : "mijoz";
+  const who = row ? (row.surname + " " + row.name) : "mijoz";
 
   if(!confirm(who + " qabul qilinsinmi?\n\nQabul qilingandan keyin unga kabinet ochiladi.")){
     return;
@@ -7846,14 +7903,14 @@ async function approveRequest(id){
   alert(
     "QABUL QILINDI\n\n" + who + "\n\n" +
     "KIRISH KODI: " + ((res && res.code) ? res.code : "—") + "\n\n" +
-    "Shu kodni mijozga bering. U ism, familiya va kod bilan kabinetga kiradi."
+    "Shu kodni mijozga bering. U familiya, ism va kod bilan kabinetga kiradi."
   );
 }
 
 async function rejectRequest(id){
 
   const row = adminRequests.filter(function(r){ return r.id === id; })[0];
-  const who = row ? (row.name + " " + row.surname) : "mijoz";
+  const who = row ? (row.surname + " " + row.name) : "mijoz";
 
   if(!confirm(who + " so'rovi rad etilsinmi?")){
     return;
@@ -7899,7 +7956,7 @@ async function loadAdminUsers(){
 
     return (
       '<div class="admin-row">' +
-        "<div><b>" + escapeHtml(user.name + " " + user.surname) + "</b>" +
+        "<div><b>" + escapeHtml(user.surname + " " + user.name) + "</b>" +
         "<small>Kod: " + escapeHtml(user.code) +
         " • " + fmtMoney(user.balance, user.currency) +
         " • " + (user.status === "active" ? "faol" : "bloklangan") +
@@ -7949,7 +8006,7 @@ function newUserForm(){
 
   document.getElementById("adminTradeBox").style.display = "none";
 
-  adminMsg("Yangi foydalanuvchi: ism, familiya va kirish kodini kiriting.");
+  adminMsg("Yangi foydalanuvchi: familiya, ism va kirish kodini kiriting.");
   showEditView();
 }
 
@@ -7985,7 +8042,7 @@ function editUser(id){
   document.getElementById("adminTradeBox").style.display = "block";
   renderAdminTrades(user);
 
-  adminMsg("Tahrirlash: " + user.name + " " + user.surname);
+  adminMsg("Tahrirlash: " + user.surname + " " + user.name);
   showEditView();
 }
 
@@ -8060,7 +8117,7 @@ async function saveUser(){
   };
 
   if(!payload.name.trim() || !payload.surname.trim()){
-    adminMsg("Ism va familiya majburiy.", "err");
+    adminMsg("Familiya va ism majburiy.", "err");
     return;
   }
 
@@ -10422,7 +10479,7 @@ async function loadAdminInvestments(){
     const info = curInfo(row.currency);
 
     let html = '<div class="adm-inv">' +
-      "<h5>" + escapeText(row.name + " " + row.surname) + "</h5>" +
+      "<h5>" + escapeText(row.surname + " " + row.name) + "</h5>" +
       "<p>" + invStatusTag(row) + "</p>" +
       "<p>SUMMA: <b>" + escapeText(fmtMoney(row.amount, info.code)) + "</b></p>" +
       "<p>VALYUTA: " + escapeText(info.code) + "</p>";
@@ -10543,7 +10600,7 @@ async function viewReceipt(id){
 async function decideInvestment(id, approve){
 
   const row = admInvestments.filter(function(r){ return r.id === id; })[0];
-  const who = row ? (row.name + " " + row.surname) : "mijoz";
+  const who = row ? (row.surname + " " + row.name) : "mijoz";
 
   const question = approve
     ? (who + " to'lovi tasdiqlansinmi?\n\nTasdiqlangandan keyin sarmoya kabinetda faol bo'ladi.")
