@@ -2786,6 +2786,8 @@ body{
 
 .req-actions .btn{ margin-top:0; min-height:42px; font-size:10.5px; }
 
+.req-actions.one{ grid-template-columns:1fr; }
+
 .req-ok{ color:#08130d; background:var(--green); border:none; }
 .req-no{ color:#e6e8ea; background:#14181b; border:1px solid rgba(232,86,106,.25); }
 
@@ -4027,6 +4029,100 @@ body{
   height:auto;
 }
 
+
+/* JOYLASHUV TEKSHIRUVI OGOHLANTIRISHI */
+
+.geo-alert{
+  margin:4px 0 14px;
+  padding:14px 15px;
+  border-radius:16px;
+  border:1px solid rgba(255,139,152,.30);
+  background:
+    radial-gradient(120% 100% at 10% 0%, rgba(161,44,123,.16), transparent 62%),
+    rgba(255,255,255,.035);
+}
+
+.geo-alert.ok{
+  border-color:rgba(236,183,72,.30);
+  background:
+    radial-gradient(120% 100% at 10% 0%, rgba(236,183,72,.12), transparent 62%),
+    rgba(255,255,255,.035);
+}
+
+.geo-alert-tag{
+  display:inline-block;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.14em;
+  padding:5px 9px;
+  border-radius:999px;
+  color:#ff8b98;
+  border:1px solid rgba(255,139,152,.32);
+  background:rgba(255,139,152,.10);
+}
+
+.geo-alert.ok .geo-alert-tag{
+  color:#efc978;
+  border-color:rgba(236,183,72,.34);
+  background:rgba(236,183,72,.10);
+}
+
+.geo-alert-text{
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.55;
+  color:#f3efe6;
+}
+
+.geo-alert-sub{
+  margin-top:8px;
+  font-size:11.5px;
+  line-height:1.6;
+  color:#9a94a6;
+}
+
+.req-badge.auto{
+  color:#ff8b98;
+  border-color:rgba(255,139,152,.34);
+  background:rgba(255,139,152,.10);
+}
+
+.req-badge.warn{
+  color:#efc978;
+  border-color:rgba(236,183,72,.34);
+  background:rgba(236,183,72,.10);
+}
+
+.req-note{
+  margin-top:9px;
+  padding:9px 11px;
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.55;
+  color:#e9d9b6;
+  border:1px solid rgba(236,183,72,.22);
+  background:rgba(236,183,72,.07);
+}
+
+.req-note.bad{
+  color:#ffc2c8;
+  border-color:rgba(255,139,152,.26);
+  background:rgba(255,139,152,.07);
+}
+
+.ip-box{
+  margin-top:9px;
+  padding:10px 11px;
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.6;
+  color:#cfc9bd;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.03);
+  word-break:break-word;
+}
+
 /* ANIMATSIYANI KAMAYTIRISH */
 
 @media (prefers-reduced-motion:reduce){
@@ -5084,6 +5180,28 @@ body{
 </div>
 
 
+
+<!-- JOYLASHUV TEKSHIRUVI OYNASI -->
+<div class="modal" id="geoCheckModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h3 id="geoCheckTitle">MA'LUMOTLAR MOS KELMADI</h3>
+      <button class="close-btn" type="button" onclick="closeGeoCheck()">×</button>
+    </div>
+
+    <div class="geo-alert" id="geoCheckBox">
+      <div class="geo-alert-tag" id="geoCheckTag">TEKSHIRUV</div>
+      <div class="geo-alert-text" id="geoCheckText"></div>
+      <div class="geo-alert-sub" id="geoCheckSub"></div>
+    </div>
+
+    <button class="btn" type="button" id="geoCheckBtn" onclick="closeGeoCheck()">
+      BOSHQATDAN KIRITISH
+    </button>
+  </div>
+</div>
+
+
 <!-- SARMOYA KIRITISH OYNASI -->
 
 <div class="modal" id="investModal" aria-hidden="true">
@@ -5658,7 +5776,8 @@ async function rpc(fn, args){
   }
 
   // Baza xatoni jsonb ichida qaytarishi mumkin (urinishlar hisobi saqlanishi uchun)
-  if(payload && typeof payload === "object" && payload.ok === false){
+  if(payload && typeof payload === "object" && payload.ok === false &&
+     String(payload.code || "").indexOf("GEO_") !== 0){
     let code = String(payload.error || "LOGIN_FAILED");
     if(payload.minutes){ code += "_" + payload.minutes; }
     throw new Error(translateError(code));
@@ -7062,6 +7181,8 @@ document.addEventListener("click", function(ev){
 let geoLat = null;
 let geoLon = null;
 let geoSource = "";
+let geoCountryCode = "";
+let geoCityName = "";
 
 function geoNote(text, kind){
 
@@ -7148,10 +7269,15 @@ async function detectLocation(){
     geoLat = Number(pos.coords.latitude.toFixed(6));
     geoLon = Number(pos.coords.longitude.toFixed(6));
     geoSource = "gps";
+    geoCountryCode = "";
+    geoCityName = "";
 
     geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
 
     const place = await reverseGeocode(geoLat, geoLon);
+
+    geoCountryCode = String(place.country || "").toUpperCase();
+    geoCityName = place.city || "";
 
     let filled = [];
 
@@ -7196,6 +7322,8 @@ async function detectLocation(){
     geoLat = null;
     geoLon = null;
     geoSource = "";
+    geoCountryCode = "";
+    geoCityName = "";
 
     if(err && err.code === 1){
       geoNote("Ruxsat berilmadi. Davlat, shahar va manzilni qo'lda kiriting.", "bad");
@@ -7248,8 +7376,10 @@ async function submitRequest(){
 
   if(btn){ btn.disabled = true; btn.textContent = "YUBORILMOQDA..."; }
 
+  let res = null;
+
   try{
-    await rpc("register_request", {
+    res = await rpc("register_request", {
       p_name: name,
       p_surname: surname,
       p_country: regCountry.n,
@@ -7259,7 +7389,9 @@ async function submitRequest(){
       p_address: address,
       p_lat: geoLat,
       p_lon: geoLon,
-      p_geo_source: geoSource
+      p_geo_source: geoSource,
+      p_geo_country: geoCountryCode,
+      p_geo_city: geoCityName
     });
   }catch(err){
     alert(err.message);
@@ -7268,6 +7400,54 @@ async function submitRequest(){
   }
 
   if(btn){ btn.disabled = false; btn.textContent = "SO'ROV YUBORISH"; }
+
+  /* ===== SERVER TEKSHIRUVI NATIJASI ===== */
+
+  if(res && res.ok === false){
+
+    const found = res.expected_country || "—";
+    const how = res.source === "gps"
+      ? "joylashuvingiz (GPS)"
+      : "internet manzilingiz (IP)";
+
+    if(res.code === "GEO_RETRY"){
+      showGeoCheck({
+        title: "MA'LUMOTLAR XATO",
+        tag: "TEKSHIRUVDAN O'TMADI",
+        text: "Siz ko'rsatgan davlat " + how + " bilan mos kelmadi. " +
+              "Aniqlangan davlat: " + found + ". Ma'lumotlaringizni " +
+              "boshqatdan, to'g'ri kiriting.",
+        sub: "Diqqat: ikkinchi marta ham xato kiritilsa, so'rovingiz " +
+             "avtomatik tarzda rad etiladi.",
+        button: "BOSHQATDAN KIRITISH"
+      });
+      return;
+    }
+
+    if(res.code === "GEO_REJECTED"){
+      closeRegister();
+      showGeoCheck({
+        title: "AVTOMATIK RAD ETILDI",
+        tag: "SO'ROV RAD ETILDI",
+        text: "So'rovingiz avtomatik tarzda rad etildi. Ko'rsatilgan davlat " +
+              how + " bilan ikki marta mos kelmadi. Aniqlangan davlat: " +
+              found + ".",
+        sub: "Internet manzilingiz (IP) va qurilma ma'lumotlari qayd etildi. " +
+             "Xato bo'lgan deb hisoblasangiz, admin bilan bog'laning.",
+        button: "YOPISH"
+      });
+      return;
+    }
+
+    showGeoCheck({
+      title: "SO'ROV QABUL QILINMADI",
+      tag: "TEKSHIRUV",
+      text: "Ma'lumotlar tekshiruvdan o'tmadi. Iltimos, qaytadan urinib ko'ring.",
+      sub: "",
+      button: "YOPISH"
+    });
+    return;
+  }
 
   closeRegister();
 
@@ -7281,6 +7461,98 @@ async function submitRequest(){
 }
 
 
+
+
+/* ===== JOYLASHUV TEKSHIRUVI OYNASI ===== */
+
+function showGeoCheck(opts){
+
+  const modal = document.getElementById("geoCheckModal");
+  if(!modal){ return; }
+
+  const box   = document.getElementById("geoCheckBox");
+  const title = document.getElementById("geoCheckTitle");
+  const tag   = document.getElementById("geoCheckTag");
+  const text  = document.getElementById("geoCheckText");
+  const sub   = document.getElementById("geoCheckSub");
+  const btn   = document.getElementById("geoCheckBtn");
+
+  if(title){ title.textContent = opts.title || "MA'LUMOTLAR MOS KELMADI"; }
+  if(tag){ tag.textContent = opts.tag || "TEKSHIRUV"; }
+  if(text){ text.textContent = opts.text || ""; }
+  if(sub){ sub.textContent = opts.sub || ""; }
+  if(btn){ btn.textContent = opts.button || "BOSHQATDAN KIRITISH"; }
+  if(box){ box.className = "geo-alert" + (opts.soft ? " ok" : ""); }
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeGeoCheck(){
+  const modal = document.getElementById("geoCheckModal");
+  if(!modal){ return; }
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+/* ===== ADMIN: IP HAQIDA TO'LIQ MA'LUMOT ===== */
+
+async function showIpInfo(id, ip){
+
+  const box = document.getElementById("ipbox_" + id);
+  if(!box){ return; }
+
+  box.style.display = "block";
+  box.textContent = "IP ma'lumoti yuklanmoqda...";
+
+  let d = null;
+
+  try{
+    d = await rpc("admin_ip_info", { p_token: adminToken, p_ip: ip });
+  }catch(err){
+    box.textContent = err.message;
+    return;
+  }
+
+  const lines = [];
+
+  lines.push("IP: " + (d.ip || "—"));
+  lines.push("DAVLAT: " + (d.country || "—") + (d.country_code ? " (" + d.country_code + ")" : ""));
+  lines.push("VILOYAT: " + (d.region || "—"));
+  lines.push("SHAHAR: " + (d.city || "—"));
+  lines.push("PROVAYDER: " + (d.isp || "—"));
+  lines.push("TASHKILOT: " + (d.org || "—"));
+  lines.push("ASN: " + (d.asn || "—"));
+  lines.push("VAQT MINTAQASI: " + (d.timezone || "—"));
+
+  if(d.lat != null && d.lon != null){
+    lines.push("IP KOORDINATA: " + d.lat + ", " + d.lon);
+  }
+
+  if(d.raw && (d.raw.proxy === true || d.raw.hosting === true)){
+    lines.push("OGOHLANTIRISH: VPN / proksi belgilari bor");
+  }
+
+  lines.push("XATO URINISHLAR: " + (d.fails || 0));
+
+  if(d.last_reason){
+    lines.push("OXIRGI SABAB: " + d.last_reason);
+  }
+
+  const reqs = Array.isArray(d.requests) ? d.requests : [];
+
+  lines.push("BU IP'DAN SO'ROVLAR: " + reqs.length);
+
+  reqs.slice(0, 8).forEach(function(r){
+    lines.push("  • " + r.name + " " + r.surname + " — " + r.status +
+               (r.check_status && r.check_status !== "ok" ? " / " + r.check_status : ""));
+  });
+
+  lines.push("MANBA: " + (d.source || "—"));
+
+  box.textContent = lines.join("\n");
+  box.style.whiteSpace = "pre-wrap";
+}
 
 /* MAXFIY ADMIN */
 
@@ -7475,6 +7747,12 @@ async function loadAdminRequests(){
     if(r.status === "approved"){ badge = '<div class="req-badge ok">QABUL QILINDI</div>'; }
     if(r.status === "rejected"){ badge = '<div class="req-badge no">RAD ETILDI</div>'; }
 
+    if(r.check_status === "auto_rejected"){
+      badge = '<div class="req-badge auto">AVTO RAD ETILDI</div>';
+    }else if(r.check_status === "city_warning" && r.status === "new"){
+      badge = '<div class="req-badge warn">SHAHAR MOS EMAS</div>';
+    }
+
     html += '<div class="req-card">' +
       '<div class="req-top">' +
         '<div class="req-name">' + escapeText(r.name) + ' ' + escapeText(r.surname) + '</div>' +
@@ -7495,10 +7773,42 @@ async function loadAdminRequests(){
         '</b></div>';
     }
 
+    if(r.geo_country){
+      html += '<div class="req-row"><span>GPS DAVLAT</span><b>' +
+        escapeText(r.geo_country + (r.geo_city ? " / " + r.geo_city : "")) + '</b></div>';
+    }
+
+    if(r.ip){
+      html += '<div class="req-row"><span>IP MANZIL</span><b>' + escapeText(r.ip) + '</b></div>' +
+        '<div class="req-row"><span>IP JOYLASHUV</span><b>' +
+          escapeText((r.ip_country || "—") + (r.ip_city ? ", " + r.ip_city : "")) + '</b></div>' +
+        '<div class="req-row"><span>PROVAYDER</span><b>' +
+          escapeText(r.ip_isp || r.ip_org || "—") + '</b></div>';
+    }
+
+    if(r.check_note){
+      html += '<div class="req-note' +
+        (r.check_status === "auto_rejected" ? ' bad' : '') + '">' +
+        escapeText(r.check_note) + '</div>';
+    }
+
+    if(r.ip){
+      html += '<button class="btn admin-mini" type="button" onclick="showIpInfo(\'' +
+        r.id + '\', \'' + escapeText(r.ip) + '\')">IP HAQIDA TO\'LIQ MA\'LUMOT</button>' +
+        '<div class="ip-box" id="ipbox_' + r.id + '" style="display:none"></div>';
+    }
+
     if(r.status === "new"){
       html += '<div class="req-actions">' +
         '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id + '\')">QABUL QILISH</button>' +
         '<button class="btn req-no" type="button" onclick="rejectRequest(\'' + r.id + '\')">RAD ETISH</button>' +
+      '</div>';
+    }
+
+    if(r.check_status === "auto_rejected" && r.status === "rejected" && !r.code){
+      html += '<div class="req-actions one">' +
+        '<button class="btn req-ok" type="button" onclick="approveRequest(\'' + r.id +
+        '\')">BARIBIR QABUL QILISH</button>' +
       '</div>';
     }
 
