@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self), payment=()">
 
 <title>JASMINA TRD — Jasmina Treding rasmiy sayti | Mijoz kabineti</title>
 <meta name="description" content="JASMINA TRD (Jasmina Treding) rasmiy sayti. Mijozlar kabineti: to'langan daromadlar, joriy balans, yutuq summasi va jonli birja kurslari. Ro'yxatdan o'tish so'rovini yuboring.">
@@ -5062,8 +5062,9 @@ body{
     </button>
 
     <div class="geo-note" id="r_geo_note">
-      Tugmani bosganingizda brauzer ruxsat so'raydi. Ruxsat bersangiz davlat,
-      shahar va manzil avtomatik to'ldiriladi — keyin o'zingiz tahrirlashingiz mumkin.
+      Joylashuv SO'ROV YUBORISH bosilganda avtomatik aniqlanadi — brauzer ruxsat
+      so'raydi. Oldin tekshirib ko'rmoqchi bo'lsangiz, shu tugmani bosing: davlat,
+      shahar va manzil to'ldiriladi va keyin o'zingiz tahrirlashingiz mumkin.
     </div>
 
     <div class="field">
@@ -6917,6 +6918,7 @@ const COUNTRY_LIST = [
 ];
 
 let regCountry = null;
+let countryChosenByUser = false;
 
 function normText(v){
   return String(v || "")
@@ -7035,6 +7037,10 @@ function pickCountry(code, silent){
 
   regCountry = found;
 
+  /* silent=true — dastur o'zi tanladi (boshlang'ich qiymat yoki joylashuv).
+     silent bo'lmasa — foydalanuvchi ro'yxatdan o'zi tanladi. */
+  if(!silent){ countryChosenByUser = true; }
+
   const input = document.getElementById("r_country");
   const dial  = document.getElementById("r_dial");
 
@@ -7080,7 +7086,7 @@ async function reverseGeocode(lat, lon){
   try{
     const res = await fetch(
       "https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18" +
-      "&accept-language=uz&lat=" + lat + "&lon=" + lon,
+      "&accept-language=uz,en&lat=" + lat + "&lon=" + lon,
       { headers: { "Accept": "application/json" } }
     );
 
@@ -7125,71 +7131,85 @@ async function reverseGeocode(lat, lon){
   return out;
 }
 
-async function detectLocation(){
+/* getCurrentPosition ustidan Promise — await qilish uchun */
+function getPositionOnce(opts){
 
-  const btn = document.getElementById("r_geo");
+  return new Promise(function(resolve, reject){
 
-  if(!navigator.geolocation){
-    geoNote("Brauzeringiz joylashuvni aniqlashni qo'llab-quvvatlamaydi. " +
-            "Ma'lumotlarni qo'lda kiriting.", "bad");
-    return;
+    if(!navigator.geolocation){
+      reject({ code: 0 });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(resolve, reject, opts);
+  });
+}
+
+/* Koordinatadan davlat / shahar / manzilni to'ldirish.
+   overwrite=false bo'lsa foydalanuvchi qo'lda yozgan qiymat saqlanadi. */
+async function applyDetectedPlace(lat, lon, overwrite){
+
+  const place = await reverseGeocode(lat, lon);
+  const filled = [];
+
+  if(place.country){
+
+    const match = COUNTRY_LIST.filter(function(c){
+      return c.c === place.country;
+    })[0];
+
+    if(match && (overwrite || !countryChosenByUser)){
+      pickCountry(match.c, true);
+      filled.push("davlat");
+    }
   }
 
-  geoNote("Brauzer ruxsatini kutamiz...", "");
+  const cityInput = document.getElementById("r_city");
+  const addrInput = document.getElementById("r_address");
 
-  if(btn){ btn.disabled = true; btn.textContent = "ANIQLANMOQDA..."; }
+  if(cityInput && place.city && (overwrite || !cityInput.value.trim())){
+    cityInput.value = place.city;
+    filled.push("shahar");
+  }
+
+  if(addrInput && place.address && (overwrite || !addrInput.value.trim())){
+    addrInput.value = place.address;
+    filled.push("manzil");
+  }
+
+  return filled;
+}
+
+/* silent=true — SO'ROV YUBORISH bosilganda avtomatik chaqiriladi.
+   Hech qachon xato tashlamaydi, natijani obyekt qilib qaytaradi. */
+async function detectLocation(silent){
+
+  const btn = document.getElementById("r_geo");
 
   function finish(){
     if(btn){ btn.disabled = false; btn.textContent = "JOYLASHUVNI ANIQLASH"; }
   }
 
-  navigator.geolocation.getCurrentPosition(async function(pos){
+  if(!navigator.geolocation){
+    geoNote("Brauzeringiz joylashuvni aniqlashni qo'llab-quvvatlamaydi. " +
+            "Ma'lumotlarni qo'lda kiriting.", "bad");
+    return { ok: false, reason: "unsupported" };
+  }
 
-    geoLat = Number(pos.coords.latitude.toFixed(6));
-    geoLon = Number(pos.coords.longitude.toFixed(6));
-    geoSource = "gps";
+  geoNote(silent ? "Joylashuv aniqlanmoqda, ruxsat bersangiz kifoya..."
+                 : "Brauzer ruxsatini kutamiz...", "");
 
-    geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
+  if(btn){ btn.disabled = true; btn.textContent = "ANIQLANMOQDA..."; }
 
-    const place = await reverseGeocode(geoLat, geoLon);
+  let pos = null;
 
-    let filled = [];
-
-    if(place.country){
-      const match = COUNTRY_LIST.filter(function(c){
-        return c.c === place.country;
-      })[0];
-
-      if(match){
-        pickCountry(match.c, true);
-        filled.push("davlat");
-      }
-    }
-
-    const cityInput = document.getElementById("r_city");
-    const addrInput = document.getElementById("r_address");
-
-    if(cityInput && place.city){
-      cityInput.value = place.city;
-      filled.push("shahar");
-    }
-
-    if(addrInput && place.address){
-      addrInput.value = place.address;
-      filled.push("manzil");
-    }
-
-    finish();
-
-    if(filled.length){
-      geoNote("Aniqlandi: " + filled.join(", ") +
-              ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
-    }else{
-      geoNote("Joylashuv olindi, lekin manzil aniqlanmadi. " +
-              "Shahar va manzilni qo'lda kiriting.", "bad");
-    }
-
-  }, function(err){
+  try{
+    pos = await getPositionOnce({
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 60000
+    });
+  }catch(err){
 
     finish();
 
@@ -7199,11 +7219,38 @@ async function detectLocation(){
 
     if(err && err.code === 1){
       geoNote("Ruxsat berilmadi. Davlat, shahar va manzilni qo'lda kiriting.", "bad");
-    }else{
-      geoNote("Joylashuvni aniqlab bo'lmadi. Ma'lumotlarni qo'lda kiriting.", "bad");
+      return { ok: false, reason: "denied" };
     }
 
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+    geoNote("Joylashuvni aniqlab bo'lmadi. Ma'lumotlarni qo'lda kiriting.", "bad");
+    return { ok: false, reason: "failed" };
+  }
+
+  geoLat = Number(pos.coords.latitude.toFixed(6));
+  geoLon = Number(pos.coords.longitude.toFixed(6));
+  geoSource = "gps";
+
+  geoNote("Joylashuv olindi, manzil aniqlanmoqda...", "");
+
+  let filled = [];
+
+  try{
+    filled = await applyDetectedPlace(geoLat, geoLon, !silent);
+  }catch(errGeo){
+    filled = [];
+  }
+
+  finish();
+
+  if(filled.length){
+    geoNote("Aniqlandi: " + filled.join(", ") +
+            ". Kerak bo'lsa o'zingiz to'g'rilang.", "ok");
+  }else{
+    geoNote("Joylashuv olindi, lekin manzil nomi aniqlanmadi. " +
+            "Shahar va manzilni qo'lda kiriting.", "bad");
+  }
+
+  return { ok: true, filled: filled };
 }
 
 async function submitRequest(){
@@ -7213,13 +7260,25 @@ async function submitRequest(){
   const name    = (document.getElementById("r_name").value || "").trim();
   const surname = (document.getElementById("r_surname").value || "").trim();
   const phone   = (document.getElementById("r_phone").value || "").trim();
-  const city    = (document.getElementById("r_city").value || "").trim();
-  const address = (document.getElementById("r_address").value || "").trim();
 
   if(!name || !surname){
     alert("Familiya va ismni kiriting.");
     return;
   }
+
+  /* JOYLASHUVNI AVTOMATIK ANIQLASH — so'rov yuborilishidan oldin.
+     Avval tugma bilan aniqlangan bo'lsa qayta so'ralmaydi. */
+  if(geoLat === null || geoLon === null){
+
+    if(btn){ btn.disabled = true; btn.textContent = "JOYLASHUV ANIQLANMOQDA..."; }
+
+    await detectLocation(true);
+
+    if(btn){ btn.disabled = false; btn.textContent = "SO'ROV YUBORISH"; }
+  }
+
+  const city    = (document.getElementById("r_city").value || "").trim();
+  const address = (document.getElementById("r_address").value || "").trim();
 
   if(!regCountry){
     alert("Ro'yxatdan davlatingizni tanlang.");
