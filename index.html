@@ -5594,6 +5594,7 @@ body{
             <label>HOLATI</label>
             <select id="f_status">
               <option value="active">Faol</option>
+              <option value="updating">Yangilanish (kirish yopiq)</option>
               <option value="blocked">Bloklangan</option>
             </select>
           </div>
@@ -5854,6 +5855,13 @@ async function rpc(fn, args){
 }
 
 function translateError(raw){
+
+  /* Bazadan kelgan yangilanish (maintenance) xabari — matn app_settings'da */
+  const maint = raw.match(/MAINTENANCE:([\s\S]*)/);
+  if(maint){
+    const msg = maint[1].trim();
+    return msg || "Ma'lumotlar bazasi yangilanmoqda. Iltimos, keyinroq qayta kiring.";
+  }
 
   const blocked = raw.match(/TOO_MANY_ATTEMPTS_(\d+)/);
   if(blocked){
@@ -8300,7 +8308,9 @@ async function loadAdminUsers(){
         "<div><b>" + escapeHtml(user.surname + " " + user.name) + "</b>" +
         "<small>Kod: " + escapeHtml(user.code) +
         " • " + fmtMoney(user.balance, user.currency) +
-        " • " + (user.status === "active" ? "faol" : "bloklangan") +
+        " • " + (user.status === "active" ? "faol" :
+                  (user.status === "updating" || user.status === "maintenance"
+                     ? "yangilanmoqda" : "bloklangan")) +
         "</small>" +
         "<small>" + escapeHtml(lastLoginLine(user)) + "</small></div>" +
         '<button class="btn register-btn tiny-btn" type="button" onclick="editUser(\'' +
