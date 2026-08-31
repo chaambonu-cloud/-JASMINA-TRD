@@ -5534,6 +5534,10 @@ body{
 
         <div class="admin-section">FOYDALANUVCHI MA'LUMOTI</div>
         <input type="hidden" id="f_id">
+        <!-- Panelda ko'rinmaydi, lekin qiymati saqlanadi (kabinetda ishlatiladi) -->
+        <input type="hidden" id="f_paid_income">
+        <input type="hidden" id="f_investment_rub">
+        <input type="hidden" id="f_profit_percent">
 
         <div class="admin-form">
           <div class="field"><label>FAMILIYA</label><input id="f_surname" type="text" placeholder="Familiyasi"></div>
@@ -5543,11 +5547,8 @@ body{
             <input id="f_code" type="text" placeholder="Masalan: 4821">
             <button class="btn register-btn tiny-btn" type="button" onclick="generateCode()">KOD GENERATSIYA</button>
           </div>
-          <div class="field"><label id="lab_paid">TO'LANGAN DAROMAD</label><input id="f_paid_income" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field"><label id="lab_inv1">SARMOYA</label><input id="f_investment_uzs" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label id="lab_inv2">SARMOYA (kichik satr)</label><input id="f_investment_rub" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field"><label id="lab_balance">JORIY BALANS</label><input id="f_balance" type="number" inputmode="decimal" placeholder="0"></div>
-          <div class="field"><label>FOYDA (%)</label><input id="f_profit_percent" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field"><label id="lab_prize">YUTUQ SUMMASI</label><input id="f_prize" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field"><label id="lab_commission">KOMISSIYA</label><input id="f_commission" type="number" inputmode="decimal" placeholder="0"></div>
           <div class="field">
