@@ -5398,6 +5398,24 @@ body{
       <div id="adminListView">
 
         <div class="admin-status" style="margin-top:14px;">
+          <span>UMUMIY TO'LANGAN DAROMADLAR</span>
+          <strong>Barcha mijozda bir xil</strong>
+        </div>
+        <div class="adm-mini-form">
+          <div class="field">
+            <label>SUMMA</label>
+            <input id="g_paid" type="number" inputmode="decimal" placeholder="950320560">
+          </div>
+          <div class="field">
+            <label>VALYUTA YOZUVI</label>
+            <input id="g_unit" type="text" placeholder="so'm">
+          </div>
+        </div>
+        <div class="admin-actions">
+          <button class="btn" type="button" onclick="saveGlobalPaid()">UMUMIY SUMMANI SAQLASH</button>
+        </div>
+
+        <div class="admin-status" style="margin-top:14px;">
           <span>RO'YXATDAN O'TISH SO'ROVLARI</span>
           <strong id="reqCountLabel">0 yangi</strong>
         </div>
@@ -6013,6 +6031,33 @@ function fmtMoney(value, code){
   return info.prefix + number + info.suffix;
 }
 
+/* UMUMIY (GLOBAL) TO'LANGAN DAROMADLAR — barcha foydalanuvchida bir xil */
+
+let globalPaid = {amount:0, unit:"so'm"};
+
+function fmtGlobalPaid(){
+  return fmtNumber(globalPaid.amount) + " " + globalPaid.unit;
+}
+
+async function loadGlobalPaid(){
+
+  try{
+    const data = await rpc("app_global_paid", {});
+    if(data){
+      globalPaid = {
+        amount: Number(data.amount || 0),
+        unit: String(data.unit || "so'm")
+      };
+    }
+  }catch(err){
+    return globalPaid;
+  }
+
+  setText("heroMoney", fmtGlobalPaid());
+
+  return globalPaid;
+}
+
 function fmtSum(value){
   return fmtMoney(value, "UZS");
 }
@@ -6563,7 +6608,8 @@ function renderUserData(user){
 
   const info = curInfo(user.currency);
 
-  setText("heroMoney", fmtMoney(user.paid_income, info.code));
+  setText("heroMoney", fmtGlobalPaid());
+  loadGlobalPaid();
   setText("prizeValue", fmtMoney(user.prize, info.code));
   setText("commissionValue", fmtMoney(user.commission, info.code));
   setText("investUzs", fmtMoney(user.investment_uzs, info.code));
@@ -8296,6 +8342,11 @@ async function loadAdminUsers(){
 
   setText("adminDbLabel", "● ULANGAN");
   setText("adminCountLabel", String(adminUsers.length));
+
+  loadGlobalPaid().then(function(g){
+    setField("g_paid", g.amount);
+    setField("g_unit", g.unit);
+  });
 
   if(!adminUsers.length){
     list.innerHTML = '<div class="admin-empty">Hozircha foydalanuvchi yo\'q. "+ YANGI FOYDALANUVCHI" tugmasini bosing.</div>';
@@ -11290,8 +11341,40 @@ async function deleteMethod(id){
 }
 
 
+/* UMUMIY TO'LANGAN DAROMADLARNI SAQLASH (admin) */
+
+async function saveGlobalPaid(){
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  const amount = Number(fieldValue("g_paid") || 0);
+  const unit = String(fieldValue("g_unit") || "").trim();
+
+  try{
+    const saved = await rpc("admin_set_global_paid", {
+      p_token: adminToken,
+      p_amount: amount,
+      p_unit: unit
+    });
+    globalPaid = {
+      amount: Number(saved.amount || 0),
+      unit: String(saved.unit || "so'm")
+    };
+    setField("g_paid", globalPaid.amount);
+    setField("g_unit", globalPaid.unit);
+    setText("heroMoney", fmtGlobalPaid());
+    adminMsg("Umumiy summa saqlandi: " + fmtGlobalPaid(), "ok");
+  }catch(err){
+    adminMsg(err.message, "err");
+  }
+}
+
 initScreenGuard();
 lmInit();
+loadGlobalPaid();
 
 </script>
 
