@@ -293,6 +293,18 @@ function translateError(raw){
   if(raw.indexOf("METHOD_NOT_FOUND") > -1){
     return "To'lov rekviziti topilmadi.";
   }
+  if(raw.indexOf("CARD_EXISTS") > -1){
+    return "Bu karta allaqachon qo'shilgan.";
+  }
+  if(raw.indexOf("CARD_LIMIT") > -1){
+    return "Ko'pi bilan 5 ta karta qo'shish mumkin.";
+  }
+  if(raw.indexOf("CARD_EXPIRED") > -1){
+    return "Bu kartaning amal qilish muddati tugagan.";
+  }
+  if(raw.indexOf("CARD_NOT_FOUND") > -1){
+    return "Karta topilmadi.";
+  }
   if(raw.indexOf("CARD_EXP_INVALID") > -1){
     return "Kartaning amal qilish muddatini OO/YY ko'rinishida kiriting.";
   }
@@ -358,6 +370,18 @@ function translateError(raw){
   }
   if(raw.indexOf("CURRENCY_REQUIRED") > -1){
     return "Valyutani tanlang.";
+  }
+  if(raw.indexOf("CARD_EXISTS") > -1){
+    return "Bu karta allaqachon qo'shilgan.";
+  }
+  if(raw.indexOf("CARD_LIMIT") > -1){
+    return "Ko'pi bilan 5 ta karta qo'shish mumkin.";
+  }
+  if(raw.indexOf("CARD_EXPIRED") > -1){
+    return "Bu kartaning amal qilish muddati tugagan.";
+  }
+  if(raw.indexOf("CARD_NOT_FOUND") > -1){
+    return "Karta topilmadi.";
   }
   if(raw.indexOf("CARD_EXP_INVALID") > -1){
     return "Kartaning amal qilish muddatini OO/YY ko'rinishida kiriting.";
