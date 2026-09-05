@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>JASMINA TRD — Mini App</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:var(--tg-theme-bg-color,#f4f5f7);
+  --card:var(--tg-theme-secondary-bg-color,#fff);
+  --text:var(--tg-theme-text-color,#111);
+  --muted:var(--tg-theme-hint-color,#7b7f86);
+  --accent:var(--tg-theme-button-color,#111);
+  --accentText:var(--tg-theme-button-text-color,#fff);
+  --line:color-mix(in srgb,var(--muted) 22%,transparent);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 48px}
+.head{display:flex;align-items:center;gap:12px;margin:4px 0 20px}
+.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+  background:var(--card);font-weight:800;letter-spacing:.5px}
+.hello{font-size:20px;font-weight:800}
+.sub{color:var(--muted);font-size:13px}
+.card{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border-radius:20px;overflow:hidden;margin-bottom:16px}
+.stat{background:var(--card);padding:18px}
+.label{color:var(--muted);font-size:13px}
+.value{font-size:21px;font-weight:800;margin-top:4px;word-break:break-word}
+.section{font-size:12px;color:var(--muted);letter-spacing:.1em;margin:22px 4px 10px}
+.menu{background:var(--card);border-radius:20px;overflow:hidden}
+.row{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;
+  color:var(--text);padding:16px 18px;display:flex;align-items:center;gap:14px;
+  text-align:left;font:inherit;cursor:pointer}
+.row:last-child{border-bottom:0}
+.ico{width:40px;height:40px;border-radius:13px;flex:none;
+  background:color-mix(in srgb,var(--accent) 12%,transparent);display:grid;place-items:center;font-size:19px}
+.grow{flex:1;min-width:0}
+.title{font-weight:700;display:block}
+.desc{font-size:12px;color:var(--muted);margin-top:2px;display:block}
+.arrow{color:var(--muted);font-size:22px}
+label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
+input,select{width:100%;min-height:48px;padding:12px 14px;font:inherit;color:var(--text);
+  background:var(--bg);border:1px solid var(--line);border-radius:13px}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
+  linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 22px,calc(100% - 15px) 22px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.btn{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--accent);
+  color:var(--accentText);font-weight:800;font-size:16px;margin-top:16px;cursor:pointer}
+.btn[disabled]{opacity:.45}
+.btn.ghost{background:transparent;color:var(--muted);font-weight:600;margin-top:8px;min-height:44px}
+.tx{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:9px;
+  display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.tx small{display:block;color:var(--muted);margin-top:3px;font-size:12px}
+.right{text-align:right;font-weight:700;white-space:nowrap}
+.badge{font-size:11px;font-weight:700;letter-spacing:.06em}
+.b-pending{color:#c98a00}.b-paid{color:#1a9e57}.b-failed{color:#d3383d}
+.msg{border-radius:16px;padding:14px 16px;margin-bottom:12px;line-height:1.45;font-size:14px}
+.msg.err{background:color-mix(in srgb,#d3383d 14%,var(--card));color:#c22}
+.msg.ok{background:color-mix(in srgb,#1a9e57 14%,var(--card));color:#0c7c43}
+.hidden{display:none}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv b{text-align:right;word-break:break-word}
+.copy{background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:6px 10px;font:inherit;font-size:12px;color:var(--text);cursor:pointer}
+.file{display:block;padding:14px;border:1px dashed var(--line);border-radius:13px;
+  text-align:center;color:var(--muted);font-size:14px;cursor:pointer}
+.file input{display:none}
+.prev{max-width:100%;border-radius:12px;margin-top:10px;display:block}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div id="loading" class="loading">Yuklanmoqda…</div>
+
+  <!-- 1. Akkauntni bog'lash -->
+  <section id="linkView" class="hidden">
+    <div class="head">
+      <div class="avatar">JT</div>
+      <div><div class="hello">JASMINA TRD</div><div class="sub">Telegram Mini App</div></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:6px">Akkauntni bog‘lash</div>
+      <div class="sub">Saytdagi mavjud hisobingiz ma’lumotlarini kiriting. Bu bir marta bajariladi.</div>
+      <div id="linkErr" class="msg err hidden" style="margin-top:14px"></div>
+      <label for="lSurname">Familiya</label>
+      <input id="lSurname" autocomplete="family-name" placeholder="Familiyangiz">
+      <label for="lName">Ism</label>
+      <input id="lName" autocomplete="given-name" placeholder="Ismingiz">
+      <label for="lCode">Kirish kodi</label>
+      <input id="lCode" autocapitalize="characters" placeholder="Sizga berilgan kod">
+      <button class="btn" id="linkBtn">BOG‘LASH</button>
+    </div>
+  </section>
+
+  <!-- 2. Asosiy ekran -->
+  <section id="mainView" class="hidden">
+    <div class="head">
+      <div class="avatar">JT</div>
+      <div><div class="hello" id="hello">Salom!</div><div class="sub">JASMINA TRD • Mini App</div></div>
+    </div>
+    <div class="grid">
+      <div class="stat"><div class="label">Balans</div><div class="value" id="balance">—</div></div>
+      <div class="stat"><div class="label">Valyuta</div><div class="value" id="currency">—</div></div>
+    </div>
+    <div class="menu">
+      <button class="row" id="depositBtn">
+        <span class="ico">💳</span>
+        <span class="grow"><span class="title">Hisobni to‘ldirish</span>
+        <span class="desc">Karta orqali, admin tasdiqlashi bilan</span></span>
+        <span class="arrow">›</span>
+      </button>
+      <button class="row" id="refreshBtn">
+        <span class="ico">↻</span>
+        <span class="grow"><span class="title">Yangilash</span>
+        <span class="desc">Balans va to‘lovlar tarixini qayta yuklash</span></span>
+        <span class="arrow">›</span>
+      </button>
+    </div>
+    <div class="section">TO‘LOVLAR TARIXI</div>
+    <div id="history"></div>
+  </section>
+
+  <!-- 3. Depozit: 1-qadam -->
+  <section id="dep1" class="hidden">
+    <div class="head"><div class="avatar">1</div>
+      <div><div class="hello">Hisobni to‘ldirish</div><div class="sub">Valyuta va summa</div></div></div>
+    <div class="card">
+      <div id="dep1Err" class="msg err hidden"></div>
+      <label for="dCurrency">Valyuta</label>
+      <select id="dCurrency"></select>
+      <label for="dAmount">Summa</label>
+      <input id="dAmount" inputmode="decimal" placeholder="0">
+      <div id="dMethodWrap">
+        <label for="dMethod">To‘lov kartasi</label>
+        <select id="dMethod"></select>
+      </div>
+      <div class="sub" id="dHint" style="margin-top:10px"></div>
+      <button class="btn" id="dNext">DAVOM ETISH</button>
+      <button class="btn ghost" id="dBack1">Bekor qilish</button>
+    </div>
+  </section>
+
+  <!-- 4. Depozit: 2-qadam -->
+  <section id="dep2" class="hidden">
+    <div class="head"><div class="avatar">2</div>
+      <div><div class="hello">To‘lovni amalga oshiring</div><div class="sub">Keyin chekni yuklang</div></div></div>
+    <div class="card" id="payCard"></div>
+    <div class="card">
+      <div id="dep2Err" class="msg err hidden"></div>
+      <label class="file">Chek rasmini tanlash
+        <input type="file" id="dReceipt" accept="image/*">
+      </label>
+      <img id="dPreview" class="prev hidden" alt="chek">
+      <button class="btn" id="dConfirm">TO‘LOV QILDIM</button>
+      <button class="btn ghost" id="dBack2">Keyinroq</button>
+    </div>
+  </section>
+
+  <div id="fatal" class="msg err hidden"></div>
+</main>
+
+<script>
+(() => {
+  const API = "https://nvflfwaykadmgerprbmh.supabase.co/functions/v1/tgapi";
+  const tg = window.Telegram?.WebApp;
+  try { tg?.ready(); tg?.expand(); } catch (e) {}
+  const initData = tg?.initData || "";
+  const $ = id => document.getElementById(id);
+
+  const ERRORS = {
+    NO_INIT_DATA: "Bu sahifani Telegram bot ichidan oching.",
+    BAD_SIGNATURE: "Telegram imzosi tekshiruvdan o‘tmadi. Mini App’ni qaytadan oching.",
+    EXPIRED: "Sessiya eskirgan. Mini App’ni qaytadan oching.",
+    NOT_LINKED: "Akkaunt bog‘lanmagan.",
+    LOGIN_FAILED: "Familiya, ism yoki kirish kodi noto‘g‘ri.",
+    BOT_TOKEN_NOT_CONFIGURED: "Bot hali sozlanmagan. Administratorga murojaat qiling.",
+    DEPOSIT_MIN: "Summa juda kichik.",
+    FX_RATE_MISSING: "Bu valyuta uchun kurs belgilanmagan.",
+    METHOD_NOT_FOUND: "To‘lov rekviziti topilmadi.",
+    RECEIPT_REQUIRED: "Chek rasmini yuklang.",
+    RECEIPT_TOO_LARGE: "Chek rasmi juda katta. Kichikroq rasm tanlang."
+  };
+  const human = e => ERRORS[e] || e || "Xatolik yuz berdi";
+
+  async function api(path, body) {
+    const r = await fetch(API + path, {
+      method: body === undefined ? "GET" : "POST",
+      headers: { "Content-Type": "application/json", "X-Telegram-Init-Data": initData },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { const err = new Error(d.error || "API_ERROR"); err.status = r.status; throw err; }
+    return d;
+  }
+
+  const views = ["loading", "linkView", "mainView", "dep1", "dep2"];
+  const show = v => views.forEach(x => $(x).classList.toggle("hidden", x !== v));
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+  function money(v, c) {
+    const n = Number(v || 0);
+    return new Intl.NumberFormat("ru-RU", {
+      minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2
+    }).format(n) + (c ? " " + c : "");
+  }
+
+  const STATUS = {
+    pending: ["KUTILMOQDA", "b-pending"], paid: ["TASDIQLANGAN", "b-paid"],
+    approved: ["TASDIQLANGAN", "b-paid"], failed: ["RAD ETILGAN", "b-failed"],
+    rejected: ["RAD ETILGAN", "b-failed"], canceled: ["BEKOR QILINGAN", "b-failed"],
+    draft: ["BOSHLANGAN", "b-pending"]
+  };
+
+  function showErr(box, msg) {
+    const el = $(box);
+    el.textContent = msg;
+    el.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  const hideErr = box => $(box).classList.add("hidden");
+
+  let me = null, dep = null, initInfo = null, receipt = "";
+
+  // ---------------------------------------------------------------- boshlash
+  async function boot() {
+    if (!initData) {
+      show("loading");
+      $("loading").classList.add("hidden");
+      showErr("fatal", "Bu sahifa Telegram Mini App sifatida ishlaydi. Iltimos, botdagi tugma orqali oching.");
+      return;
+    }
+    try {
+      me = await api("/me");
+      if (!me.linked) { show("linkView"); return; }
+      await loadMain();
+    } catch (e) {
+      $("loading").classList.add("hidden");
+      showErr("fatal", human(e.message));
+    }
+  }
+
+  async function loadMain() {
+    show("loading");
+    me = await api("/me");
+    $("hello").textContent = "Salom, " + (me.name || "mijoz") + "!";
+    $("balance").textContent = money(me.balance, "");
+    $("currency").textContent = me.currency || "—";
+    const deps = await api("/deposits");
+    const items = deps.items || deps.deposits || [];
+    $("history").innerHTML = items.length
+      ? items.slice(0, 15).map(d => {
+          const [text, cls] = STATUS[String(d.status || "").toLowerCase()] || [String(d.status || "").toUpperCase(), ""];
+          const conv = d.credit_amount != null && d.credit_currency && d.credit_currency !== d.currency
+            ? `<small>Balansga: ${esc(money(d.credit_amount, d.credit_currency))}</small>` : "";
+          return `<div class="tx"><div><b>${esc(d.ref || "To‘lov")}</b>
+            <small class="badge ${cls}">${esc(text)}</small></div>
+            <div class="right">${esc(money(d.amount, d.currency))}${conv}</div></div>`;
+        }).join("")
+      : `<div class="card sub">Hozircha to‘lov so‘rovi yo‘q.</div>`;
+    show("mainView");
+  }
+
+  // ------------------------------------------------------------ bog'lash
+  $("linkBtn").addEventListener("click", async () => {
+    hideErr("linkErr");
+    const surname = $("lSurname").value.trim();
+    const name = $("lName").value.trim();
+    const code = $("lCode").value.trim();
+    if (!surname || !name || !code) return showErr("linkErr", "Barcha maydonlarni to‘ldiring.");
+    $("linkBtn").disabled = true;
+    try {
+      await api("/link", { surname, name, code });
+      $("lCode").value = "";
+      await loadMain();
+    } catch (e) {
+      showErr("linkErr", human(e.message));
+    } finally { $("linkBtn").disabled = false; }
+  });
+
+  // ------------------------------------------------------------ depozit 1
+  $("depositBtn").addEventListener("click", async () => {
+    hideErr("dep1Err"); receipt = "";
+    show("loading");
+    try {
+      initInfo = await api("/deposit-init");
+      const list = await api("/currencies");
+      const codes = [...new Set([
+        ...(Array.isArray(list) ? list.map(c => c.currency) : []),
+        me.currency, "UZS"
+      ].filter(Boolean))];
+      $("dCurrency").innerHTML = codes.map(c =>
+        `<option value="${esc(c)}"${c === "UZS" ? " selected" : ""}>${esc(c)}</option>`).join("");
+      await loadMethods();
+      show("dep1");
+    } catch (e) {
+      show("mainView");
+      showErr("fatal", human(e.message));
+    }
+  });
+
+  async function loadMethods() {
+    const cur = $("dCurrency").value;
+    $("dMethod").innerHTML = `<option>Yuklanmoqda…</option>`;
+    $("dNext").disabled = true;
+    try {
+      const methods = await api("/pay-methods?currency=" + encodeURIComponent(cur));
+      if (!Array.isArray(methods) || !methods.length) {
+        $("dMethod").innerHTML = `<option>Rekvizit yo‘q</option>`;
+        $("dHint").textContent = cur + " uchun to‘lov rekviziti hozircha yo‘q. Boshqa valyutani tanlang.";
+        return;
+      }
+      $("dMethod").innerHTML = methods.map(m =>
+        `<option value="${esc(m.id)}">${esc([m.bank_name, m.holder].filter(Boolean).join(" • ") || m.card_number)}</option>`
+      ).join("");
+      $("dHint").textContent = me.currency && me.currency !== cur
+        ? `Summa ${cur} da kiritiladi, balansga ${me.currency} da tushadi.`
+        : "";
+      $("dNext").disabled = false;
+    } catch (e) {
+      showErr("dep1Err", human(e.message));
+    }
+  }
+  $("dCurrency").addEventListener("change", loadMethods);
+  $("dBack1").addEventListener("click", () => show("mainView"));
+
+  $("dNext").addEventListener("click", async () => {
+    hideErr("dep1Err");
+    const amount = Number(String($("dAmount").value).replace(/\s/g, "").replace(",", "."));
+    if (!amount || amount <= 0) return showErr("dep1Err", "To‘g‘ri summa kiriting.");
+    $("dNext").disabled = true;
+    try {
+      const out = await api("/deposit", {
+        amount, currency: $("dCurrency").value,
+        method_id: $("dMethod").value, note: "Telegram Mini App"
+      });
+      dep = out.deposit || out;
+      renderPay(out.method || dep.method);
+      show("dep2");
+    } catch (e) {
+      showErr("dep1Err", human(e.message));
+    } finally { $("dNext").disabled = false; }
+  });
+
+  // ------------------------------------------------------------ depozit 2
+  function renderPay(method) {
+    const card = method?.card_number || dep.card_number || "";
+    const rows = [
+      ["Tranzaksiya ID", dep.ref],
+      ["Summa", money(dep.amount, dep.currency)],
+      dep.credit_amount != null && dep.credit_currency !== dep.currency
+        ? ["Balansga tushadi", money(dep.credit_amount, dep.credit_currency)] : null,
+      ["Bank", method?.bank_name || dep.method_label || "—"],
+      ["Karta egasi", method?.holder || "—"]
+    ].filter(Boolean);
+    $("payCard").innerHTML =
+      rows.map(([k, v]) => `<div class="kv"><span class="label">${esc(k)}</span><b>${esc(v)}</b></div>`).join("") +
+      (card ? `<div class="kv"><span class="label">Karta raqami</span>
+        <b>${esc(card)} <button class="copy" id="copyCard">nusxa</button></b></div>` : "") +
+      `<div class="sub" style="margin-top:12px">To‘lovni amalga oshirib, chek rasmini yuklang.
+        Balans admin tasdiqlaganidan keyin oshadi.</div>`;
+    const btn = $("copyCard");
+    if (btn) btn.addEventListener("click", () => {
+      navigator.clipboard?.writeText(card.replace(/\s/g, ""));
+      btn.textContent = "nusxa olindi";
+    });
+  }
+
+  $("dReceipt").addEventListener("change", e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    hideErr("dep2Err");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1000;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * scale);
+        c.height = Math.round(img.height * scale);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        let q = 0.72, out = c.toDataURL("image/jpeg", q);
+        while (out.length > 880000 && q > 0.3) { q -= 0.12; out = c.toDataURL("image/jpeg", q); }
+        if (out.length > 880000) return showErr("dep2Err", human("RECEIPT_TOO_LARGE"));
+        receipt = out;
+        $("dPreview").src = out;
+        $("dPreview").classList.remove("hidden");
+      };
+      img.onerror = () => showErr("dep2Err", "Rasmni o‘qib bo‘lmadi.");
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  $("dConfirm").addEventListener("click", async () => {
+    hideErr("dep2Err");
+    if (!receipt) return showErr("dep2Err", human("RECEIPT_REQUIRED"));
+    $("dConfirm").disabled = true;
+    try {
+      await api("/deposit/confirm", { id: dep.id, receipt, note: "Telegram Mini App" });
+      receipt = "";
+      $("dPreview").classList.add("hidden");
+      $("dAmount").value = "";
+      await loadMain();
+      tg?.HapticFeedback?.notificationOccurred?.("success");
+    } catch (e) {
+      showErr("dep2Err", human(e.message));
+    } finally { $("dConfirm").disabled = false; }
+  });
+
+  $("dBack2").addEventListener("click", () => loadMain().catch(() => show("mainView")));
+  $("refreshBtn").addEventListener("click", () => loadMain().catch(e => showErr("fatal", human(e.message))));
+
+  boot();
+})();
+</script>
+</body>
+</html>
