@@ -5848,11 +5848,11 @@ body{
   <div class="field">
     <label>KARTA EGASI</label>
     <input id="cdHolder" type="text" autocomplete="off" maxlength="30"
-           placeholder="ISM FAMILIYA" style="text-transform:uppercase">
+           placeholder="Avtomatik yoziladi" style="text-transform:uppercase" readonly>
   </div>
-  <div class="cd-note" style="margin-top:-4px">
-    Hisobingizdagi ism-familiya avtomatik yoziladi. Kartada boshqacha
-    yozilgan bo'lsa, o'zgartirishingiz mumkin.
+  <div class="cd-note" style="margin-top:-4px" id="cdHolderNote">
+    Hisobingizdagi ism-familiya avtomatik yozildi.
+    <a href="#" onclick="cdHolderUnlock(event)" style="color:var(--gold,#f5c451)">O'zgartirish</a>
   </div>
 
   <button class="btn" type="button" id="cdAddBtn" onclick="cdAdd()">
@@ -14074,8 +14074,19 @@ function cdTranslit(s){
 function cdFillHolder(force){
   var el = document.getElementById("cdHolder");
   if(!el || !currentUser) return;
-  if(!force && el.value.trim()) return;
+  if(!force && !el.readOnly && el.value.trim()) return;
   el.value = cdTranslit((currentUser.name || "") + " " + (currentUser.surname || ""));
+}
+
+function cdHolderUnlock(ev){
+  if(ev){ ev.preventDefault(); }
+  var el = document.getElementById("cdHolder");
+  if(!el){ return; }
+  el.readOnly = false;
+  el.focus();
+  el.select();
+  var note = document.getElementById("cdHolderNote");
+  if(note){ note.textContent = "Kartada yozilganidek yozing (lotin harflarida)."; }
 }
 
 async function cdLoad(){
@@ -14200,7 +14211,7 @@ async function cdAdd(){
   document.getElementById("cdCvv").value = "";
   document.getElementById("cdBank").value = "";
   document.getElementById("cdBrand").innerHTML = "";
-  cdFillHolder(true);
+  if(document.getElementById("cdHolder").readOnly){ cdFillHolder(true); }
 
   cdSay("KARTANGIZ MUVAFFAQIYATLI QO'SHILDI ✅", "ok");
   await cdLoad();

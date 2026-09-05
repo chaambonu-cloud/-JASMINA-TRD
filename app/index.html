@@ -442,10 +442,10 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         <input id="cdBank" placeholder="Avtomatik aniqlanadi" readonly>
 
         <label for="cdHolder">KARTA EGASI</label>
-        <input id="cdHolder" autocomplete="off" maxlength="30" placeholder="ISM FAMILIYA"
-               style="text-transform:uppercase">
-        <div class="cd-note" style="margin-top:6px">Hisobingizdagi ism-familiya avtomatik yoziladi.
-          Kartada boshqacha yozilgan bo‘lsa, o‘zgartiring.</div>
+        <input id="cdHolder" autocomplete="off" maxlength="30" placeholder="Avtomatik yoziladi"
+               style="text-transform:uppercase" readonly>
+        <div class="cd-note" style="margin-top:6px">Hisobingizdagi ism-familiya avtomatik yozildi.
+          <a href="#" id="cdHolderEdit" style="color:var(--gold)">O‘zgartirish</a></div>
 
         <button class="btn gold" id="cdAdd" style="margin-top:14px">KARTANI QO‘SHISH</button>
         <div id="cdMsg"></div>
@@ -868,9 +868,16 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   function cdFillHolder(force){
     var el = document.getElementById("cdHolder");
     if(!el || !user) return;
-    if(!force && el.value.trim()) return;
+    if(!force && !el.readOnly && el.value.trim()) return;
     el.value = cdTranslit((user.name || "") + " " + (user.surname || ""));
   }
+  document.addEventListener("click", function(ev){
+    if(!ev.target || ev.target.id !== "cdHolderEdit") return;
+    ev.preventDefault();
+    var el = document.getElementById("cdHolder");
+    el.readOnly = false; el.focus(); el.select();
+    ev.target.parentNode.innerHTML = "Kartada yozilganidek yozing (lotin harflarida).";
+  });
 
   async function cdLoad() {
     let rows = [];
@@ -930,7 +937,8 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     $("cdAdd").disabled = false;
 
     $("cdNumber").value = ""; $("cdExp").value = ""; $("cdCvv").value = "";
-    $("cdBank").value = ""; $("cdBrand").innerHTML = ""; cdFillHolder(true);
+    $("cdBank").value = ""; $("cdBrand").innerHTML = "";
+    if ($("cdHolder").readOnly) cdFillHolder(true);
     if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
     cdMsg("KARTANGIZ MUVAFFAQIYATLI QO‘SHILDI ✅", true);
     await cdLoad();
