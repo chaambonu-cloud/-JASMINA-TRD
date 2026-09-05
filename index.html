@@ -4636,6 +4636,20 @@ body{
 }
 
 
+#dpConvert{
+  display:none;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(201,162,39,.28);
+  background:rgba(201,162,39,.08);
+  color:#e9dfc4;
+  font-size:13px;
+  line-height:1.5;
+}
+#dpConvert b{color:#f3d777;}
+
+#dpCurrency,
 #dpMethod{
   width:100%;
   padding:12px 14px;
@@ -4652,6 +4666,7 @@ body{
   background-size:6px 6px,6px 6px;
   background-repeat:no-repeat;
 }
+#dpCurrency option,
 #dpMethod option{
   background:#14161c;
   color:#f4f4f4;
@@ -5789,11 +5804,19 @@ body{
       </div>
 
       <div class="field">
+        <label>VALYUTA</label>
+        <select id="dpCurrency" onchange="dpChangeCurrency()"></select>
+      </div>
+
+      <div class="field" style="margin-top:12px;">
         <label>SUMMA (<span id="dpCurLabel">UZS</span>)</label>
-        <input id="dpAmount" type="number" inputmode="decimal" placeholder="Masalan: 500000">
+        <input id="dpAmount" type="number" inputmode="decimal" placeholder="Masalan: 500000"
+               oninput="dpRenderConvert()">
       </div>
 
       <div class="dp-chips" id="dpChips"></div>
+
+      <div class="dp-convert" id="dpConvert"></div>
 
       <div class="field" style="margin-top:12px;">
         <label>TO'LOV REKVIZITI</label>
@@ -5814,6 +5837,11 @@ body{
       <div class="dp-sum">
         <span>TO'LOV SUMMASI</span>
         <strong id="dpPayAmount">—</strong>
+      </div>
+
+      <div class="dp-sum" id="dpPayConvertRow" style="display:none;">
+        <span>BALANSGA TUSHADI</span>
+        <strong id="dpPayConvert">—</strong>
       </div>
 
       <div class="dp-sum">
@@ -6089,6 +6117,29 @@ body{
         </div>
 
         <div id="admAuditList" class="admin-list"></div>
+
+        <!-- VALYUTA KURSLARI -->
+        <div class="admin-status" style="margin-top:18px;">
+          <span>VALYUTA KURSLARI (1 USD = X)</span>
+          <strong id="fxCountLabel">0</strong>
+        </div>
+
+        <div class="reg-hint">
+          Mijoz boshqa valyutada to'lasa, summa shu kurslar bo'yicha uning hisob
+          valyutasiga o'tkaziladi. Kurs tasdiqlash paytida qo'llanadi.
+        </div>
+
+        <div id="admFxList" class="admin-list"></div>
+
+        <div class="adm-mini-form">
+          <div class="field"><label>VALYUTA KODI</label><input id="fx_code" type="text" maxlength="3" placeholder="USD"></div>
+          <div class="field"><label>1 USD = ?</label><input id="fx_rate" type="number" inputmode="decimal" placeholder="11791.93"></div>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn" type="button" onclick="saveFxRate()">KURSNI SAQLASH</button>
+          <button class="btn register-btn" type="button" onclick="loadFxRates()">KURSLARNI YANGILASH</button>
+        </div>
 
         <!-- SARMOYA TO'LOV SO'ROVLARI -->
         <div class="admin-status" style="margin-top:18px;">
@@ -6594,7 +6645,22 @@ function translateError(raw){
     return "To'ldirish summasini kiriting.";
   }
   if(raw.indexOf("METHOD_CURRENCY_MISMATCH") > -1){
-    return "Tanlangan rekvizit valyutasi hisobingizga mos emas.";
+    return "Tanlangan rekvizit valyutasi tanlangan valyutaga mos emas.";
+  }
+  if(raw.indexOf("FX_RATE_MISSING") > -1){
+    return "Bu valyuta uchun kurs sozlanmagan. Admin bilan bog'laning.";
+  }
+  if(raw.indexOf("FX_CURRENCY_REQUIRED") > -1){
+    return "Valyutani tanlang.";
+  }
+  if(raw.indexOf("FX_CODE_INVALID") > -1){
+    return "Valyuta kodi noto'g'ri (3 ta harf bo'lishi kerak).";
+  }
+  if(raw.indexOf("FX_RATE_INVALID") > -1){
+    return "Kurs qiymati noto'g'ri.";
+  }
+  if(raw.indexOf("FX_BASE_LOCKED") > -1){
+    return "USD asosiy valyuta — uni o'chirib bo'lmaydi.";
   }
   if(raw.indexOf("METHOD_NOT_FOUND") > -1){
     return "To'lov rekviziti topilmadi.";
@@ -6698,7 +6764,8 @@ const CURRENCIES = {
   TRY:{code:"TRY", name:"turk lirasi", grid:"LIRA",   short:"₺",      locale:"en-US", prefix:"₺", suffix:""},
   TJS:{code:"TJS", name:"somoni",      grid:"SOMONI", short:"somoni", locale:"ru-RU", prefix:"",  suffix:" somoni"},
   KZT:{code:"KZT", name:"tenge",       grid:"TENGE",  short:"₸",      locale:"ru-RU", prefix:"",  suffix:" ₸"},
-  KGS:{code:"KGS", name:"som",         grid:"SOM",    short:"som",    locale:"ru-RU", prefix:"",  suffix:" som"}
+  KGS:{code:"KGS", name:"som",         grid:"SOM",    short:"som",    locale:"ru-RU", prefix:"",  suffix:" som"},
+  EUR:{code:"EUR", name:"yevro",       grid:"YEVRO",  short:"€",      locale:"en-US", prefix:"€", suffix:""}
 };
 
 function curInfo(code){
@@ -6710,8 +6777,14 @@ function fmtMoney(value, code){
 
   const info = curInfo(code);
 
-  const number = Number(value || 0)
-    .toLocaleString(info.locale, {maximumFractionDigits:2})
+  const raw = Number(value || 0);
+
+  /* Kasr qismi bo'lsa har doim 2 xona ko'rsatiladi: 42.4 → 42.40 */
+  const number = raw
+    .toLocaleString(info.locale, {
+      minimumFractionDigits: (raw % 1 === 0) ? 0 : 2,
+      maximumFractionDigits: 2
+    })
     .replace(/\u00a0/g, " ");
 
   return info.prefix + number + info.suffix;
@@ -9363,6 +9436,7 @@ function openAdminPanel(){
     document.getElementById("adminPanelModal").classList.add("show");
     loadAdminUsers();
     loadAdminDeposits();
+    loadFxRates();
   }else{
     openAdminLogin();
   }
@@ -12089,7 +12163,10 @@ loadGlobalPaid();
 /* ================= HISOBNI TO'LDIRISH (DEPOSITS) ================= */
 
 let dpMethods = [];
-let dpCurrency = "UZS";
+let dpCurrency = "UZS";        // to'lov (so'rov) valyutasi
+let dpAccountCurrency = "UZS"; // hisob (balans) valyutasi
+let dpCurrencies = [];
+let dpRates = {};
 let dpBalance = 0;
 let dpDeposit = null;
 let dpMethodInfo = null;
@@ -12196,15 +12273,86 @@ async function loadDepositInit(){
     return;
   }
 
-  dpCurrency = String((res && res.currency) || "UZS").toUpperCase();
+  dpAccountCurrency = String((res && res.currency) || "UZS").toUpperCase();
   dpBalance = Number((res && res.balance) || 0);
   dpMethods = (res && Array.isArray(res.methods)) ? res.methods : [];
+  dpRates = (res && res.rates) ? res.rates : {};
+
+  dpCurrencies = [];
+
+  /* Rekviziti bor valyutalar + hisob valyutasi + asosiy valyutalar */
+  const base = [dpAccountCurrency, "USD", "UZS", "RUB"];
+
+  dpMethods.forEach(function(m){
+    const code = String(m.currency || "").toUpperCase();
+    if(code && dpCurrencies.indexOf(code) === -1){ dpCurrencies.push(code); }
+  });
+
+  base.forEach(function(code){
+    if(code && dpCurrencies.indexOf(code) === -1 && CURRENCIES[code]){
+      dpCurrencies.push(code);
+    }
+  });
+
+  dpCurrencies.sort(function(a, b){
+    if(a === dpAccountCurrency){ return -1; }
+    if(b === dpAccountCurrency){ return 1; }
+    const ia = base.indexOf(a);
+    const ib = base.indexOf(b);
+    if(ia > -1 && ib > -1){ return ia - ib; }
+    if(ia > -1){ return -1; }
+    if(ib > -1){ return 1; }
+    return a < b ? -1 : 1;
+  });
+
+  const balLabel = document.getElementById("dpBalance");
+  if(balLabel){ balLabel.textContent = fmtMoney(dpBalance, dpAccountCurrency); }
+
+  const curSelect = document.getElementById("dpCurrency");
+
+  if(curSelect){
+
+    if(!dpCurrencies.length){
+      curSelect.innerHTML = '<option value="">Valyuta topilmadi</option>';
+    }else{
+      curSelect.innerHTML = dpCurrencies.map(function(code){
+
+        const info = curInfo(code);
+
+        const has = dpMethods.some(function(m){
+          return String(m.currency || "").toUpperCase() === code;
+        });
+
+        return '<option value="' + escapeText(code) + '">' +
+          escapeText(code + " — " + info.name + (has ? "" : " (rekvizit yo'q)")) +
+          "</option>";
+      }).join("");
+
+      curSelect.value = dpCurrencies.indexOf(dpAccountCurrency) > -1
+        ? dpAccountCurrency
+        : dpCurrencies[0];
+    }
+  }
+
+  dpChangeCurrency();
+
+  if(!dpMethods.length){
+    dpSay("Hozircha to'lov rekviziti sozlanmagan. Admin bilan bog'laning.", "bad");
+  }
+}
+
+/* Valyuta tanlanganda: yorliq, tez tanlash tugmalari va rekvizitlar yangilanadi */
+function dpChangeCurrency(){
+
+  const curSelect = document.getElementById("dpCurrency");
+
+  dpCurrency = String((curSelect && curSelect.value) || dpAccountCurrency || "UZS").toUpperCase();
 
   const curLabel = document.getElementById("dpCurLabel");
   if(curLabel){ curLabel.textContent = dpCurrency; }
 
-  const balLabel = document.getElementById("dpBalance");
-  if(balLabel){ balLabel.textContent = fmtMoney(dpBalance, dpCurrency); }
+  const amountEl = document.getElementById("dpAmount");
+  if(amountEl){ amountEl.value = ""; }
 
   const chips = document.getElementById("dpChips");
 
@@ -12220,12 +12368,16 @@ async function loadDepositInit(){
 
   const select = document.getElementById("dpMethod");
 
+  const list = dpMethods.filter(function(m){
+    return String(m.currency || "").toUpperCase() === dpCurrency;
+  });
+
   if(select){
 
-    if(!dpMethods.length){
+    if(!list.length){
       select.innerHTML = '<option value="">Rekvizit topilmadi</option>';
     }else{
-      select.innerHTML = dpMethods.map(function(m){
+      select.innerHTML = list.map(function(m){
         const title = (m.bank_name || "Karta") + " • " + (m.holder || "");
         return '<option value="' + escapeText(m.id) + '">' + escapeText(title.trim()) + "</option>";
       }).join("");
@@ -12233,10 +12385,88 @@ async function loadDepositInit(){
   }
 
   dpRenderMethod();
+  dpRenderConvert();
 
-  if(!dpMethods.length){
-    dpSay("Hozircha to'lov rekviziti sozlanmagan. Admin bilan bog'laning.", "bad");
+  const nextBtn = document.getElementById("dpNextBtn");
+  if(nextBtn){ nextBtn.disabled = !list.length; }
+
+  if(!list.length){
+    dpSay("Bu valyuta uchun to'lov rekviziti qo'shilmagan. Boshqa valyutani tanlang " +
+      "yoki admin bilan bog'laning.", "bad");
+  }else{
+    dpSay("", "");
   }
+}
+
+/* Kursni o'qishga qulay ko'rinishda yozadi */
+function fxText(from, to, rate){
+
+  const value = Number(rate || 0);
+
+  if(!value){ return ""; }
+
+  const a = String(from).toUpperCase();
+  const b = String(to).toUpperCase();
+
+  if(a === b){ return ""; }
+
+  if(value >= 1){
+    return "kurs 1 " + a + " = " + fmtNumber(Math.round(value * 10000) / 10000) + " " + b;
+  }
+
+  return "kurs 1 " + b + " = " + fmtNumber(Math.round(100 / value) / 100) + " " + a;
+}
+
+/* Hisob valyutasiga o'tkazish kursi (1 dpCurrency = X account) */
+function dpRate(){
+
+  if(dpCurrency === dpAccountCurrency){ return 1; }
+
+  const from = Number(dpRates[dpCurrency] || 0);
+  const to = Number(dpRates[dpAccountCurrency] || 0);
+
+  if(!from || !to){ return 0; }
+
+  return to / from;
+}
+
+function dpConvert(amount){
+  return Math.round(Number(amount || 0) * dpRate() * 100) / 100;
+}
+
+function dpRenderConvert(){
+
+  const box = document.getElementById("dpConvert");
+
+  if(!box){ return; }
+
+  const amountEl = document.getElementById("dpAmount");
+  const amount = Number(amountEl ? amountEl.value : 0);
+
+  if(dpCurrency === dpAccountCurrency){
+    box.style.display = "none";
+    box.innerHTML = "";
+    return;
+  }
+
+  const rate = dpRate();
+
+  if(!rate){
+    box.style.display = "block";
+    box.innerHTML = "Bu valyuta uchun kurs sozlanmagan. Admin bilan bog'laning.";
+    return;
+  }
+
+  box.style.display = "block";
+
+  if(!amount || amount <= 0){
+    box.innerHTML = "Hisobingiz <b>" + escapeText(dpAccountCurrency) + "</b> da. " +
+      escapeText(fxText(dpCurrency, dpAccountCurrency, rate)) + ".";
+    return;
+  }
+
+  box.innerHTML = escapeText(fmtMoney(amount, dpCurrency)) + " → <b>" +
+    escapeText(fmtMoney(dpConvert(amount), dpAccountCurrency)) + "</b> balansga tushadi";
 }
 
 function dpPickAmount(value){
@@ -12244,6 +12474,7 @@ function dpPickAmount(value){
   const el = document.getElementById("dpAmount");
   if(el){ el.value = value; }
 
+  dpRenderConvert();
   dpSay("", "");
   tinyVibration(12);
 }
@@ -12315,7 +12546,8 @@ async function dpCreate(){
     res = await rpc("user_create_deposit", Object.assign({}, creds, {
       p_amount: amount,
       p_method_id: method.id,
-      p_note: ""
+      p_note: "",
+      p_currency: dpCurrency
     }));
   }catch(err){
     dpSay(err.message, "bad");
@@ -12334,9 +12566,25 @@ async function dpCreate(){
   dpDeposit = res ? res.deposit : null;
   dpMethodInfo = res ? res.method : null;
 
+  const depCur = (dpDeposit && dpDeposit.currency) ? String(dpDeposit.currency).toUpperCase() : dpCurrency;
+
   const amountLabel = document.getElementById("dpPayAmount");
   if(amountLabel){
-    amountLabel.textContent = fmtMoney(dpDeposit ? dpDeposit.amount : amount, dpCurrency);
+    amountLabel.textContent = fmtMoney(dpDeposit ? dpDeposit.amount : amount, depCur);
+  }
+
+  const convRow = document.getElementById("dpPayConvertRow");
+  const convLabel = document.getElementById("dpPayConvert");
+
+  if(convRow && convLabel){
+
+    if(dpDeposit && dpDeposit.credit_currency &&
+       String(dpDeposit.credit_currency).toUpperCase() !== depCur){
+      convLabel.textContent = "≈ " + fmtMoney(dpDeposit.credit_amount, dpDeposit.credit_currency);
+      convRow.style.display = "flex";
+    }else{
+      convRow.style.display = "none";
+    }
   }
 
   const refLabel = document.getElementById("dpPayRef");
@@ -12593,11 +12841,15 @@ async function loadDeposits(){
 
   dpDeposits = (res && Array.isArray(res.items)) ? res.items : [];
 
+  const accCur = String((res && res.currency) ||
+    (currentUser && currentUser.currency) || dpAccountCurrency || "UZS").toUpperCase();
+
+  dpAccountCurrency = accCur;
+
   const balLabel = document.getElementById("depBalanceLabel");
 
   if(balLabel){
-    balLabel.textContent = fmtMoney(Number((res && res.balance) || 0),
-      (currentUser && currentUser.currency) || dpCurrency);
+    balLabel.textContent = fmtMoney(Number((res && res.balance) || 0), accCur);
   }
 
   if(!dpDeposits.length){
@@ -12607,9 +12859,19 @@ async function loadDeposits(){
 
   list.innerHTML = dpDeposits.map(function(row){
 
+    const rowCur = String(row.currency || accCur).toUpperCase();
+    const creditCur = String(row.credit_currency || rowCur).toUpperCase();
+    const converted = creditCur !== rowCur;
+
     let html = '<div class="dep-row">' +
-      '<div class="dep-top"><b>' + escapeText(fmtMoney(row.amount, row.currency)) + "</b>" +
+      '<div class="dep-top"><b>' + escapeText(fmtMoney(row.amount, rowCur)) + "</b>" +
       depBadge(row.status) + "</div>" +
+      (converted
+        ? "<div>" + (row.status === "paid" ? "BALANSGA TUSHDI" : "BALANSGA TUSHADI") + ": <b>" +
+          escapeText(fmtMoney(row.credit_amount, creditCur)) + "</b>" +
+          (row.fx_rate ? " (" + escapeText(fxText(rowCur, creditCur, row.fx_rate)) + ")" : "") +
+          "</div>"
+        : "") +
       "<div>ID: " + escapeText(row.ref) + "</div>" +
       "<div>USUL: " + escapeText(row.method_label || "—") +
       (row.card_last4 ? " (****" + escapeText(row.card_last4) + ")" : "") + "</div>" +
@@ -12724,6 +12986,11 @@ async function loadAdminDeposits(){
       "<h5>" + escapeText((row.user_surname || "") + " " + (row.user_name || "")) + "</h5>" +
       "<p>" + depBadge(row.status) + "</p>" +
       "<p>SUMMA: <b>" + escapeText(fmtMoney(row.amount, row.currency)) + "</b></p>" +
+      (row.credit_currency &&
+       String(row.credit_currency).toUpperCase() !== String(row.currency).toUpperCase()
+        ? "<p>" + (row.status === "paid" ? "BALANSGA TUSHDI" : "BALANSGA TUSHADI") + ": <b>" +
+          escapeText(fmtMoney(row.credit_amount, row.credit_currency)) + "</b></p>"
+        : "") +
       "<p>MIJOZ KODI: " + escapeText(row.user_code || "—") + "</p>" +
       "<p>TRANZAKSIYA ID: " + escapeText(row.ref) + "</p>" +
       "<p>USUL: " + escapeText(row.method_label || "—") +
@@ -12773,6 +13040,13 @@ async function openDepositDetail(id){
     "<div>TELEFON: " + escapeText(u.phone || "—") + "</div>" +
     "<div>JORIY BALANS: <b>" + escapeText(fmtMoney(u.balance, u.currency)) + "</b></div>" +
     "<div>SUMMA: <b>" + escapeText(fmtMoney(d.amount, d.currency)) + "</b></div>" +
+    (d.credit_currency
+      ? "<div>" + (d.credited ? "BALANSGA TUSHDI" : "BALANSGA TUSHADI") + ": <b>" +
+        escapeText(fmtMoney(d.credit_amount, d.credit_currency)) + "</b>" +
+        (d.fx_rate
+          ? " (" + escapeText(fxText(d.currency, d.credit_currency, d.fx_rate)) + ")"
+          : "") + "</div>"
+      : "") +
     "<div>TO'LOV USULI: " + escapeText(d.method_label || "—") +
       (d.card_last4 ? " (****" + escapeText(d.card_last4) + ")" : "") + "</div>" +
     "<div>PROVAYDER: " + escapeText(d.provider || "manual") +
@@ -12902,6 +13176,121 @@ async function loadBalanceAudit(){
       "<div>VAQT: " + reqDate(row.at) + "</div>" +
     "</div>";
   }).join("");
+}
+
+/* --------- ADMIN: VALYUTA KURSLARI --------- */
+
+async function loadFxRates(){
+
+  const list = document.getElementById("admFxList");
+  const label = document.getElementById("fxCountLabel");
+
+  if(!list){ return; }
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_fx_rates", {p_token: adminToken});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  const items = (res && Array.isArray(res.items)) ? res.items : [];
+
+  if(label){ label.textContent = items.length; }
+
+  if(!items.length){
+    list.innerHTML = '<div class="combo-empty">Kurslar yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = items.map(function(row){
+
+    return '<div class="dep-row">' +
+      '<div class="dep-top"><b>' + escapeText(row.code) + "</b><span>1 USD = " +
+        escapeText(fmtNumber(row.per_usd)) + "</span></div>" +
+      "<div>YANGILANGAN: " + reqDate(row.updated_at) + "</div>" +
+      '<div class="row">' +
+        '<button class="btn register-btn tiny-btn" type="button" onclick="editFxRate(\'' +
+          escapeText(row.code) + "', " + Number(row.per_usd) + ')">TAHRIR</button>' +
+        (row.code === "USD"
+          ? ""
+          : '<button class="btn admin-danger tiny-btn" type="button" onclick="deleteFxRate(\'' +
+            escapeText(row.code) + '\')">O\'CHIRISH</button>') +
+      "</div>" +
+    "</div>";
+  }).join("");
+}
+
+function editFxRate(code, value){
+
+  setField("fx_code", code);
+  setField("fx_rate", value);
+
+  const el = document.getElementById("fx_code");
+  if(el){ el.scrollIntoView({block: "center"}); }
+}
+
+async function saveFxRate(){
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  const code = String(fieldValue("fx_code") || "").trim().toUpperCase();
+  const rate = Number(fieldValue("fx_rate"));
+
+  if(!/^[A-Z]{3}$/.test(code)){
+    adminMsg("Valyuta kodi 3 ta harfdan iborat bo'lishi kerak (masalan USD).", "err");
+    return;
+  }
+
+  if(!rate || rate <= 0){
+    adminMsg("Kurs qiymati noldan katta bo'lishi kerak.", "err");
+    return;
+  }
+
+  try{
+    await rpc("admin_save_fx_rate", {p_token: adminToken, p_code: code, p_per_usd: rate});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  setField("fx_code", "");
+  setField("fx_rate", "");
+
+  await loadFxRates();
+  adminMsg(code + " kursi saqlandi.", "ok");
+}
+
+async function deleteFxRate(code){
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  if(!confirm(code + " kursi o'chirilsinmi?")){ return; }
+
+  try{
+    await rpc("admin_delete_fx_rate", {p_token: adminToken, p_code: code});
+  }catch(err){
+    adminMsg(err.message, "err");
+    return;
+  }
+
+  await loadFxRates();
+  adminMsg(code + " kursi o'chirildi.", "ok");
 }
 
 const admDepSearchEl = document.getElementById("admDepSearch");
