@@ -440,6 +440,12 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         <label for="cdBank">BANK</label>
         <input id="cdBank" placeholder="Avtomatik aniqlanadi" readonly>
 
+        <label for="cdHolder">KARTA EGASI</label>
+        <input id="cdHolder" autocomplete="off" maxlength="30" placeholder="ISM FAMILIYA"
+               style="text-transform:uppercase">
+        <div class="cd-note" style="margin-top:6px">Hisobingizdagi ism-familiya avtomatik yoziladi.
+          Kartada boshqacha yozilgan bo‘lsa, o‘zgartiring.</div>
+
         <button class="btn gold" id="cdAdd" style="margin-top:14px">KARTANI QO‘SHISH</button>
         <div id="cdMsg"></div>
 
@@ -844,9 +850,31 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
 
   $("cdCvv").addEventListener("input", e => { e.target.value = cdDigits(e.target.value).slice(0, 4); });
 
+
+  var CD_TR = {"\u0410":"A","\u0411":"B","\u0412":"V","\u0413":"G","\u0414":"D","\u0415":"E","\u0401":"E","\u0416":"J","\u0417":"Z","\u0418":"I","\u0419":"Y","\u041a":"K","\u041b":"L","\u041c":"M","\u041d":"N","\u041e":"O","\u041f":"P","\u0420":"R","\u0421":"S","\u0422":"T","\u0423":"U","\u0424":"F","\u0425":"X","\u0426":"TS","\u0427":"CH","\u0428":"SH","\u0429":"SH","\u042a":"","\u042b":"I","\u042c":"","\u042d":"E","\u042e":"YU","\u042f":"YA","\u0492":"G","\u049a":"Q","\u04b2":"H","\u040e":"O"};
+  function cdTranslit(s){
+    s = String(s || "").toUpperCase();
+    var out = "";
+    for(var i = 0; i < s.length; i++){
+      var ch = s[i];
+      out += (CD_TR[ch] !== undefined) ? CD_TR[ch] : ch;
+    }
+    out = out.replace(/[\u02BB\u2018\u2019']/g, "");
+    out = out.replace(/[^A-Z ]/g, " ");
+    return out.replace(/\s+/g, " ").trim();
+  }
+
+  function cdFillHolder(force){
+    var el = document.getElementById("cdHolder");
+    if(!el || !user) return;
+    if(!force && el.value.trim()) return;
+    el.value = cdTranslit((user.name || "") + " " + (user.surname || ""));
+  }
+
   async function cdLoad() {
     let rows = [];
     try { rows = await api("/cards"); } catch (e) { $("cdList").innerHTML = '<div class="msg note">Kartalarni yuklab bo‘lmadi.</div>'; return; }
+    cdFillHolder(false);
     if (!rows || !rows.length) { $("cdList").innerHTML = '<div class="msg note">Hozircha karta qo‘shilmagan.</div>'; return; }
     $("cdList").innerHTML = rows.map(c => {
       const info = cdDetect(cdDigits(c.masked)) || {};
@@ -854,7 +882,8 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
       return '<div class="cd-item">' +
         (info.key ? '<img src="' + bankLogo(info.key) + '" alt="" onerror="this.style.display=\'none\'">' : "") +
         '<div class="m"><div class="cd-num">' + c.masked + '</div>' +
-        '<div class="cd-meta">' + (c.bank || c.brand || "—") + " • " + exp + (c.is_default ? " • ASOSIY" : "") + "</div></div>" +
+        '<div class="cd-meta">' + (c.bank || c.brand || "—") + " • " + exp + (c.is_default ? " • ASOSIY" : "") + "</div>" +
+        (c.holder ? '<div class="cd-meta">' + c.holder + "</div>" : "") + "</div>" +
         '<button class="cd-del" data-card="' + c.id + '">O‘CHIRISH</button></div>';
     }).join("");
     $("cdList").querySelectorAll(".cd-del").forEach(b => {
@@ -883,6 +912,10 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     if (y < now.getFullYear() || (y === now.getFullYear() && m < now.getMonth() + 1)) {
       cdMsg("Bu kartaning amal qilish muddati tugagan.", false); return;
     }
+    const holder = cdTranslit($("cdHolder").value);
+    if (holder.length < 3 || holder.indexOf(" ") === -1) {
+      cdMsg("Karta egasining ism va familiyasini yozing (kartada qanday bo‘lsa shunday).", false); return;
+    }
     if (info.cvv) {
       const need = info.cvvLen === 4 ? 4 : 3;
       if (cvv.length !== need) { cdMsg("CVV / CVC kodi " + need + " ta raqamdan iborat bo‘lishi kerak.", false); return; }
@@ -891,12 +924,12 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     $("cdAdd").disabled = true;
     try {
       /* CVV yuborilmaydi — faqat shu yerda tekshiriladi */
-      await api("/card/add", { card: digits, exp, brand: info.brand, bank: info.bank || info.brand });
+      await api("/card/add", { card: digits, exp, brand: info.brand, bank: info.bank || info.brand, holder: holder });
     } catch (e) { cdMsg(human(e.message), false); $("cdAdd").disabled = false; return; }
     $("cdAdd").disabled = false;
 
     $("cdNumber").value = ""; $("cdExp").value = ""; $("cdCvv").value = "";
-    $("cdBank").value = ""; $("cdBrand").innerHTML = "";
+    $("cdBank").value = ""; $("cdBrand").innerHTML = ""; cdFillHolder(true);
     if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
     cdMsg("KARTANGIZ MUVAFFAQIYATLI QO‘SHILDI ✅", true);
     await cdLoad();

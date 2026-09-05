@@ -5842,6 +5842,16 @@ body{
     <input id="cdBank" type="text" placeholder="Avtomatik aniqlanadi" readonly>
   </div>
 
+  <div class="field">
+    <label>KARTA EGASI</label>
+    <input id="cdHolder" type="text" autocomplete="off" maxlength="30"
+           placeholder="ISM FAMILIYA" style="text-transform:uppercase">
+  </div>
+  <div class="cd-note" style="margin-top:-4px">
+    Hisobingizdagi ism-familiya avtomatik yoziladi. Kartada boshqacha
+    yozilgan bo'lsa, o'zgartirishingiz mumkin.
+  </div>
+
   <button class="btn" type="button" id="cdAddBtn" onclick="cdAdd()">
     KARTANI QO'SHISH
   </button>
@@ -14044,12 +14054,35 @@ function cdSay(text, kind){
   box.innerHTML = text ? '<div class="' + (kind === "ok" ? "cd-ok" : "cd-bad") + '">' + escapeText(text) + "</div>" : "";
 }
 
+
+var CD_TR = {"\u0410":"A","\u0411":"B","\u0412":"V","\u0413":"G","\u0414":"D","\u0415":"E","\u0401":"E","\u0416":"J","\u0417":"Z","\u0418":"I","\u0419":"Y","\u041a":"K","\u041b":"L","\u041c":"M","\u041d":"N","\u041e":"O","\u041f":"P","\u0420":"R","\u0421":"S","\u0422":"T","\u0423":"U","\u0424":"F","\u0425":"X","\u0426":"TS","\u0427":"CH","\u0428":"SH","\u0429":"SH","\u042a":"","\u042b":"I","\u042c":"","\u042d":"E","\u042e":"YU","\u042f":"YA","\u0492":"G","\u049a":"Q","\u04b2":"H","\u040e":"O"};
+function cdTranslit(s){
+    s = String(s || "").toUpperCase();
+    var out = "";
+    for(var i = 0; i < s.length; i++){
+      var ch = s[i];
+      out += (CD_TR[ch] !== undefined) ? CD_TR[ch] : ch;
+    }
+    out = out.replace(/[\u02BB\u2018\u2019']/g, "");
+    out = out.replace(/[^A-Z ]/g, " ");
+    return out.replace(/\s+/g, " ").trim();
+  }
+
+function cdFillHolder(force){
+  var el = document.getElementById("cdHolder");
+  if(!el || !currentUser) return;
+  if(!force && el.value.trim()) return;
+  el.value = cdTranslit((currentUser.name || "") + " " + (currentUser.surname || ""));
+}
+
 async function cdLoad(){
   var box = document.getElementById("cdList");
   if(!box){ return; }
 
   var creds = userCreds();
   if(!creds){ return; }
+
+  cdFillHolder(false);
 
   var rows;
 
@@ -14075,6 +14108,7 @@ async function cdLoad(){
         '<div class="cd-num">' + escapeText(c.masked) + "</div>" +
         '<div class="cd-meta">' + escapeText(c.bank || c.brand || "—") + " • " + escapeText(exp) +
           (c.is_default ? " • ASOSIY" : "") + "</div>" +
+        (c.holder ? '<div class="cd-meta">' + escapeText(c.holder) + "</div>" : "") +
       "</div>" +
       '<button class="cd-del" type="button" onclick="cdDelete(\'' + c.id + '\')">O\'CHIRISH</button>' +
     "</div>";
@@ -14124,6 +14158,12 @@ async function cdAdd(){
     return;
   }
 
+  var holder = cdTranslit(document.getElementById("cdHolder").value);
+  if(holder.length < 3 || holder.indexOf(" ") === -1){
+    cdSay("Karta egasining ism va familiyasini yozing (kartada qanday bo'lsa shunday).", "bad");
+    return;
+  }
+
   if(info.cvv){
     var need = info.cvvLen === 4 ? 4 : 3;
     if(cvv.length !== need){
@@ -14142,7 +14182,7 @@ async function cdAdd(){
       p_exp: exp,
       p_brand: info.brand,
       p_bank: info.bank || info.brand,
-      p_holder: ""
+      p_holder: holder
     }));
   }catch(err){
     cdSay(translateError(err.message), "bad");
@@ -14157,6 +14197,7 @@ async function cdAdd(){
   document.getElementById("cdCvv").value = "";
   document.getElementById("cdBank").value = "";
   document.getElementById("cdBrand").innerHTML = "";
+  cdFillHolder(true);
 
   cdSay("KARTANGIZ MUVAFFAQIYATLI QO'SHILDI ✅", "ok");
   await cdLoad();
