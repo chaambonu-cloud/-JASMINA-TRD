@@ -403,7 +403,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
           <span>Skrinshot qora chiqsin
             <small>Ekran ko‘zga sezilmas darajada qora kadr bilan almashadi — olingan skrinshot va ekran
               yozuvi asosan qop-qora bo‘lib chiqadi. Miltillashga sezgir bo‘lsangiz yoqmang.</small></span>
-          <div class="tgl" id="tglFlick" role="switch"></div>
+          <div class="tgl on" id="tglFlick" role="switch"></div>
         </div>
         <div class="msg note">Telefon tizim skrinshotini veb-ilova 100% bloklay olmaydi — buni faqat
           Telegramdan tashqaridagi native ilova qiladi. Shu sabab ekranda ismingiz va Telegram ID’ingiz
@@ -509,7 +509,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   const SECRET_IDS = ["balanceValue", "prizeValue", "commissionValue", "investMain", "investAlt",
     "payBalance", "profBalance", "clientCard"];
   let secretOn = localStorage.getItem("jt_secret") === "1";
-  let flickOn = localStorage.getItem("jt_flick") === "1";
+  let flickOn = localStorage.getItem("jt_flick") !== "0";
   let hideTimer = null;
 
   function armSecrets() {
@@ -1170,6 +1170,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   $("refreshAll").addEventListener("click", () => loadAll().catch(e => say("fatal", human(e.message))));
   $("depRefresh").addEventListener("click", () => { refreshBalance().catch(() => {}); loadDeposits(); });
 
+  document.body.classList.toggle("flick", flickOn);
   drawWatermark();
   setInterval(drawWatermark, 60000);
   boot();
