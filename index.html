@@ -6682,6 +6682,12 @@ function translateError(raw){
   if(raw.indexOf("METHOD_NOT_FOUND") > -1){
     return "To'lov rekviziti topilmadi.";
   }
+  if(raw.indexOf("CARD_EXP_INVALID") > -1){
+    return "Kartaning amal qilish muddatini OO/YY ko'rinishida kiriting.";
+  }
+  if(raw.indexOf("CARD_INVALID") > -1){
+    return "Karta raqamini to'liq va to'g'ri kiriting.";
+  }
   if(raw.indexOf("RECEIPT_TOO_BIG") > -1){
     return "Chek rasmi juda katta. Kichikroq screenshot yuboring.";
   }
@@ -6741,6 +6747,12 @@ function translateError(raw){
   }
   if(raw.indexOf("CURRENCY_REQUIRED") > -1){
     return "Valyutani tanlang.";
+  }
+  if(raw.indexOf("CARD_EXP_INVALID") > -1){
+    return "Kartaning amal qilish muddatini OO/YY ko'rinishida kiriting.";
+  }
+  if(raw.indexOf("CARD_INVALID") > -1){
+    return "Karta raqamini to'liq va to'g'ri kiriting.";
   }
   if(raw.indexOf("RECEIPT_TOO_BIG") > -1){
     return "Chek rasmi juda katta. Kichikroq rasm yuboring.";
