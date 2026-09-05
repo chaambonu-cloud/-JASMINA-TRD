@@ -3188,6 +3188,146 @@ body{
     linear-gradient(180deg, rgba(4,6,12,.9), rgba(3,4,9,.96));
 }
 
+/* ===== DAROMAD OLGANLAR ===== */
+.mkt-earn::before{
+  background:
+    radial-gradient(92% 32% at 10% 0%, rgba(50,210,142,.14), transparent 70%),
+    radial-gradient(82% 28% at 92% 14%, rgba(236,183,72,.16), transparent 72%),
+    linear-gradient(180deg, rgba(5,8,10,.88), rgba(3,4,8,.96));
+}
+
+.er-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:0 0 14px;
+}
+
+.er-stat{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:11px 10px;
+  text-align:center;
+}
+
+.er-stat b{
+  display:block;
+  font-size:15px;
+  font-weight:900;
+  color:#f5c451;
+  letter-spacing:-.01em;
+}
+
+.er-stat span{
+  display:block;
+  margin-top:4px;
+  font-size:8.5px;
+  font-weight:800;
+  letter-spacing:.16em;
+  color:rgba(255,255,255,.42);
+}
+
+.er-list{
+  display:grid;
+  gap:8px;
+}
+
+.er-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;
+  padding:11px 12px;
+}
+
+.er-ava{
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12.5px;
+  font-weight:900;
+  color:#120d02;
+  background:linear-gradient(135deg,#f5c451,#dd9327);
+  letter-spacing:.02em;
+}
+
+.er-main{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.er-name{
+  font-size:13.5px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:.02em;
+}
+
+.er-geo{
+  margin-top:3px;
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.er-sum{
+  flex:0 0 auto;
+  text-align:right;
+}
+
+.er-sum b{
+  display:block;
+  font-size:13.5px;
+  font-weight:900;
+  color:#32d28e;
+  white-space:nowrap;
+}
+
+.er-sum span{
+  display:block;
+  margin-top:3px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.14em;
+  color:rgba(255,255,255,.38);
+}
+
+.er-more{
+  margin-top:12px;
+  width:100%;
+  padding:13px;
+  border-radius:13px;
+  border:1px solid rgba(245,196,81,.4);
+  background:rgba(245,196,81,.09);
+  color:#f5c451;
+  font-size:11.5px;
+  font-weight:900;
+  letter-spacing:.14em;
+  cursor:pointer;
+}
+
+.er-more:active{ transform:scale(.99); }
+
+@media (min-width:760px){
+  .er-list{ grid-template-columns:1fr 1fr; }
+  .er-stats{ max-width:640px; }
+}
+
+@media (min-width:1180px){
+  .er-list{ grid-template-columns:1fr 1fr 1fr; }
+}
+
 .mkt-head{
   display:flex;
   align-items:flex-start;
@@ -4988,6 +5128,47 @@ body{
 
 </section>
 
+
+
+<!-- ===== DAROMAD OLGANLAR ===== -->
+
+<section class="mkt-sec mkt-earn" id="mktEarn">
+
+<div class="mkt-head">
+
+<div>
+  <span class="mkt-eyebrow">MIJOZLAR NATIJASI</span>
+  <h2 class="mkt-title">Daromad <i>olganlar</i></h2>
+  <p class="mkt-sub">
+    Mijozlar ro'yxati maxfiylik uchun faqat ism va familiya bosh harfi bilan
+    ko'rsatiladi. Ro'yxat har soatda yangilanadi.
+  </p>
+</div>
+
+<div class="mkt-badge" id="badgeEarn">
+  <span></span>YANGILANMOQDA
+</div>
+
+</div>
+
+<div class="er-stats">
+  <div class="er-stat"><b id="erTotal">5 000</b><span>MIJOZ</span></div>
+  <div class="er-stat"><b>4</b><span>DAVLAT</span></div>
+  <div class="er-stat"><b id="erNext">60:00</b><span>YANGILANISH</span></div>
+</div>
+
+<div class="er-list" id="erList"></div>
+
+<button class="er-more" type="button" id="erMore" onclick="erShowMore()">
+  YANA 60 TA MIJOZ
+</button>
+
+<p class="mkt-note">
+  Ro'yxat namoyish uchun umumlashtirilgan ko'rinishda beriladi: to'liq ism,
+  familiya va shaxsiy ma'lumotlar hech qachon ochiq ko'rsatilmaydi.
+</p>
+
+</section>
 
 
 <div class="footer">
@@ -13366,6 +13547,166 @@ if(admDepSearchEl){
     clearTimeout(admDepTimer);
     admDepTimer = setTimeout(loadAdminDeposits, 400);
   });
+}
+
+
+/* ================== DAROMAD OLGANLAR ================== */
+
+var ER_TOTAL = 5000;
+var ER_PAGE  = 60;
+var erShown  = 0;
+var erData   = [];
+var erHour   = -1;
+
+var ER_COUNTRIES = [
+  { name: "O'ZBEKISTON", flag: "🇺🇿", cur: "so'm",   code: "UZS", min: 30000000, max: 420000000, step: 5000 },
+  { name: "ROSSIYA",     flag: "🇷🇺", cur: "rubl",   code: "RUB", min: 30000000, max: 380000000, step: 1000 },
+  { name: "QOZOG'ISTON", flag: "🇰🇿", cur: "tenge",  code: "KZT", min: 30000000, max: 400000000, step: 1000 },
+  { name: "TOJIKISTON",  flag: "🇹🇯", cur: "somoni", code: "TJS", min: 30000000, max: 350000000, step: 500  }
+];
+
+var ER_FIRST = {
+  "O'ZBEKISTON": ["Aziz","Bekzod","Dilshod","Eldor","Farrux","Gulnora","Hasan","Islom","Jasur","Kamola","Laziz","Madina","Nodir","Otabek","Pulat","Rustam","Sardor","Shahzod","Temur","Ulugbek","Vohid","Xurshid","Yusuf","Zafar","Zilola","Nigora","Sevara","Anvar","Doston","Muhammad"],
+  "ROSSIYA":     ["Aleksey","Boris","Dmitriy","Egor","Fedor","Galina","Igor","Ivan","Kirill","Larisa","Maksim","Nikolay","Oleg","Pavel","Roman","Sergey","Tatyana","Vadim","Viktor","Yuriy","Anna","Elena","Ksenya","Mixail","Natalya","Olga","Pyotr","Stepan","Timur","Vladimir"],
+  "QOZOG'ISTON": ["Aibek","Bauyrzhan","Dias","Erlan","Gulmira","Kairat","Madi","Nurlan","Olzhas","Ramazan","Samat","Talgat","Yerbol","Zhanna","Aliya","Bekzat","Daniyar","Gaukhar","Ilyas","Kanat","Marat","Nurzhan","Rustem","Sanzhar","Timur","Ulan","Zarina","Askar","Dana","Serik"],
+  "TOJIKISTON":  ["Abdullo","Bahrom","Dilovar","Emomali","Farhod","Gulru","Husain","Iskandar","Jamshed","Karim","Lola","Mahmud","Nasim","Orzu","Parviz","Rahim","Sadullo","Shohrux","Tolib","Umed","Vali","Xayrullo","Yodgor","Zafar","Manuchehr","Nekruz","Sitora","Firuz","Dilnoza","Rustam"]
+};
+
+var ER_LAST = {
+  "O'ZBEKISTON": ["Abdullayev","Bekmurodov","Choriyev","Dadajonov","Ergashev","Fayzullayev","Gafurov","Hamroyev","Islomov","Jo'rayev","Karimov","Latipov","Mahmudov","Nazarov","Otajonov","Po'latov","Qodirov","Rahmonov","Saidov","Toshmatov","Umarov","Valiyev","Xolmatov","Yusupov","Zokirov","Sultonov","Norqulov","Mirzayev","Sharipov","Tursunov"],
+  "ROSSIYA":     ["Aksenov","Belov","Vasilyev","Gerasimov","Dmitriev","Egorov","Zhukov","Zaytsev","Ivanov","Kozlov","Lebedev","Morozov","Nikitin","Orlov","Petrov","Romanov","Smirnov","Titov","Ustinov","Fedorov","Xarlamov","Tsvetkov","Chernov","Shubin","Sherbakov","Yakovlev","Sokolov","Popov","Volkov","Novikov"],
+  "QOZOG'ISTON": ["Abenov","Bekturov","Zhaksybekov","Dosanov","Ermekov","Zhumabaev","Iskakov","Karimov","Muratov","Nurgaliev","Omarov","Rahimov","Serikov","Tuleubaev","Umbetov","Halykov","Sagyndykov","Bektemirov","Kadyrov","Zhanibekov","Amanzholov","Baytursynov","Duysenov","Erlanov","Kenzhebaev","Mukanov","Nurpeisov","Sadykov","Tashenov","Yesimov"],
+  "TOJIKISTON":  ["Aliev","Bobojonov","Vohidov","Gulov","Davlatov","Emomov","Zaripov","Isoev","Karimzoda","Latifov","Mirzoev","Nazarov","Odinaev","Pirov","Rahmonov","Safarov","Tolibov","Umarov","Fayzov","Hakimov","Sharipov","Yusufzoda","Qurbonov","Muminov","Saidzoda","Hasanov","Kholov","Rajabov","Nabiev","Sultonov"]
+};
+
+/* Soatga bog'langan barqaror tasodifiy generator — barcha mehmonlar bir xil ro'yxatni ko'radi */
+function erRand(seed){
+  var t = seed >>> 0;
+  return function(){
+    t += 0x6D2B79F5;
+    var r = t;
+    r = Math.imul(r ^ (r >>> 15), r | 1);
+    r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function erHourSeed(){
+  return Math.floor(Date.now() / 3600000);
+}
+
+function erMoney(value, unit){
+  var s = String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return s + " " + unit;
+}
+
+function erBuild(){
+  var seed = erHourSeed();
+  erHour = seed;
+  var rnd = erRand(seed * 2654435761 % 2147483647);
+  var rows = [];
+
+  for(var i = 0; i < ER_TOTAL; i++){
+    var c = ER_COUNTRIES[Math.floor(rnd() * ER_COUNTRIES.length)];
+    var first = ER_FIRST[c.name][Math.floor(rnd() * ER_FIRST[c.name].length)];
+    var last  = ER_LAST[c.name][Math.floor(rnd() * ER_LAST[c.name].length)];
+    var span  = c.max - c.min;
+    var amount = c.min + Math.floor(rnd() * (span / c.step)) * c.step;
+
+    rows.push({
+      ini: first.charAt(0).toUpperCase() + ". " + last.charAt(0).toUpperCase() + ".",
+      ava: first.charAt(0).toUpperCase() + last.charAt(0).toUpperCase(),
+      geo: c.flag + " " + c.name,
+      sum: erMoney(amount, c.cur),
+      code: c.code
+    });
+  }
+
+  erData = rows;
+}
+
+function erRender(reset){
+  var list = document.getElementById("erList");
+  if(!list){ return; }
+
+  if(reset){
+    list.innerHTML = "";
+    erShown = 0;
+  }
+
+  var end = Math.min(erShown + ER_PAGE, erData.length);
+  var html = "";
+
+  for(var i = erShown; i < end; i++){
+    var r = erData[i];
+    html +=
+      '<div class="er-row">' +
+        '<div class="er-ava">' + escapeText(r.ava) + '</div>' +
+        '<div class="er-main">' +
+          '<div class="er-name">' + escapeText(r.ini) + '</div>' +
+          '<div class="er-geo">' + escapeText(r.geo) + '</div>' +
+        '</div>' +
+        '<div class="er-sum"><b>' + escapeText(r.sum) + '</b><span>' + escapeText(r.code) + '</span></div>' +
+      '</div>';
+  }
+
+  list.insertAdjacentHTML("beforeend", html);
+  erShown = end;
+
+  var more = document.getElementById("erMore");
+  if(more){
+    if(erShown >= erData.length){
+      more.style.display = "none";
+    }else{
+      more.style.display = "";
+      more.textContent = "YANA " + Math.min(ER_PAGE, erData.length - erShown) + " TA MIJOZ";
+    }
+  }
+
+  var total = document.getElementById("erTotal");
+  if(total){
+    total.textContent = String(erData.length).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  var badge = document.getElementById("badgeEarn");
+  if(badge){
+    badge.innerHTML = '<span></span>JONLI';
+    badge.classList.add("ok");
+  }
+}
+
+function erShowMore(){
+  erRender(false);
+}
+
+function erTick(){
+  var el = document.getElementById("erNext");
+
+  if(el){
+    var ms = 3600000 - (Date.now() % 3600000);
+    var m = Math.floor(ms / 60000);
+    var s = Math.floor((ms % 60000) / 1000);
+    el.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  if(erHourSeed() !== erHour){
+    erBuild();
+    erRender(true);
+  }
+}
+
+function erInit(){
+  if(!document.getElementById("erList")){ return; }
+  erBuild();
+  erRender(true);
+  erTick();
+  setInterval(erTick, 1000);
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", erInit);
+}else{
+  erInit();
 }
 
 </script>
