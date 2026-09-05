@@ -4,193 +4,372 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>JASMINA TRD — Mini App</title>
+<title>JASMINA TRD — Mijoz kabineti</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
   color-scheme:light dark;
   --bg:var(--tg-theme-bg-color,#f4f5f7);
-  --card:var(--tg-theme-secondary-bg-color,#fff);
-  --text:var(--tg-theme-text-color,#111);
+  --card:var(--tg-theme-secondary-bg-color,#ffffff);
+  --text:var(--tg-theme-text-color,#111214);
   --muted:var(--tg-theme-hint-color,#7b7f86);
-  --accent:var(--tg-theme-button-color,#111);
-  --accentText:var(--tg-theme-button-text-color,#fff);
+  --accent:var(--tg-theme-button-color,#111214);
+  --accentText:var(--tg-theme-button-text-color,#ffffff);
+  --gold:#c8912f;
+  --ok:#1a9e57;
+  --warn:#c98a00;
+  --bad:#d3383d;
   --line:color-mix(in srgb,var(--muted) 22%,transparent);
+  --soft:color-mix(in srgb,var(--muted) 10%,transparent);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--text);
-  font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:640px;margin:0 auto;padding:18px 16px 48px}
-.head{display:flex;align-items:center;gap:12px;margin:4px 0 20px}
-.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
-  background:var(--card);font-weight:800;letter-spacing:.5px}
-.hello{font-size:20px;font-weight:800}
+body{margin:0;background:var(--bg);color:var(--text);overflow-wrap:anywhere;
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:16px 14px 96px}
+.head{display:flex;align-items:center;gap:12px;margin:2px 0 16px}
+.avatar{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:var(--card);font-weight:800;letter-spacing:.5px;color:var(--gold)}
+.hello{font-size:19px;font-weight:800;line-height:1.2}
 .sub{color:var(--muted);font-size:13px}
-.card{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
-  border-radius:20px;overflow:hidden;margin-bottom:16px}
-.stat{background:var(--card);padding:18px}
-.label{color:var(--muted);font-size:13px}
-.value{font-size:21px;font-weight:800;margin-top:4px;word-break:break-word}
-.section{font-size:12px;color:var(--muted);letter-spacing:.1em;margin:22px 4px 10px}
-.menu{background:var(--card);border-radius:20px;overflow:hidden}
-.row{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;
-  color:var(--text);padding:16px 18px;display:flex;align-items:center;gap:14px;
-  text-align:left;font:inherit;cursor:pointer}
-.row:last-child{border-bottom:0}
-.ico{width:40px;height:40px;border-radius:13px;flex:none;
-  background:color-mix(in srgb,var(--accent) 12%,transparent);display:grid;place-items:center;font-size:19px}
-.grow{flex:1;min-width:0}
-.title{font-weight:700;display:block}
-.desc{font-size:12px;color:var(--muted);margin-top:2px;display:block}
-.arrow{color:var(--muted);font-size:22px}
-label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
-input,select{width:100%;min-height:48px;padding:12px 14px;font:inherit;color:var(--text);
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px}
+.section-title{font-size:11px;letter-spacing:.14em;color:var(--muted);
+  font-weight:700;margin:0 0 12px}
+.hero{background:var(--card);border-radius:18px;padding:18px;margin-bottom:12px;
+  border:1px solid color-mix(in srgb,var(--gold) 34%,transparent)}
+.hero .big{font-size:26px;font-weight:800;color:var(--gold);margin:6px 0 2px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;padding:5px 10px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.pill.on{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border-radius:18px;overflow:hidden;margin-bottom:12px}
+.stat{background:var(--card);padding:15px}
+.label{color:var(--muted);font-size:12px}
+.value{font-size:19px;font-weight:800;margin-top:3px}
+.value.gold{color:var(--gold)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:11px 0;
+  border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv span{color:var(--muted)}
+.kv b{text-align:right;font-weight:700}
+.btn{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--accent);
+  color:var(--accentText);font-weight:800;font-size:15px;letter-spacing:.02em;
+  margin-top:10px;cursor:pointer;font-family:inherit}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.soft{background:var(--soft);color:var(--text)}
+.btn.ghost{background:transparent;color:var(--muted);font-weight:600;min-height:44px}
+.btn[disabled]{opacity:.45}
+label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px;
+  letter-spacing:.08em;font-weight:700}
+input,select,textarea{width:100%;min-height:48px;padding:12px 14px;font:inherit;color:var(--text);
   background:var(--bg);border:1px solid var(--line);border-radius:13px}
-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
+select{appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
   linear-gradient(135deg,var(--muted) 50%,transparent 50%);
   background-position:calc(100% - 20px) 22px,calc(100% - 15px) 22px;
   background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-.btn{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--accent);
-  color:var(--accentText);font-weight:800;font-size:16px;margin-top:16px;cursor:pointer}
-.btn[disabled]{opacity:.45}
-.btn.ghost{background:transparent;color:var(--muted);font-weight:600;margin-top:8px;min-height:44px}
-.tx{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:9px;
+.msg{border-radius:14px;padding:12px 14px;margin:12px 0 0;font-size:14px;line-height:1.45}
+.msg.err{background:color-mix(in srgb,var(--bad) 14%,var(--card));color:var(--bad)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,var(--card));color:var(--ok)}
+.msg.note{background:var(--soft);color:var(--muted)}
+.row-item{background:var(--card);border-radius:15px;padding:13px 15px;margin-bottom:8px;
   display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.tx small{display:block;color:var(--muted);margin-top:3px;font-size:12px}
+.row-item small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
 .right{text-align:right;font-weight:700;white-space:nowrap}
-.badge{font-size:11px;font-weight:700;letter-spacing:.06em}
-.b-pending{color:#c98a00}.b-paid{color:#1a9e57}.b-failed{color:#d3383d}
-.msg{border-radius:16px;padding:14px 16px;margin-bottom:12px;line-height:1.45;font-size:14px}
-.msg.err{background:color-mix(in srgb,#d3383d 14%,var(--card));color:#c22}
-.msg.ok{background:color-mix(in srgb,#1a9e57 14%,var(--card));color:#0c7c43}
-.hidden{display:none !important}
-.loading{padding:60px 0;text-align:center;color:var(--muted)}
-.kv{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
-.kv:last-child{border-bottom:0}
-.kv b{text-align:right;word-break:break-word}
-.copy{background:var(--bg);border:1px solid var(--line);border-radius:10px;
-  padding:6px 10px;font:inherit;font-size:12px;color:var(--text);cursor:pointer}
+.dep-badge{font-size:10px;font-weight:800;letter-spacing:.08em;display:inline-block;margin-top:4px}
+.dep-badge.pending{color:var(--warn)}
+.dep-badge.paid{color:var(--ok)}
+.dep-badge.failed,.dep-badge.canceled{color:var(--bad)}
+.inv-step{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);padding:6px 0}
+.inv-step i{width:11px;height:11px;border-radius:50%;background:var(--line);flex:none}
+.inv-step.done{color:var(--text)}
+.inv-step.done i{background:var(--ok)}
+.inv-step.now{color:var(--gold);font-weight:700}
+.inv-step.now i{background:var(--gold)}
+.cur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cur{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 8px;
+  text-align:center;cursor:pointer;font-family:inherit;color:var(--text)}
+.cur b{display:block;font-size:13px;font-weight:800}
+.cur small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.cur.active,.cur.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.pkg{width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);
+  border-radius:15px;padding:14px;margin-bottom:8px;cursor:pointer;font:inherit;color:var(--text)}
+.pkg.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.pkg b{display:block;font-size:15px}
+.pkg small{color:var(--muted);font-size:12px}
+.coin{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.coin:last-child{border-bottom:0}
+.coin .sym{font-weight:700}
+.coin .sym small{color:var(--muted);font-weight:400}
+.coin .chg{font-weight:700;font-size:13px;min-width:64px;text-align:right}
+.chg.up{color:var(--ok)}.chg.down{color:var(--bad)}
+.countdown{font-size:27px;font-weight:800;letter-spacing:.06em;text-align:center;color:var(--gold)}
+.steps{display:flex;gap:6px;margin-bottom:14px}
+.steps span{flex:1;text-align:center;font-size:10px;font-weight:800;letter-spacing:.06em;
+  color:var(--muted);background:var(--soft);border-radius:999px;padding:6px 4px}
+.steps span.on{background:var(--gold);color:#fff}
 .file{display:block;padding:14px;border:1px dashed var(--line);border-radius:13px;
-  text-align:center;color:var(--muted);font-size:14px;cursor:pointer}
+  text-align:center;color:var(--muted);font-size:14px;cursor:pointer;margin-top:14px}
 .file input{display:none}
 .prev{max-width:100%;border-radius:12px;margin-top:10px;display:block}
+.bank-logo{height:26px;margin-top:8px;display:block}
+.copy{background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:5px 9px;font:inherit;font-size:12px;color:var(--text);cursor:pointer;margin-left:6px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;
+  background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0)}
+.nav button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:9px 2px 8px;cursor:pointer}
+.nav button i{display:block;font-size:19px;font-style:normal;margin-bottom:2px;line-height:1}
+.nav button.on{color:var(--gold)}
+.loading{padding:56px 0;text-align:center;color:var(--muted)}
+.hidden{display:none !important}
+.empty{color:var(--muted);font-size:14px}
+.locked{text-align:center;color:var(--muted);font-size:13px;padding:8px 0}
 </style>
 </head>
 <body>
 <main class="wrap">
 
   <div id="loading" class="loading">Yuklanmoqda…</div>
+  <div id="fatal" class="msg err hidden"></div>
 
-  <!-- 1. Akkauntni bog'lash -->
+  <!-- AKKAUNTNI BOG'LASH -->
   <section id="linkView" class="hidden">
     <div class="head">
       <div class="avatar">JT</div>
-      <div><div class="hello">JASMINA TRD</div><div class="sub">Telegram Mini App</div></div>
+      <div><div class="hello">JASMINA TREDING</div><div class="sub">Mijoz kabineti • Telegram</div></div>
     </div>
     <div class="card">
-      <div style="font-weight:700;margin-bottom:6px">Akkauntni bog‘lash</div>
-      <div class="sub">Saytdagi mavjud hisobingiz ma’lumotlarini kiriting. Bu bir marta bajariladi.</div>
-      <div id="linkErr" class="msg err hidden" style="margin-top:14px"></div>
-      <label for="lSurname">Familiya</label>
+      <div class="section-title">AKKAUNTNI BOG‘LASH</div>
+      <div class="sub">Saytdagi mavjud hisobingiz ma’lumotlarini kiriting. Bu bir marta bajariladi,
+        keyin kabinet Telegramda ochiladi.</div>
+      <div id="linkErr" class="msg err hidden"></div>
+      <label for="lSurname">FAMILIYA</label>
       <input id="lSurname" autocomplete="family-name" placeholder="Familiyangiz">
-      <label for="lName">Ism</label>
+      <label for="lName">ISM</label>
       <input id="lName" autocomplete="given-name" placeholder="Ismingiz">
-      <label for="lCode">Kirish kodi</label>
+      <label for="lCode">KIRISH KODI</label>
       <input id="lCode" autocapitalize="characters" placeholder="Sizga berilgan kod">
-      <button class="btn" id="linkBtn">BOG‘LASH</button>
+      <button class="btn gold" id="linkBtn">BOG‘LASH →</button>
     </div>
   </section>
 
-  <!-- 2. Asosiy ekran -->
-  <section id="mainView" class="hidden">
+  <!-- KABINET -->
+  <section id="app" class="hidden">
     <div class="head">
-      <div class="avatar">JT</div>
-      <div><div class="hello" id="hello">Salom!</div><div class="sub">JASMINA TRD • Mini App</div></div>
-    </div>
-    <div class="grid">
-      <div class="stat"><div class="label">Balans</div><div class="value" id="balance">—</div></div>
-      <div class="stat"><div class="label">Valyuta</div><div class="value" id="currency">—</div></div>
-    </div>
-    <div class="menu">
-      <button class="row" id="depositBtn">
-        <span class="ico">💳</span>
-        <span class="grow"><span class="title">Hisobni to‘ldirish</span>
-        <span class="desc">Karta orqali, admin tasdiqlashi bilan</span></span>
-        <span class="arrow">›</span>
-      </button>
-      <button class="row" id="refreshBtn">
-        <span class="ico">↻</span>
-        <span class="grow"><span class="title">Yangilash</span>
-        <span class="desc">Balans va to‘lovlar tarixini qayta yuklash</span></span>
-        <span class="arrow">›</span>
-      </button>
-    </div>
-    <div class="section">TO‘LOVLAR TARIXI</div>
-    <div id="history"></div>
-  </section>
-
-  <!-- 3. Depozit: 1-qadam -->
-  <section id="dep1" class="hidden">
-    <div class="head"><div class="avatar">1</div>
-      <div><div class="hello">Hisobni to‘ldirish</div><div class="sub">Valyuta va summa</div></div></div>
-    <div class="card">
-      <div id="dep1Err" class="msg err hidden"></div>
-      <label for="dCurrency">Valyuta</label>
-      <select id="dCurrency"></select>
-      <label for="dAmount">Summa</label>
-      <input id="dAmount" inputmode="decimal" placeholder="0">
-      <div id="dMethodWrap">
-        <label for="dMethod">To‘lov kartasi</label>
-        <select id="dMethod"></select>
+      <div class="avatar" id="initials">JT</div>
+      <div>
+        <div class="hello" id="hello">—</div>
+        <div class="sub">JASMINA TREDING • GOLD / MIJOZLAR</div>
       </div>
-      <div class="sub" id="dHint" style="margin-top:10px"></div>
-      <button class="btn" id="dNext">DAVOM ETISH</button>
-      <button class="btn ghost" id="dBack1">Bekor qilish</button>
+    </div>
+
+    <!-- 1. BOSH SAHIFA -->
+    <div id="tab-home">
+      <div class="hero">
+        <div class="label">TO‘LANGAN DAROMADLAR</div>
+        <div class="big" id="heroMoney">—</div>
+        <div class="sub">kartalarga o‘tkazilgan</div>
+        <div class="kv" style="margin-top:10px;border:0;padding-bottom:0">
+          <span>HISOB HOLATI</span>
+          <b><span class="pill on">● FAOL</span></b>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="stat"><div class="label">JORIY BALANS</div><div class="value" id="balanceValue">—</div></div>
+        <div class="stat"><div class="label">YUTUQ SUMMASI</div><div class="value gold" id="prizeValue">—</div></div>
+        <div class="stat"><div class="label">KOMISSIYA</div><div class="value" id="commissionValue">—</div></div>
+        <div class="stat"><div class="label">FOYDA</div><div class="value" id="profitValue">—</div></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">DAROMAD OLINGAN</div>
+        <div class="kv"><span>SARMOYA (asosiy)</span><b id="investMain">—</b></div>
+        <div class="kv"><span>SARMOYA (qo‘shimcha)</span><b id="investAlt">—</b></div>
+      </div>
+
+      <div id="userNoteBox" class="msg note hidden"></div>
+
+      <div class="card hidden" id="deadlinePanel">
+        <div class="section-title">YUTUQNI OLISH UCHUN QOLGAN VAQT</div>
+        <div class="countdown" id="countdownValue">00:00:00</div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">VALYUTA KURSLARI</div>
+        <div class="cur-grid" id="currencyGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">BIRJA — JONLI NARXLAR</div>
+        <div id="coins"></div>
+        <div class="sub" id="marketStatus" style="margin-top:10px">Narxlar yuklanmoqda…</div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">MIJOZLAR RO‘YXATI</div>
+        <div class="locked">🔒 QULFLANGAN<br>Mijozlar ma’lumotlari maxfiy.</div>
+      </div>
+
+      <button class="btn gold" id="goInvest">SARMOYA KIRITISH</button>
+      <button class="btn" id="goDeposit">HISOBNI TO‘LDIRISH</button>
+      <button class="btn ghost" id="refreshAll">↻ Ma’lumotlarni yangilash</button>
+    </div>
+
+    <!-- 2. SARMOYA -->
+    <div id="tab-invest" class="hidden">
+      <div class="card" id="invStateCard">
+        <div class="section-title">SARMOYA HOLATI</div>
+        <div id="invStateBody" class="empty">Yuklanmoqda…</div>
+      </div>
+      <button class="btn gold" id="invStart">SARMOYA KIRITISH</button>
+
+      <div id="invFlow" class="card hidden">
+        <div class="steps"><span id="ivs1" class="on">1 VALYUTA</span><span id="ivs2">2 PAKET</span><span id="ivs3">3 TO‘LOV</span></div>
+        <div id="ivErr" class="msg err hidden"></div>
+
+        <div id="ivStep1">
+          <div class="section-title">VALYUTANI TANLANG</div>
+          <div class="cur-grid" id="ivCurGrid"></div>
+          <button class="btn ghost" id="ivCancel1">Bekor qilish</button>
+        </div>
+
+        <div id="ivStep2" class="hidden">
+          <div class="section-title">PAKETNI TANLANG</div>
+          <div id="ivPkgList"></div>
+          <button class="btn" id="ivNext2">DAVOM ETISH →</button>
+          <button class="btn ghost" id="ivBack1">← ORQAGA</button>
+        </div>
+
+        <div id="ivStep3" class="hidden">
+          <div class="section-title">TO‘LOV</div>
+          <div id="ivSummary"></div>
+          <label for="ivMethod">TO‘LOV REKVIZITI</label>
+          <select id="ivMethod"></select>
+          <div id="ivMethodBox"></div>
+          <label for="ivNote">IZOH (ixtiyoriy)</label>
+          <input id="ivNote" placeholder="To‘lov haqida qisqa izoh">
+          <label class="file">Chek rasmini tanlash<input type="file" id="ivReceipt" accept="image/*"></label>
+          <img id="ivPreview" class="prev hidden" alt="chek">
+          <button class="btn gold" id="ivPaid">TO‘LOV QILDIM</button>
+          <button class="btn ghost" id="ivBack2">← ORQAGA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. TO'LOVLAR -->
+    <div id="tab-pay" class="hidden">
+      <div class="grid2">
+        <div class="stat"><div class="label">JORIY BALANS</div><div class="value" id="payBalance">—</div></div>
+        <div class="stat"><div class="label">VALYUTA</div><div class="value" id="payCurrency">—</div></div>
+      </div>
+      <button class="btn gold" id="dpStart">HISOBNI TO‘LDIRISH</button>
+
+      <div id="dpFlow" class="card hidden">
+        <div class="steps"><span id="dps1" class="on">1 SUMMA</span><span id="dps2">2 TO‘LOV</span><span id="dps3">3 CHEK</span></div>
+        <div id="dpErr" class="msg err hidden"></div>
+
+        <div id="dpStep1">
+          <label for="dpCurrency">VALYUTA</label>
+          <select id="dpCurrency"></select>
+          <label for="dpAmount">SUMMA</label>
+          <input id="dpAmount" inputmode="decimal" placeholder="Masalan: 500000">
+          <div class="msg note" id="dpConvertBox" style="display:none"></div>
+          <label for="dpMethod">TO‘LOV REKVIZITI</label>
+          <select id="dpMethod"></select>
+          <div id="dpMethodBox"></div>
+          <button class="btn" id="dpNext">DAVOM ETISH →</button>
+          <button class="btn ghost" id="dpCancel1">Bekor qilish</button>
+        </div>
+
+        <div id="dpStep2" class="hidden">
+          <div id="dpPayBox"></div>
+          <button class="btn" id="dpToStep3">CHEKNI YUKLASH →</button>
+          <button class="btn ghost" id="dpBack1">← ORQAGA</button>
+        </div>
+
+        <div id="dpStep3" class="hidden">
+          <label for="dpNote">IZOH (ixtiyoriy)</label>
+          <input id="dpNote" placeholder="To‘lov haqida qisqa izoh">
+          <label class="file">Chek rasmini tanlash<input type="file" id="dpReceipt" accept="image/*"></label>
+          <img id="dpPreview" class="prev hidden" alt="chek">
+          <button class="btn gold" id="dpSend">TO‘LOV QILDIM</button>
+          <button class="btn ghost" id="dpBack2">← ORQAGA</button>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin:18px 4px 10px">TO‘LOVLAR TARIXI</div>
+      <div id="depList"></div>
+      <button class="btn ghost" id="depRefresh">↻ Tarixni yangilash</button>
+    </div>
+
+    <!-- 4. SAVDO -->
+    <div id="tab-trades" class="hidden">
+      <div class="section-title" style="margin:4px 4px 10px">SAVDO TARIXI</div>
+      <div id="tradesList"></div>
+    </div>
+
+    <!-- 5. PROFIL -->
+    <div id="tab-profile" class="hidden">
+      <div class="card">
+        <div class="section-title">MIJOZ</div>
+        <div class="value" id="clientName" style="margin-bottom:10px">—</div>
+        <div class="kv"><span>DAVLAT</span><b id="clientCountry">—</b></div>
+        <div class="kv"><span>VALYUTA</span><b id="clientCurrency">—</b></div>
+        <div class="kv"><span>BANK / KARTA</span><b id="clientBank">—</b></div>
+        <div class="kv"><span>KARTA</span><b id="clientCard">—</b></div>
+        <img id="clientBankLogo" class="bank-logo hidden" alt="">
+      </div>
+      <div class="card">
+        <div class="section-title">HISOB</div>
+        <div class="kv"><span>JORIY BALANS</span><b id="profBalance">—</b></div>
+        <div class="kv"><span>YUTUQNI OLISH</span><b id="profPrizeOpen">—</b></div>
+        <div class="kv"><span>OXIRGI KIRISH</span><b id="profLastLogin">—</b></div>
+      </div>
+      <div class="card">
+        <div class="section-title">TELEGRAM</div>
+        <div class="kv"><span>BOG‘LANGAN AKKAUNT</span><b id="profTg">—</b></div>
+        <div class="sub" style="margin-top:8px">Uzsangiz, kabinet Telegramda yopiladi.
+          Saytdagi hisobingiz va balansingiz o‘zgarmaydi.</div>
+        <button class="btn soft" id="unlinkBtn">AKKAUNTNI UZISH</button>
+      </div>
+      <div class="sub" style="text-align:center;margin-top:14px">© 2026 JASMINA TREDING</div>
     </div>
   </section>
-
-  <!-- 4. Depozit: 2-qadam -->
-  <section id="dep2" class="hidden">
-    <div class="head"><div class="avatar">2</div>
-      <div><div class="hello">To‘lovni amalga oshiring</div><div class="sub">Keyin chekni yuklang</div></div></div>
-    <div class="card" id="payCard"></div>
-    <div class="card">
-      <div id="dep2Err" class="msg err hidden"></div>
-      <label class="file">Chek rasmini tanlash
-        <input type="file" id="dReceipt" accept="image/*">
-      </label>
-      <img id="dPreview" class="prev hidden" alt="chek">
-      <button class="btn" id="dConfirm">TO‘LOV QILDIM</button>
-      <button class="btn ghost" id="dBack2">Keyinroq</button>
-    </div>
-  </section>
-
-  <div id="fatal" class="msg err hidden"></div>
 </main>
 
+<nav class="nav hidden" id="nav">
+  <button data-tab="home" class="on"><i>🏠</i>BOSH SAHIFA</button>
+  <button data-tab="invest"><i>📈</i>SARMOYA</button>
+  <button data-tab="pay"><i>💳</i>TO‘LOV</button>
+  <button data-tab="trades"><i>📊</i>SAVDO</button>
+  <button data-tab="profile"><i>👤</i>PROFIL</button>
+</nav>
+
+<script src="shared.js"></script>
 <script>
 (() => {
+  "use strict";
   const API = "https://nvflfwaykadmgerprbmh.supabase.co/functions/v1/tgapi";
-  const tg = window.Telegram?.WebApp;
-  try { tg?.ready(); tg?.expand(); } catch (e) {}
-  const initData = tg?.initData || "";
+  const tg = window.Telegram && window.Telegram.WebApp;
+  try { tg.ready(); tg.expand(); } catch (e) {}
+  const initData = (tg && tg.initData) || "";
   const $ = id => document.getElementById(id);
+  const showEl = (id, on) => $(id).classList.toggle("hidden", !on);
 
-  const ERRORS = {
+  const TG_ERRORS = {
     NO_INIT_DATA: "Bu sahifani Telegram bot ichidan oching.",
     BAD_SIGNATURE: "Telegram imzosi tekshiruvdan o‘tmadi. Mini App’ni qaytadan oching.",
     EXPIRED: "Sessiya eskirgan. Mini App’ni qaytadan oching.",
     NOT_LINKED: "Akkaunt bog‘lanmagan.",
-    LOGIN_FAILED: "Familiya, ism yoki kirish kodi noto‘g‘ri.",
     BOT_TOKEN_NOT_CONFIGURED: "Bot hali sozlanmagan. Administratorga murojaat qiling.",
-    DEPOSIT_MIN: "Summa juda kichik.",
-    FX_RATE_MISSING: "Bu valyuta uchun kurs belgilanmagan.",
-    METHOD_NOT_FOUND: "To‘lov rekviziti topilmadi.",
-    RECEIPT_REQUIRED: "Chek rasmini yuklang.",
-    RECEIPT_TOO_LARGE: "Chek rasmi juda katta. Kichikroq rasm tanlang."
+    RECEIPT_TOO_LARGE: "Chek rasmi juda katta. Kichikroq rasm tanlang.",
+    RECEIPT_REQUIRED: "Chek rasmini yuklang."
   };
-  const human = e => ERRORS[e] || e || "Xatolik yuz berdi";
+  // Saytdagi translateError() bilan bir xil matnlar + Telegramga xos xatolar
+  const human = e => TG_ERRORS[e] || translateError(e) || "Xatolik yuz berdi";
 
   async function api(path, body) {
     const r = await fetch(API + path, {
@@ -199,228 +378,592 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
       body: body === undefined ? undefined : JSON.stringify(body)
     });
     const d = await r.json().catch(() => ({}));
-    if (!r.ok) { const err = new Error(d.error || "API_ERROR"); err.status = r.status; throw err; }
+    if (!r.ok) throw new Error((d && d.error) || "API_ERROR");
     return d;
   }
 
-  const views = ["loading", "linkView", "mainView", "dep1", "dep2"];
-  const show = v => views.forEach(x => $(x).classList.toggle("hidden", x !== v));
-  const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
-
-  function money(v, c) {
-    const n = Number(v || 0);
-    return new Intl.NumberFormat("ru-RU", {
-      minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2
-    }).format(n) + (c ? " " + c : "");
-  }
-
-  const STATUS = {
-    pending: ["KUTILMOQDA", "b-pending"], paid: ["TASDIQLANGAN", "b-paid"],
-    approved: ["TASDIQLANGAN", "b-paid"], failed: ["RAD ETILGAN", "b-failed"],
-    rejected: ["RAD ETILGAN", "b-failed"], canceled: ["BEKOR QILINGAN", "b-failed"],
-    draft: ["BOSHLANGAN", "b-pending"]
-  };
-
-  function showErr(box, msg) {
+  function say(box, text, kind) {
     const el = $(box);
-    el.textContent = msg;
-    el.classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    el.textContent = text || "";
+    el.className = "msg " + (kind || "err") + (text ? "" : " hidden");
   }
-  const hideErr = box => $(box).classList.add("hidden");
+  const clear = box => say(box, "");
 
-  let me = null, dep = null, initInfo = null, receipt = "";
-
-  // ---------------------------------------------------------------- boshlash
-  async function boot() {
-    if (!initData) {
-      show("loading");
-      $("loading").classList.add("hidden");
-      showErr("fatal", "Bu sahifa Telegram Mini App sifatida ishlaydi. Iltimos, botdagi tugma orqali oching.");
-      return;
-    }
-    try {
-      me = await api("/me");
-      if (!me.linked) { show("linkView"); return; }
-      await loadMain();
-    } catch (e) {
-      $("loading").classList.add("hidden");
-      showErr("fatal", human(e.message));
-    }
-  }
-
-  async function loadMain() {
-    show("loading");
-    me = await api("/me");
-    $("hello").textContent = "Salom, " + (me.name || "mijoz") + "!";
-    $("balance").textContent = money(me.balance, "");
-    $("currency").textContent = me.currency || "—";
-    const deps = await api("/deposits");
-    const items = deps.items || deps.deposits || [];
-    $("history").innerHTML = items.length
-      ? items.slice(0, 15).map(d => {
-          const [text, cls] = STATUS[String(d.status || "").toLowerCase()] || [String(d.status || "").toUpperCase(), ""];
-          const conv = d.credit_amount != null && d.credit_currency && d.credit_currency !== d.currency
-            ? `<small>Balansga: ${esc(money(d.credit_amount, d.credit_currency))}</small>` : "";
-          return `<div class="tx"><div><b>${esc(d.ref || "To‘lov")}</b>
-            <small class="badge ${cls}">${esc(text)}</small></div>
-            <div class="right">${esc(money(d.amount, d.currency))}${conv}</div></div>`;
-        }).join("")
-      : `<div class="card sub">Hozircha to‘lov so‘rovi yo‘q.</div>`;
-    show("mainView");
-  }
-
-  // ------------------------------------------------------------ bog'lash
-  $("linkBtn").addEventListener("click", async () => {
-    hideErr("linkErr");
-    const surname = $("lSurname").value.trim();
-    const name = $("lName").value.trim();
-    const code = $("lCode").value.trim();
-    if (!surname || !name || !code) return showErr("linkErr", "Barcha maydonlarni to‘ldiring.");
-    $("linkBtn").disabled = true;
-    try {
-      await api("/link", { surname, name, code });
-      $("lCode").value = "";
-      await loadMain();
-    } catch (e) {
-      showErr("linkErr", human(e.message));
-    } finally { $("linkBtn").disabled = false; }
-  });
-
-  // ------------------------------------------------------------ depozit 1
-  $("depositBtn").addEventListener("click", async () => {
-    hideErr("dep1Err"); receipt = "";
-    show("loading");
-    try {
-      initInfo = await api("/deposit-init");
-      const list = await api("/currencies");
-      const codes = [...new Set([
-        ...(Array.isArray(list) ? list.map(c => c.currency) : []),
-        me.currency, "UZS"
-      ].filter(Boolean))];
-      $("dCurrency").innerHTML = codes.map(c =>
-        `<option value="${esc(c)}"${c === "UZS" ? " selected" : ""}>${esc(c)}</option>`).join("");
-      await loadMethods();
-      show("dep1");
-    } catch (e) {
-      show("mainView");
-      showErr("fatal", human(e.message));
-    }
-  });
-
-  async function loadMethods() {
-    const cur = $("dCurrency").value;
-    $("dMethod").innerHTML = `<option>Yuklanmoqda…</option>`;
-    $("dNext").disabled = true;
-    try {
-      const methods = await api("/pay-methods?currency=" + encodeURIComponent(cur));
-      if (!Array.isArray(methods) || !methods.length) {
-        $("dMethod").innerHTML = `<option>Rekvizit yo‘q</option>`;
-        $("dHint").textContent = cur + " uchun to‘lov rekviziti hozircha yo‘q. Boshqa valyutani tanlang.";
-        return;
-      }
-      $("dMethod").innerHTML = methods.map(m =>
-        `<option value="${esc(m.id)}">${esc([m.bank_name, m.holder].filter(Boolean).join(" • ") || m.card_number)}</option>`
-      ).join("");
-      $("dHint").textContent = me.currency && me.currency !== cur
-        ? `Summa ${cur} da kiritiladi, balansga ${me.currency} da tushadi.`
-        : "";
-      $("dNext").disabled = false;
-    } catch (e) {
-      showErr("dep1Err", human(e.message));
-    }
-  }
-  $("dCurrency").addEventListener("change", loadMethods);
-  $("dBack1").addEventListener("click", () => show("mainView"));
-
-  $("dNext").addEventListener("click", async () => {
-    hideErr("dep1Err");
-    const amount = Number(String($("dAmount").value).replace(/\s/g, "").replace(",", "."));
-    if (!amount || amount <= 0) return showErr("dep1Err", "To‘g‘ri summa kiriting.");
-    $("dNext").disabled = true;
-    try {
-      const out = await api("/deposit", {
-        amount, currency: $("dCurrency").value,
-        method_id: $("dMethod").value, note: "Telegram Mini App"
-      });
-      dep = out.deposit || out;
-      renderPay(out.method || dep.method);
-      show("dep2");
-    } catch (e) {
-      showErr("dep1Err", human(e.message));
-    } finally { $("dNext").disabled = false; }
-  });
-
-  // ------------------------------------------------------------ depozit 2
-  function renderPay(method) {
-    const card = method?.card_number || dep.card_number || "";
-    const rows = [
-      ["Tranzaksiya ID", dep.ref],
-      ["Summa", money(dep.amount, dep.currency)],
-      dep.credit_amount != null && dep.credit_currency !== dep.currency
-        ? ["Balansga tushadi", money(dep.credit_amount, dep.credit_currency)] : null,
-      ["Bank", method?.bank_name || dep.method_label || "—"],
-      ["Karta egasi", method?.holder || "—"]
-    ].filter(Boolean);
-    $("payCard").innerHTML =
-      rows.map(([k, v]) => `<div class="kv"><span class="label">${esc(k)}</span><b>${esc(v)}</b></div>`).join("") +
-      (card ? `<div class="kv"><span class="label">Karta raqami</span>
-        <b>${esc(card)} <button class="copy" id="copyCard">nusxa</button></b></div>` : "") +
-      `<div class="sub" style="margin-top:12px">To‘lovni amalga oshirib, chek rasmini yuklang.
-        Balans admin tasdiqlaganidan keyin oshadi.</div>`;
-    const btn = $("copyCard");
-    if (btn) btn.addEventListener("click", () => {
-      navigator.clipboard?.writeText(card.replace(/\s/g, ""));
-      btn.textContent = "nusxa olindi";
-    });
-  }
-
-  $("dReceipt").addEventListener("change", e => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    hideErr("dep2Err");
+  function compress(file, done, fail) {
     const reader = new FileReader();
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        const max = 1000;
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const scale = Math.min(1, 1000 / Math.max(img.width, img.height));
         const c = document.createElement("canvas");
         c.width = Math.round(img.width * scale);
         c.height = Math.round(img.height * scale);
         c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
         let q = 0.72, out = c.toDataURL("image/jpeg", q);
         while (out.length > 880000 && q > 0.3) { q -= 0.12; out = c.toDataURL("image/jpeg", q); }
-        if (out.length > 880000) return showErr("dep2Err", human("RECEIPT_TOO_LARGE"));
-        receipt = out;
-        $("dPreview").src = out;
-        $("dPreview").classList.remove("hidden");
+        if (out.length > 880000) { fail("RECEIPT_TOO_LARGE"); return; }
+        done(out);
       };
-      img.onerror = () => showErr("dep2Err", "Rasmni o‘qib bo‘lmadi.");
+      img.onerror = () => fail("Rasmni o‘qib bo‘lmadi.");
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
-  });
+  }
 
-  $("dConfirm").addEventListener("click", async () => {
-    hideErr("dep2Err");
-    if (!receipt) return showErr("dep2Err", human("RECEIPT_REQUIRED"));
-    $("dConfirm").disabled = true;
+  let user = null, invState = null, deposits = [], dash = null;
+
+  /* ================= BOSHLASH ================= */
+  async function boot() {
+    if (!initData) {
+      showEl("loading", false);
+      say("fatal", "Bu sahifa Telegram Mini App sifatida ishlaydi. Iltimos, botdagi KABINET tugmasi orqali oching.");
+      return;
+    }
     try {
-      await api("/deposit/confirm", { id: dep.id, receipt, note: "Telegram Mini App" });
-      receipt = "";
-      $("dPreview").classList.add("hidden");
-      $("dAmount").value = "";
-      await loadMain();
-      tg?.HapticFeedback?.notificationOccurred?.("success");
+      const me = await api("/me");
+      if (!me.linked) { showEl("loading", false); showEl("linkView", true); return; }
+      await loadAll();
     } catch (e) {
-      showErr("dep2Err", human(e.message));
-    } finally { $("dConfirm").disabled = false; }
+      showEl("loading", false);
+      say("fatal", human(e.message));
+    }
+  }
+
+  $("linkBtn").addEventListener("click", async () => {
+    clear("linkErr");
+    const surname = $("lSurname").value.trim();
+    const name = $("lName").value.trim();
+    const code = $("lCode").value.trim();
+    if (!surname || !name || !code) { say("linkErr", "Barcha maydonlarni to‘ldiring."); return; }
+    $("linkBtn").disabled = true;
+    try {
+      await api("/link", { surname, name, code });
+      $("lCode").value = "";
+      showEl("linkView", false);
+      await loadAll();
+    } catch (e) { say("linkErr", human(e.message)); }
+    finally { $("linkBtn").disabled = false; }
   });
 
-  $("dBack2").addEventListener("click", () => loadMain().catch(() => show("mainView")));
-  $("refreshBtn").addEventListener("click", () => loadMain().catch(e => showErr("fatal", human(e.message))));
+  async function loadAll() {
+    showEl("app", false); showEl("nav", false); showEl("loading", true);
+    try { dash = await api("/dashboard"); }
+    catch (e) {
+      if (String(e.message) === "NOT_LINKED") { showEl("loading", false); showEl("linkView", true); return; }
+      throw e;
+    }
+    if (!dash.linked) { showEl("loading", false); showEl("linkView", true); return; }
+    user = dash.user;
+    globalPaid = dash.global_paid || globalPaid;
+    renderHome();
+    renderProfile();
+    renderTrades();
+    showEl("loading", false); showEl("app", true); showEl("nav", true);
+    loadInvestState();
+    loadDeposits();
+    loadMarket();
+  }
+
+  /* ================= BOSH SAHIFA ================= */
+  function renderHome() {
+    const info = curInfo(user.currency);
+    const initials = ((user.name || "?")[0] + (user.surname || "")[0] || "").toUpperCase();
+    $("initials").textContent = initials || "JT";
+    $("hello").textContent = (user.name || "") + " " + (user.surname || "");
+    $("heroMoney").textContent = fmtGlobalPaid();
+    $("balanceValue").textContent = fmtMoney(user.balance, info.code);
+    $("prizeValue").textContent = fmtMoney(user.prize, info.code);
+    $("commissionValue").textContent = fmtMoney(user.commission, info.code);
+    $("profitValue").textContent = fmtNumber(user.profit_percent) + "%";
+    $("investMain").textContent = fmtMoney(user.investment_uzs, info.code);
+    $("investAlt").textContent = fmtMoney(user.investment_rub, info.code);
+
+    const note = maskSensitive(noteText(user.note));
+    $("userNoteBox").textContent = note;
+    showEl("userNoteBox", !!note);
+
+    // Valyuta kurslari — saytdagi kabi asosiylari + hisob valyutasi
+    const shown = ["RUB", "UZS", "USD"];
+    if (shown.indexOf(info.code) === -1) shown.push(info.code);
+    const fx = {};
+    (dash.fx || []).forEach(r => { fx[String(r.code).toUpperCase()] = Number(r.per_usd); });
+    $("currencyGrid").innerHTML = shown.map(code => {
+      const it = curInfo(code);
+      const rate = fx[code];
+      const line = rate ? ("1 USD = " + fmtNumber(rate) + " " + it.code) : (it.code + " " + it.short);
+      return '<div class="cur' + (code === info.code ? " active" : "") + '"><b>' +
+        escapeHtml(it.grid) + "</b><small>" + escapeHtml(line) + "</small></div>";
+    }).join("");
+
+    startCountdown(userDeadline(user));
+  }
+
+  // Yutuq muddati sanoqchisi — saytdagi countdown bilan bir xil format (KK:SS:DD:SS)
+  let countdownTimer = null;
+  function startCountdown(iso) {
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    const target = iso ? new Date(iso).getTime() : 0;
+    if (!target || isNaN(target)) { showEl("deadlinePanel", false); return; }
+    showEl("deadlinePanel", true);
+    const pad = n => String(n).padStart(2, "0");
+    const tick = () => {
+      const left = target - Date.now();
+      if (left <= 0) {
+        $("countdownValue").textContent = "MUDDAT TUGADI";
+        clearInterval(countdownTimer); countdownTimer = null;
+        return;
+      }
+      const t = Math.floor(left / 1000);
+      const d = Math.floor(t / 86400);
+      const txt = pad(Math.floor(t % 86400 / 3600)) + ":" + pad(Math.floor(t % 3600 / 60)) + ":" + pad(t % 60);
+      $("countdownValue").textContent = (d > 0 ? d + " kun " : "") + txt;
+    };
+    tick();
+    countdownTimer = setInterval(tick, 1000);
+  }
+
+  /* ================= SAVDO ================= */
+  function renderTrades() {
+    const rows = Array.isArray(dash.trades) ? dash.trades : [];
+    const info = curInfo(user.currency);
+    $("tradesList").innerHTML = rows.length ? rows.map(t => {
+      const up = String(t.direction || "").toLowerCase() === "up";
+      const res = Number(t.result || 0);
+      const when = t.traded_at ? new Date(t.traded_at).toLocaleString("ru-RU") : "";
+      return '<div class="row-item"><div><b>' + escapeHtml(t.symbol || "—") + "</b>" +
+        '<small>' + (up ? "▲ O‘SISH" : "▼ PASAYISH") + " • " + escapeHtml(when) + "</small></div>" +
+        '<div class="right">' + escapeHtml(fmtMoney(t.amount, info.code)) +
+        '<small class="' + (res >= 0 ? "chg up" : "chg down") + '">natija: ' +
+        escapeHtml(fmtMoney(res, info.code)) + "</small></div></div>";
+    }).join("") : '<div class="card empty">Hozircha savdo yozuvi yo‘q.</div>';
+  }
+
+  /* ================= PROFIL ================= */
+  function renderProfile() {
+    const info = curInfo(user.currency);
+    $("clientName").textContent = ((user.name || "") + " " + (user.surname || "")).toUpperCase();
+    $("clientCountry").textContent = countryLabel(user.country).toUpperCase();
+    $("clientCurrency").textContent = info.code + " — " + info.name;
+    const bankKey = userBank(user);
+    $("clientBank").textContent = bankKey ? bankName(bankKey) : "—";
+    $("clientCard").textContent = maskCard(user.card_last4);
+    const logo = $("clientBankLogo");
+    if (bankKey) {
+      logo.onerror = () => logo.classList.add("hidden");
+      logo.src = bankLogo(bankKey);
+      logo.classList.remove("hidden");
+    } else { logo.classList.add("hidden"); }
+    $("profBalance").textContent = fmtMoney(user.balance, info.code);
+    $("profPrizeOpen").textContent = user.prize_available === false ? "Yopiq" : "Ochiq";
+    $("profLastLogin").textContent = user.last_login_at
+      ? new Date(user.last_login_at).toLocaleString("ru-RU") : "—";
+    const u = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+    $("profTg").textContent = u.username ? "@" + u.username : (u.first_name || "Telegram");
+  }
+
+  $("unlinkBtn").addEventListener("click", async () => {
+    if (!confirm("Telegram akkauntini kabinetdan uzasizmi?")) return;
+    try {
+      await api("/unlink", {});
+      location.reload();
+    } catch (e) { alert(human(e.message)); }
+  });
+
+  /* ================= SARMOYA HOLATI ================= */
+  async function loadInvestState() {
+    try { invState = await api("/state"); }
+    catch (e) { $("invStateBody").textContent = human(e.message); return; }
+    renderInvestState();
+  }
+
+  function renderInvestState() {
+    const box = $("invStateBody");
+    if (!invState || invState.has_investment === false) {
+      box.innerHTML = '<div class="empty">Hozircha sarmoya yo‘q. Quyidagi tugma orqali sarmoya kiritishingiz mumkin.</div>';
+      return;
+    }
+    const info = curInfo(invState.currency);
+    const statusText = invState.status === "pending" ? "TEKSHIRILMOQDA"
+      : invState.status === "active" ? "FAOL"
+      : invState.status === "rejected" ? "RAD ETILDI"
+      : String(invState.status || "").toUpperCase();
+    let html =
+      '<div class="kv"><span>HOLAT</span><b>' + escapeHtml(statusText) + "</b></div>" +
+      '<div class="kv"><span>SUMMA</span><b>' + escapeHtml(fmtMoney(invState.amount, info.code)) + "</b></div>";
+    if (invState.prize != null)
+      html += '<div class="kv"><span>YUTUQ SUMMASI</span><b>' + escapeHtml(fmtMoney(invState.prize, info.code)) + "</b></div>";
+    if (invState.commission != null)
+      html += '<div class="kv"><span>KOMISSIYA</span><b>' + escapeHtml(fmtMoney(invState.commission, info.code)) + "</b></div>";
+    if (invState.commission_percent != null)
+      html += '<div class="kv"><span>KOMISSIYA (%)</span><b>' + fmtNumber(invState.commission_percent) + "%</b></div>";
+    html += '<div style="margin-top:12px">' + invTimelineHtml(invState) + "</div>";
+    if (invState.admin_note)
+      html += '<div class="msg note">' + escapeHtml(maskSensitive(invState.admin_note)) + "</div>";
+    if (invState.withdraw_open === true)
+      html += '<button class="btn gold" id="withdrawBtn">YUTUQNI OLISH</button>';
+    box.innerHTML = html;
+    const w = $("withdrawBtn");
+    if (w) w.addEventListener("click", () => {
+      alert("YUTUQNI OLISH\n\n" +
+        (invState.prize != null ? "Yutuq summasi: " + fmtMoney(invState.prize, curInfo(invState.currency).code) + "\n\n" : "") +
+        "So‘rovingiz qabul qilindi. To‘lov admin tomonidan kartangizga o‘tkaziladi.");
+    });
+  }
+
+  /* ================= SARMOYA KIRITISH ================= */
+  let ivCurrency = "", ivPackages = [], ivPackage = null, ivMethods = [], ivReceipt = "";
+
+  function ivStep(n) {
+    [1, 2, 3].forEach(i => {
+      showEl("ivStep" + i, i === n);
+      $("ivs" + i).classList.toggle("on", i === n);
+    });
+    clear("ivErr");
+  }
+
+  async function openInvest() {
+    showEl("invFlow", true);
+    ivStep(1);
+    ivPackage = null; ivReceipt = "";
+    $("ivCurGrid").innerHTML = '<div class="empty">Yuklanmoqda…</div>';
+    try {
+      const rows = await api("/currencies");
+      const list = Array.isArray(rows) ? rows : [];
+      if (!list.length) { $("ivCurGrid").innerHTML = '<div class="empty">Paketlar topilmadi.</div>'; return; }
+      $("ivCurGrid").innerHTML = list.map(r => {
+        const it = curInfo(r.currency);
+        return '<button class="cur" data-cur="' + escapeHtml(it.code) + '"><b>' + escapeHtml(it.grid) +
+          "</b><small>" + escapeHtml(r.packages + " ta paket") + "</small></button>";
+      }).join("");
+      $("ivCurGrid").querySelectorAll("[data-cur]").forEach(b =>
+        b.addEventListener("click", () => pickCurrency(b.getAttribute("data-cur"))));
+    } catch (e) { say("ivErr", human(e.message)); }
+  }
+
+  async function pickCurrency(code) {
+    ivCurrency = code;
+    ivStep(2);
+    $("ivPkgList").innerHTML = '<div class="empty">Yuklanmoqda…</div>';
+    try {
+      ivPackages = await api("/packages?currency=" + encodeURIComponent(code));
+      if (!ivPackages.length) { $("ivPkgList").innerHTML = '<div class="empty">Bu valyutada paket yo‘q.</div>'; return; }
+      const info = curInfo(code);
+      $("ivPkgList").innerHTML = ivPackages.map((p, i) =>
+        '<button class="pkg" data-i="' + i + '"><b>' + escapeHtml(p.title || "Paket") + "</b><small>" +
+        escapeHtml(fmtMoney(p.amount, info.code)) +
+        (p.payout != null ? " → natija " + escapeHtml(fmtMoney(p.payout, info.code)) : "") +
+        (p.fee_percent != null ? " • ish haqi " + fmtNumber(p.fee_percent) + "%" : "") +
+        "</small></button>").join("");
+      $("ivPkgList").querySelectorAll("[data-i]").forEach(b => b.addEventListener("click", () => {
+        ivPackage = ivPackages[Number(b.getAttribute("data-i"))];
+        $("ivPkgList").querySelectorAll(".pkg").forEach(x => x.classList.remove("on"));
+        b.classList.add("on");
+        clear("ivErr");
+      }));
+    } catch (e) { say("ivErr", human(e.message)); }
+  }
+
+  async function ivGoPay() {
+    if (!ivPackage) { say("ivErr", "Avval paketni tanlang."); return; }
+    const info = curInfo(ivCurrency);
+    ivStep(3);
+    $("ivSummary").innerHTML =
+      '<div class="kv"><span>PAKET</span><b>' + escapeHtml(ivPackage.title || "Paket") + "</b></div>" +
+      '<div class="kv"><span>TO‘LANADIGAN SUMMA</span><b>' + escapeHtml(fmtMoney(ivPackage.amount, info.code)) + "</b></div>" +
+      (ivPackage.payout != null ? '<div class="kv"><span>KUTILAYOTGAN NATIJA</span><b>' + escapeHtml(fmtMoney(ivPackage.payout, info.code)) + "</b></div>" : "") +
+      (ivPackage.fee_percent != null ? '<div class="kv"><span>ISH HAQI</span><b>' + fmtNumber(ivPackage.fee_percent) + "%</b></div>" : "");
+    $("ivMethod").innerHTML = '<option>Yuklanmoqda…</option>';
+    try {
+      ivMethods = await api("/pay-methods?currency=" + encodeURIComponent(ivCurrency));
+      if (!ivMethods.length) {
+        $("ivMethod").innerHTML = '<option value="">Rekvizit yo‘q</option>';
+        $("ivMethodBox").innerHTML = '<div class="msg note">Bu valyuta uchun to‘lov rekviziti yo‘q. Admin bilan bog‘laning.</div>';
+        return;
+      }
+      $("ivMethod").innerHTML = ivMethods.map(m =>
+        '<option value="' + escapeHtml(m.id) + '">' +
+        escapeHtml([m.bank_name, m.holder].filter(Boolean).join(" • ") || m.card_number) + "</option>").join("");
+      renderMethodBox("ivMethodBox", ivMethods[0]);
+      $("ivMethod").onchange = () => renderMethodBox("ivMethodBox", ivMethods.find(m => m.id === $("ivMethod").value));
+    } catch (e) { say("ivErr", human(e.message)); }
+  }
+
+  function renderMethodBox(boxId, m) {
+    if (!m) { $(boxId).innerHTML = ""; return; }
+    const card = String(m.card_number || "");
+    $(boxId).innerHTML =
+      '<div class="kv"><span>BANK</span><b>' + escapeHtml(m.bank_name || "—") + "</b></div>" +
+      '<div class="kv"><span>KARTA EGASI</span><b>' + escapeHtml(m.holder || "—") + "</b></div>" +
+      '<div class="kv"><span>KARTA RAQAMI</span><b>' + escapeHtml(card) +
+      '<button class="copy" data-card="' + escapeHtml(card.replace(/\s/g, "")) + '">nusxa</button></b></div>' +
+      (m.extra ? '<div class="sub" style="margin-top:8px">' + escapeHtml(m.extra) + "</div>" : "");
+    const btn = $(boxId).querySelector("[data-card]");
+    if (btn) btn.addEventListener("click", () => {
+      const v = btn.getAttribute("data-card");
+      if (navigator.clipboard) navigator.clipboard.writeText(v);
+      btn.textContent = "nusxa olindi";
+    });
+  }
+
+  $("ivReceipt").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    clear("ivErr");
+    compress(f, out => { ivReceipt = out; $("ivPreview").src = out; showEl("ivPreview", true); },
+      err => say("ivErr", human(err)));
+  });
+
+  $("ivPaid").addEventListener("click", async () => {
+    clear("ivErr");
+    if (!ivPackage) { say("ivErr", "Paket tanlanmagan."); return; }
+    const btn = $("ivPaid");
+    btn.disabled = true; btn.textContent = "YUBORILMOQDA…";
+    try {
+      const note = $("ivNote").value.trim();
+      const res = await api("/invest", {
+        package_id: ivPackage.id, currency: ivCurrency, amount: ivPackage.amount,
+        method_id: $("ivMethod").value || null, note
+      });
+      if (ivReceipt && res && res.id) await api("/invest/receipt", { id: res.id, receipt: ivReceipt, note });
+      ivReceipt = ""; showEl("ivPreview", false); $("ivNote").value = "";
+      showEl("invFlow", false);
+      await loadInvestState();
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+      alert("SO‘ROV YUBORILDI\n\nTo‘lov avtomatik tasdiqlanmaydi. Admin chekni tekshirib tasdiqlagandan keyin sarmoya kabinetingizda faol holatga o‘tadi.");
+    } catch (e) { say("ivErr", human(e.message)); }
+    finally { btn.disabled = false; btn.textContent = "TO‘LOV QILDIM"; }
+  });
+
+  $("invStart").addEventListener("click", openInvest);
+  $("ivCancel1").addEventListener("click", () => showEl("invFlow", false));
+  $("ivNext2").addEventListener("click", ivGoPay);
+  $("ivBack1").addEventListener("click", () => ivStep(1));
+  $("ivBack2").addEventListener("click", () => ivStep(2));
+
+  /* ================= HISOBNI TO'LDIRISH ================= */
+  let dpRates = {}, dpAccount = "UZS", dpMethods = [], dpCurrencies = [], dpDeposit = null, dpReceipt = "";
+
+  function dpStep(n) {
+    [1, 2, 3].forEach(i => {
+      showEl("dpStep" + i, i === n);
+      $("dps" + i).classList.toggle("on", i === n);
+    });
+    clear("dpErr");
+  }
+
+  function dpRate() {
+    const cur = $("dpCurrency").value;
+    if (cur === dpAccount) return 1;
+    const from = Number(dpRates[cur] || 0), to = Number(dpRates[dpAccount] || 0);
+    if (!from || !to) return 0;
+    return to / from;
+  }
+
+  function dpRenderConvert() {
+    const box = $("dpConvertBox");
+    const cur = $("dpCurrency").value;
+    const amount = Number(String($("dpAmount").value).replace(/\s/g, "").replace(",", "."));
+    if (cur === dpAccount) { box.style.display = "none"; return; }
+    const rate = dpRate();
+    box.style.display = "block";
+    if (!rate) { box.textContent = "Bu valyuta uchun kurs sozlanmagan. Admin bilan bog‘laning."; return; }
+    if (!amount || amount <= 0) {
+      box.textContent = "Hisobingiz " + dpAccount + " da. " + fxText(cur, dpAccount, rate) + ".";
+      return;
+    }
+    const conv = Math.round(amount * rate * 100) / 100;
+    box.innerHTML = escapeHtml(fmtMoney(amount, cur)) + " → <b>" +
+      escapeHtml(fmtMoney(conv, dpAccount)) + "</b> balansga tushadi";
+  }
+
+  async function openDeposit() {
+    showEl("dpFlow", true);
+    dpStep(1);
+    dpDeposit = null; dpReceipt = ""; showEl("dpPreview", false);
+    $("dpAmount").value = ""; $("dpNote").value = "";
+    try {
+      const res = await api("/deposit-init");
+      dpAccount = String((res && res.currency) || "UZS").toUpperCase();
+      dpMethods = (res && Array.isArray(res.methods)) ? res.methods : [];
+      dpRates = (res && res.rates) || {};
+      // Kurslar eski RPC'dan kelmasa, kabinet ma'lumotlaridagi kurslardan foydalanamiz
+      if (!Object.keys(dpRates).length) (dash.fx || []).forEach(r => { dpRates[String(r.code).toUpperCase()] = Number(r.per_usd); });
+      // Saytdagi kabi: rekviziti bor valyutalar + hisob valyutasi + asosiylari
+      dpCurrencies = [];
+      dpMethods.forEach(m => {
+        const c = String(m.currency || "").toUpperCase();
+        if (c && dpCurrencies.indexOf(c) === -1) dpCurrencies.push(c);
+      });
+      (Array.isArray(res.currencies) ? res.currencies : []).forEach(c => {
+        c = String(c).toUpperCase();
+        if (c && dpCurrencies.indexOf(c) === -1) dpCurrencies.push(c);
+      });
+      [dpAccount, "USD", "UZS", "RUB"].forEach(c => {
+        if (c && dpCurrencies.indexOf(c) === -1 && CURRENCIES[c]) dpCurrencies.push(c);
+      });
+      $("dpCurrency").innerHTML = dpCurrencies.map(c => {
+        const has = dpMethods.some(m => String(m.currency || "").toUpperCase() === c);
+        return '<option value="' + escapeHtml(c) + '"' + (has ? "" : " disabled") + ">" +
+          escapeHtml(c + " — " + curInfo(c).name + (has ? "" : " (rekvizit yo‘q)")) + "</option>";
+      }).join("");
+      const first = dpCurrencies.find(c => dpMethods.some(m => String(m.currency || "").toUpperCase() === c));
+      if (first) $("dpCurrency").value = first;
+      dpFillMethods();
+    } catch (e) { say("dpErr", human(e.message)); }
+  }
+
+  function dpFillMethods() {
+    const cur = $("dpCurrency").value;
+    const rows = dpMethods.filter(m => String(m.currency || "").toUpperCase() === cur);
+    if (!rows.length) {
+      $("dpMethod").innerHTML = '<option value="">Rekvizit yo‘q</option>';
+      $("dpMethodBox").innerHTML = '<div class="msg note">Bu valyuta uchun rekvizit yo‘q. Boshqa valyutani tanlang.</div>';
+    } else {
+      $("dpMethod").innerHTML = rows.map(m => '<option value="' + escapeHtml(m.id) + '">' +
+        escapeHtml([m.bank_name, m.holder].filter(Boolean).join(" • ") || m.card_number) + "</option>").join("");
+      renderMethodBox("dpMethodBox", rows[0]);
+      $("dpMethod").onchange = () => renderMethodBox("dpMethodBox", rows.find(m => m.id === $("dpMethod").value));
+    }
+    dpRenderConvert();
+  }
+
+  $("dpCurrency").addEventListener("change", dpFillMethods);
+  $("dpAmount").addEventListener("input", dpRenderConvert);
+
+  $("dpNext").addEventListener("click", async () => {
+    clear("dpErr");
+    const amount = Number(String($("dpAmount").value).replace(/\s/g, "").replace(",", "."));
+    if (!amount || amount <= 0) { say("dpErr", "To‘g‘ri summa kiriting."); return; }
+    if (!$("dpMethod").value) { say("dpErr", "To‘lov rekvizitini tanlang."); return; }
+    $("dpNext").disabled = true;
+    try {
+      const out = await api("/deposit", {
+        amount, currency: $("dpCurrency").value,
+        method_id: $("dpMethod").value, note: $("dpNote").value.trim() || "Telegram Mini App"
+      });
+      dpDeposit = out.deposit || out;
+      const m = out.method || dpMethods.find(x => x.id === $("dpMethod").value);
+      $("dpPayBox").innerHTML =
+        '<div class="kv"><span>TRANZAKSIYA ID</span><b>' + escapeHtml(dpDeposit.ref || "") + "</b></div>" +
+        '<div class="kv"><span>SUMMA</span><b>' + escapeHtml(fmtMoney(dpDeposit.amount, dpDeposit.currency)) + "</b></div>" +
+        (dpDeposit.credit_amount != null && dpDeposit.credit_currency !== dpDeposit.currency
+          ? '<div class="kv"><span>BALANSGA TUSHADI</span><b>' +
+            escapeHtml(fmtMoney(dpDeposit.credit_amount, dpDeposit.credit_currency)) + "</b></div>" : "");
+      const box = document.createElement("div");
+      box.id = "dpPayMethod";
+      $("dpPayBox").appendChild(box);
+      renderMethodBox("dpPayMethod", m);
+      $("dpPayBox").insertAdjacentHTML("beforeend",
+        '<div class="msg note">To‘lovni amalga oshirib, keyingi qadamda chek rasmini yuklang. Balans admin tasdiqlaganidan keyin oshadi.</div>');
+      dpStep(2);
+    } catch (e) { say("dpErr", human(e.message)); }
+    finally { $("dpNext").disabled = false; }
+  });
+
+  $("dpReceipt").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    clear("dpErr");
+    compress(f, out => { dpReceipt = out; $("dpPreview").src = out; showEl("dpPreview", true); },
+      err => say("dpErr", human(err)));
+  });
+
+  $("dpSend").addEventListener("click", async () => {
+    clear("dpErr");
+    if (!dpDeposit) { say("dpErr", "Avval so‘rov yarating."); return; }
+    if (!dpReceipt) { say("dpErr", human("RECEIPT_REQUIRED")); return; }
+    $("dpSend").disabled = true;
+    try {
+      await api("/deposit/confirm", { id: dpDeposit.id, receipt: dpReceipt, note: $("dpNote").value.trim() });
+      dpReceipt = ""; showEl("dpPreview", false); showEl("dpFlow", false);
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+      await refreshBalance();
+      await loadDeposits();
+      alert("CHEK YUBORILDI\n\nAdmin tekshirib tasdiqlagandan keyin balansingiz yangilanadi.");
+    } catch (e) { say("dpErr", human(e.message)); }
+    finally { $("dpSend").disabled = false; }
+  });
+
+  $("dpStart").addEventListener("click", openDeposit);
+  $("dpCancel1").addEventListener("click", () => showEl("dpFlow", false));
+  $("dpToStep3").addEventListener("click", () => dpStep(3));
+  $("dpBack1").addEventListener("click", () => dpStep(1));
+  $("dpBack2").addEventListener("click", () => dpStep(2));
+
+  async function loadDeposits() {
+    try {
+      const res = await api("/deposits");
+      deposits = (res && (res.items || res.deposits)) || (Array.isArray(res) ? res : []);
+    } catch (e) { $("depList").innerHTML = '<div class="card empty">' + escapeHtml(human(e.message)) + "</div>"; return; }
+    $("depList").innerHTML = deposits.length ? deposits.map(d => {
+      const conv = d.credit_amount != null && d.credit_currency && d.credit_currency !== d.currency
+        ? "<small>Balansga: " + escapeHtml(fmtMoney(d.credit_amount, d.credit_currency)) + "</small>" : "";
+      const when = d.created_at ? new Date(d.created_at).toLocaleDateString("ru-RU") : "";
+      return '<div class="row-item"><div><b>' + escapeHtml(d.ref || "To‘lov") + "</b>" +
+        depBadge(String(d.status || "").toLowerCase()) +
+        "<small>" + escapeHtml([d.method_label, when].filter(Boolean).join(" • ")) + "</small></div>" +
+        '<div class="right">' + escapeHtml(fmtMoney(d.amount, d.currency)) + conv + "</div></div>";
+    }).join("") : '<div class="card empty">Hozircha to‘lov so‘rovi yo‘q.</div>';
+  }
+
+  async function refreshBalance() {
+    const me = await api("/me");
+    if (me && me.linked) {
+      user.balance = me.balance;
+      const info = curInfo(user.currency);
+      $("balanceValue").textContent = fmtMoney(user.balance, info.code);
+      $("payBalance").textContent = fmtMoney(user.balance, info.code);
+      $("payCurrency").textContent = info.code;
+      $("profBalance").textContent = fmtMoney(user.balance, info.code);
+    }
+  }
+
+  /* ================= BIRJA (saytdagi kabi Binance) ================= */
+  const COINS = [
+    { key: "BTC", sym: "BTCUSDT", name: "BTC" },
+    { key: "ETH", sym: "ETHUSDT", name: "ETH" },
+    { key: "BNB", sym: "BNBUSDT", name: "BNB" },
+    { key: "SOL", sym: "SOLUSDT", name: "SOL" },
+    { key: "DOGE", sym: "DOGEUSDT", name: "DOGE" }
+  ];
+  async function loadMarket() {
+    try {
+      const url = "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
+        encodeURIComponent(JSON.stringify(COINS.map(c => c.sym)));
+      const rows = await (await fetch(url)).json();
+      const by = {};
+      rows.forEach(r => { by[r.symbol] = r; });
+      $("coins").innerHTML = COINS.map(c => {
+        const r = by[c.sym] || {};
+        const price = Number(r.lastPrice || 0);
+        const pct = Number(r.priceChangePercent || 0);
+        return '<div class="coin"><div class="sym">' + c.name + " <small>/USDT</small></div>" +
+          "<div>" + (price ? price.toLocaleString("en-US", { maximumFractionDigits: price < 1 ? 5 : 2 }) : "—") + "</div>" +
+          '<div class="chg ' + (pct >= 0 ? "up" : "down") + '">' +
+          (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%</div></div>";
+      }).join("");
+      $("marketStatus").textContent = "Yangilandi: " + new Date().toLocaleTimeString("ru-RU");
+    } catch (e) {
+      $("marketStatus").textContent = "Narxlarni yuklab bo‘lmadi.";
+    }
+  }
+
+  /* ================= TABLAR ================= */
+  const TABS = ["home", "invest", "pay", "trades", "profile"];
+  function openTab(name) {
+    TABS.forEach(t => showEl("tab-" + t, t === name));
+    document.querySelectorAll(".nav button").forEach(b =>
+      b.classList.toggle("on", b.getAttribute("data-tab") === name));
+    window.scrollTo(0, 0);
+    if (name === "pay") refreshBalance().catch(() => {});
+  }
+  document.querySelectorAll(".nav button").forEach(b =>
+    b.addEventListener("click", () => openTab(b.getAttribute("data-tab"))));
+
+  $("goInvest").addEventListener("click", () => { openTab("invest"); openInvest(); });
+  $("goDeposit").addEventListener("click", () => { openTab("pay"); openDeposit(); });
+  $("refreshAll").addEventListener("click", () => loadAll().catch(e => say("fatal", human(e.message))));
+  $("depRefresh").addEventListener("click", () => { refreshBalance().catch(() => {}); loadDeposits(); });
 
   boot();
 })();
