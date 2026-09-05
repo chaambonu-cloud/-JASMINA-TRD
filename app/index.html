@@ -154,6 +154,31 @@ img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
 #privacy small{color:var(--muted);font-size:13px;max-width:280px;line-height:1.5}
 body.privacy #privacy{display:flex}
 body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
+/* Yashirin summalar: faqat barmoq bilan bosib turilganda ko'rinadi */
+.secret{filter:blur(9px);transition:filter .12s;cursor:pointer;-webkit-user-select:none;user-select:none}
+.secret.show{filter:none}
+body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
+@keyframes flick{0%{opacity:1}50%{opacity:.04}100%{opacity:1}}
+.sec-hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:11px;
+  letter-spacing:.06em;font-weight:700;margin:2px 0 10px}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;
+  border-bottom:1px solid var(--line)}
+.switch:last-of-type{border-bottom:0}
+.switch small{display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:3px;letter-spacing:0}
+.switch span{font-size:13px;font-weight:700}
+.tgl{flex:none;width:50px;height:29px;border-radius:20px;border:1px solid var(--line);
+  background:#0a0c0e;position:relative;cursor:pointer}
+.tgl::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;
+  background:var(--muted);transition:.16s}
+.tgl.on{background:color-mix(in srgb,var(--gold) 26%,transparent);border-color:var(--gold)}
+.tgl.on::after{left:26px;background:var(--gold)}
+/* Chop etish / PDF ga saqlashni bloklash */
+@media print{
+  html,body{background:#fff !important}
+  body>*{display:none !important}
+  body::after{content:"JASMINA TRD — kabinetni chop etish taqiqlangan.";
+    display:block;padding:40px;font:16px sans-serif;color:#000}
+}
 .hidden{display:none !important}
 .empty{color:var(--muted);font-size:14px}
 .locked{text-align:center;color:var(--muted);font-size:13px;padding:8px 0}
@@ -209,6 +234,8 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       </div>
 
       <div class="grid2">
+        <div class="stat" style="grid-column:1/-1;padding:0">
+          <div class="sec-hint">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div></div>
         <div class="stat"><div class="label">JORIY BALANS</div><div class="value" id="balanceValue">—</div></div>
         <div class="stat"><div class="label">YUTUQ SUMMASI</div><div class="value gold" id="prizeValue">—</div></div>
         <div class="stat"><div class="label">KOMISSIYA</div><div class="value" id="commissionValue">—</div></div>
@@ -355,9 +382,25 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       </div>
       <div class="card">
         <div class="section-title">HISOB</div>
+        <div class="sec-hint">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div>
         <div class="kv"><span>JORIY BALANS</span><b id="profBalance">—</b></div>
         <div class="kv"><span>YUTUQNI OLISH</span><b id="profPrizeOpen">—</b></div>
         <div class="kv"><span>OXIRGI KIRISH</span><b id="profLastLogin">—</b></div>
+      </div>
+      <div class="card">
+        <div class="section-title">XAVFSIZLIK</div>
+        <div class="switch">
+          <span>Summalarni yashirish
+            <small>Balans, yutuq va karta raqami xiralashtiriladi. Ko‘rish uchun bosib turasiz.</small></span>
+          <div class="tgl on" id="tglSecret" role="switch"></div>
+        </div>
+        <div class="switch">
+          <span>Kuchli skrinshot himoyasi
+            <small>Ochilgan summalar tez miltillaydi — skrinshot va ekran yozuvida raqamlar buziladi.</small></span>
+          <div class="tgl" id="tglFlick" role="switch"></div>
+        </div>
+        <div class="msg note">Telefon tizim skrinshotini veb-ilova to‘liq bloklay olmaydi.
+          Shu sabab ekranda ismingiz yozilgan suv belgisi turadi — tarqatilgan har qanday rasm sizga bog‘lanadi.</div>
       </div>
       <div class="card">
         <div class="section-title">TELEGRAM</div>
@@ -454,6 +497,34 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
 
   let user = null, invState = null, deposits = [], dash = null;
 
+  /* ===== Maxfiy summalar: bosib turilgandagina ko'rinadi ===== */
+  const SECRET_IDS = ["balanceValue", "prizeValue", "commissionValue", "investMain", "investAlt",
+    "payBalance", "profBalance", "clientCard"];
+  let secretOn = localStorage.getItem("jt_secret") !== "0";
+  let flickOn = localStorage.getItem("jt_flick") === "1";
+  let hideTimer = null;
+
+  function armSecrets() {
+    const els = SECRET_IDS.map(id => $(id)).filter(Boolean)
+      .concat(Array.prototype.slice.call(document.querySelectorAll("[data-secret]")));
+    els.forEach(el => el.classList.toggle("secret", secretOn));
+    if (!secretOn) els.forEach(el => el.classList.remove("show"));
+    document.body.classList.toggle("flick", flickOn);
+    document.querySelectorAll(".sec-hint").forEach(el => el.classList.toggle("hidden", !secretOn));
+  }
+  function hideSecrets() {
+    document.querySelectorAll(".secret.show").forEach(el => el.classList.remove("show"));
+  }
+  document.addEventListener("pointerdown", e => {
+    const el = e.target && e.target.closest && e.target.closest(".secret");
+    if (!el) return;
+    el.classList.add("show");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideSecrets, 8000);
+  }, true);
+  ["pointerup", "pointercancel", "pointerleave", "scroll"].forEach(ev =>
+    document.addEventListener(ev, hideSecrets, true));
+
   /* ============ Skrinshot va nusxa ko'chirishdan himoya ============
      Eslatma: brauzer/Mini App darajasida tizim skrinshotini butunlay
      bloklab bo'lmaydi. Shu sabab: ekranga egasining nomi yozilgan
@@ -464,7 +535,8 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
     const who = user ? ((user.name || "") + " " + (user.surname || "")).trim() : "JASMINA TRD";
     const id = u.id ? "ID " + u.id : "";
     const day = new Date().toLocaleDateString("ru-RU");
-    const line = [who.toUpperCase(), id, day].filter(Boolean).join(" • ");
+    const t = new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+    const line = [who.toUpperCase(), id, day + " " + t].filter(Boolean).join(" • ");
     $("watermark").innerHTML = new Array(40).fill(0)
       .map(() => "<span>" + escapeHtml(line) + "</span>").join("");
   }
@@ -588,6 +660,7 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
 
     startCountdown(userDeadline(user));
     drawWatermark();
+    armSecrets();
   }
 
   // Yutuq muddati sanoqchisi — saytdagi countdown bilan bir xil format (KK:SS:DD:SS)
@@ -624,10 +697,11 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       const when = t.traded_at ? new Date(t.traded_at).toLocaleString("ru-RU") : "";
       return '<div class="row-item"><div><b>' + escapeHtml(t.symbol || "—") + "</b>" +
         '<small>' + (up ? "▲ O‘SISH" : "▼ PASAYISH") + " • " + escapeHtml(when) + "</small></div>" +
-        '<div class="right">' + escapeHtml(fmtMoney(t.amount, info.code)) +
+        '<div class="right" data-secret>' + escapeHtml(fmtMoney(t.amount, info.code)) +
         '<small class="' + (res >= 0 ? "chg up" : "chg down") + '">natija: ' +
         escapeHtml(fmtMoney(res, info.code)) + "</small></div></div>";
     }).join("") : '<div class="card empty">Hozircha savdo yozuvi yo‘q.</div>';
+    armSecrets();
   }
 
   /* ================= PROFIL ================= */
@@ -651,7 +725,24 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       ? new Date(user.last_login_at).toLocaleString("ru-RU") : "—";
     const u = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
     $("profTg").textContent = u.username ? "@" + u.username : (u.first_name || "Telegram");
+    armSecrets();
   }
+
+  function paintToggles() {
+    $("tglSecret").classList.toggle("on", secretOn);
+    $("tglFlick").classList.toggle("on", flickOn);
+  }
+  $("tglSecret").addEventListener("click", () => {
+    secretOn = !secretOn;
+    localStorage.setItem("jt_secret", secretOn ? "1" : "0");
+    paintToggles(); armSecrets();
+  });
+  $("tglFlick").addEventListener("click", () => {
+    flickOn = !flickOn;
+    localStorage.setItem("jt_flick", flickOn ? "1" : "0");
+    paintToggles(); armSecrets();
+  });
+  paintToggles();
 
   $("unlinkBtn").addEventListener("click", async () => {
     if (!confirm("Telegram akkauntini kabinetdan uzasizmi?")) return;
@@ -996,8 +1087,9 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       return '<div class="row-item"><div><b>' + escapeHtml(d.ref || "To‘lov") + "</b>" +
         depBadge(String(d.status || "").toLowerCase()) +
         "<small>" + escapeHtml([d.method_label, when].filter(Boolean).join(" • ")) + "</small></div>" +
-        '<div class="right">' + escapeHtml(fmtMoney(d.amount, d.currency)) + conv + "</div></div>";
+        '<div class="right" data-secret>' + escapeHtml(fmtMoney(d.amount, d.currency)) + conv + "</div></div>";
     }).join("") : '<div class="card empty">Hozircha to‘lov so‘rovi yo‘q.</div>';
+    armSecrets();
   }
 
   async function refreshBalance() {
@@ -1009,6 +1101,7 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       $("payBalance").textContent = fmtMoney(user.balance, info.code);
       $("payCurrency").textContent = info.code;
       $("profBalance").textContent = fmtMoney(user.balance, info.code);
+      armSecrets();
     }
   }
 
@@ -1059,6 +1152,7 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       b.classList.toggle("on", b.getAttribute("data-tab") === name));
     window.scrollTo(0, 0);
     if (name === "pay") refreshBalance().catch(() => {});
+    armSecrets();
   }
   document.querySelectorAll(".nav button").forEach(b =>
     b.addEventListener("click", () => openTab(b.getAttribute("data-tab"))));
@@ -1069,6 +1163,7 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
   $("depRefresh").addEventListener("click", () => { refreshBalance().catch(() => {}); loadDeposits(); });
 
   drawWatermark();
+  setInterval(drawWatermark, 60000);
   boot();
 })();
 </script>
