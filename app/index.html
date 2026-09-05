@@ -139,6 +139,21 @@ select{appearance:none;
 .nav button i{display:block;font-size:19px;font-style:normal;margin-bottom:2px;line-height:1}
 .nav button.on{color:var(--gold)}
 .loading{padding:56px 0;text-align:center;color:var(--muted)}
+/* --- Nusxa ko'chirish va skrinshotdan himoya --- */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
+#watermark{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden;
+  opacity:.14;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  transform:rotate(-24deg)}
+#watermark span{color:#f5bd35;font-size:12px;font-weight:800;letter-spacing:.1em;
+  white-space:nowrap;padding:16px 18px}
+#privacy{position:fixed;inset:0;z-index:60;background:#050506;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:30px}
+#privacy b{font-size:18px;color:var(--gold);letter-spacing:.04em}
+#privacy small{color:var(--muted);font-size:13px;max-width:280px;line-height:1.5}
+body.privacy #privacy{display:flex}
+body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
 .hidden{display:none !important}
 .empty{color:var(--muted);font-size:14px}
 .locked{text-align:center;color:var(--muted);font-size:13px;padding:8px 0}
@@ -356,6 +371,12 @@ select{appearance:none;
   </section>
 </main>
 
+<div id="watermark" aria-hidden="true"></div>
+<div id="privacy" aria-hidden="true">
+  <b>MAXFIYLIK REJIMI</b>
+  <small>Kabinet ma’lumotlari vaqtincha yashirildi. Ilovaga qaytganingizda avtomatik ochiladi.</small>
+</div>
+
 <nav class="nav hidden" id="nav">
   <button data-tab="home" class="on"><i>🏠</i>BOSH SAHIFA</button>
   <button data-tab="invest"><i>📈</i>SARMOYA</button>
@@ -432,6 +453,42 @@ select{appearance:none;
   }
 
   let user = null, invState = null, deposits = [], dash = null;
+
+  /* ============ Skrinshot va nusxa ko'chirishdan himoya ============
+     Eslatma: brauzer/Mini App darajasida tizim skrinshotini butunlay
+     bloklab bo'lmaydi. Shu sabab: ekranga egasining nomi yozilgan
+     suv belgisi qo'yiladi, ilova fondan chiqqanda ma'lumot yashiriladi,
+     matn nusxalash, rasm saqlash va kontekst menyu o'chiriladi. */
+  function drawWatermark() {
+    const u = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+    const who = user ? ((user.name || "") + " " + (user.surname || "")).trim() : "JASMINA TRD";
+    const id = u.id ? "ID " + u.id : "";
+    const day = new Date().toLocaleDateString("ru-RU");
+    const line = [who.toUpperCase(), id, day].filter(Boolean).join(" • ");
+    $("watermark").innerHTML = new Array(40).fill(0)
+      .map(() => "<span>" + escapeHtml(line) + "</span>").join("");
+  }
+
+  function privacy(on) { document.body.classList.toggle("privacy", !!on); }
+
+  document.addEventListener("visibilitychange", () => privacy(document.hidden));
+  window.addEventListener("blur", () => privacy(true));
+  window.addEventListener("focus", () => privacy(false));
+  window.addEventListener("pagehide", () => privacy(true));
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  ["copy", "cut", "dragstart"].forEach(ev =>
+    document.addEventListener(ev, e => {
+      if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+      e.preventDefault();
+    }));
+  // Kompyuterdagi skrinshot tugmalari: ekran vaqtincha yashiriladi
+  document.addEventListener("keyup", e => {
+    const k = String(e.key || "");
+    if (k === "PrintScreen" || ((e.metaKey || e.ctrlKey) && e.shiftKey && "345".includes(k))) {
+      privacy(true);
+      setTimeout(() => privacy(false), 1200);
+    }
+  });
 
   /* ================= BOSHLASH ================= */
   async function boot() {
@@ -517,6 +574,7 @@ select{appearance:none;
     }).join("");
 
     startCountdown(userDeadline(user));
+    drawWatermark();
   }
 
   // Yutuq muddati sanoqchisi — saytdagi countdown bilan bir xil format (KK:SS:DD:SS)
@@ -997,6 +1055,7 @@ select{appearance:none;
   $("refreshAll").addEventListener("click", () => loadAll().catch(e => say("fatal", human(e.message))));
   $("depRefresh").addEventListener("click", () => { refreshBalance().catch(() => {}); loadDeposits(); });
 
+  drawWatermark();
   boot();
 })();
 </script>
