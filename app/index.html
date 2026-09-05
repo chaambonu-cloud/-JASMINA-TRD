@@ -144,7 +144,7 @@ body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea{-webkit-user-select:text;user-select:text}
 img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
 #watermark{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden;
-  opacity:.14;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  opacity:.11;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
   transform:rotate(-24deg)}
 #watermark span{color:#f5bd35;font-size:12px;font-weight:800;letter-spacing:.1em;
   white-space:nowrap;padding:16px 18px}
@@ -469,11 +469,24 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
       .map(() => "<span>" + escapeHtml(line) + "</span>").join("");
   }
 
-  function privacy(on) { document.body.classList.toggle("privacy", !!on); }
+  // Chek tanlash oynasi ochilganda maxfiylik pardasi chiqmasin
+  let picking = false;
+  document.addEventListener("click", e => {
+    const t = e.target;
+    if (t && ((t.tagName === "INPUT" && t.type === "file") || (t.closest && t.closest(".file")))) {
+      picking = true;
+      setTimeout(() => { picking = false; }, 120000);
+    }
+  }, true);
+
+  function privacy(on) {
+    if (on && picking) return;
+    document.body.classList.toggle("privacy", !!on);
+  }
 
   document.addEventListener("visibilitychange", () => privacy(document.hidden));
   window.addEventListener("blur", () => privacy(true));
-  window.addEventListener("focus", () => privacy(false));
+  window.addEventListener("focus", () => { picking = false; privacy(false); });
   window.addEventListener("pagehide", () => privacy(true));
   document.addEventListener("contextmenu", e => e.preventDefault());
   ["copy", "cut", "dragstart"].forEach(ev =>
