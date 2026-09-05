@@ -4258,9 +4258,8 @@ body{
     max-width:460px;
   }
 
-  #adminPanelModal .modal-card,
   #adminLoginModal .modal-card{
-    max-width:900px;
+    max-width:460px;
   }
 }
 
@@ -4281,6 +4280,177 @@ body{
 
   #dashboard > .content > .hero-panel{
     grid-column:1 / -1;
+  }
+}
+
+
+/* ===== MODAL / ADMIN PANEL RESPONSIVE =====
+   Modal hech qachon ekrandan chiqib ketmaydi, vertikal scroll ichkarida,
+   gorizontal scroll yo'q. */
+
+.modal{
+  align-items:center;
+  justify-content:center;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:18px;
+}
+
+.modal-card{
+  max-height:calc(100vh - 36px);
+  max-height:calc(100dvh - 36px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* --- ADMIN PANEL: sarlavha qotgan, kontent ichida scroll --- */
+
+#adminPanelModal .modal-card{
+  width:100%;
+  max-width:min(1180px,100%);
+  max-height:calc(100vh - 36px);
+  max-height:calc(100dvh - 36px);
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  overflow:hidden;
+}
+
+#adminPanelModal .modal-top{
+  flex:0 0 auto;
+  margin:0;
+  padding:16px 20px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,#16191c,#111417);
+  border-radius:25px 25px 0 0;
+}
+
+#adminPanelModal .admin-gate{
+  flex:1 1 auto;
+  min-height:0;
+  margin:0;
+  padding:18px 20px 22px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+#adminLoginModal .modal-card{
+  width:100%;
+}
+
+/* Uzun matn va tugmalar konteynerdan chiqmasin */
+
+#adminPanelModal .admin-row{
+  flex-wrap:wrap;
+}
+
+#adminPanelModal .admin-row > *{
+  min-width:0;
+}
+
+#adminPanelModal .admin-row b,
+#adminPanelModal .admin-row small,
+#adminPanelModal .admin-note,
+#adminPanelModal .admin-empty,
+#adminPanelModal .admin-status{
+  overflow-wrap:anywhere;
+}
+
+#adminPanelModal input,
+#adminPanelModal select,
+#adminPanelModal textarea{
+  max-width:100%;
+}
+
+/* --- Planshet va undan katta ekranlar --- */
+
+@media (min-width:760px){
+
+  #adminPanelModal .admin-grid{
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  }
+
+  #adminPanelModal .admin-actions{
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  }
+
+  #adminPanelModal .adm-mini-form{
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  }
+
+  #adminPanelModal .admin-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+    align-items:start;
+    gap:10px;
+  }
+
+  #adminPanelModal .admin-form{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:2px 14px;
+    align-items:start;
+  }
+
+  #adminPanelModal .admin-form > .field.wide,
+  #adminPanelModal .admin-form > .field.last,
+  #adminPanelModal .admin-form > input,
+  #adminPanelModal .admin-form > select{
+    grid-column:1 / -1;
+  }
+}
+
+@media (min-width:1100px){
+
+  #adminPanelModal .modal-top{
+    padding:18px 26px;
+  }
+
+  #adminPanelModal .admin-gate{
+    padding:22px 26px 26px;
+  }
+
+  #adminPanelModal .admin-list{
+    grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+  }
+}
+
+/* --- Telefon: ixcham chekka, to'liq ekran --- */
+
+@media (max-width:480px){
+
+  .modal{
+    padding:10px;
+  }
+
+  .modal-card{
+    max-height:calc(100vh - 20px);
+    max-height:calc(100dvh - 20px);
+  }
+
+  #adminPanelModal .modal-card{
+    max-width:100%;
+    max-height:calc(100vh - 20px);
+    max-height:calc(100dvh - 20px);
+    border-radius:18px;
+  }
+
+  #adminPanelModal .modal-top{
+    padding:13px 14px;
+    border-radius:18px 18px 0 0;
+  }
+
+  #adminPanelModal .admin-gate{
+    padding:13px 14px 18px;
   }
 }
 
