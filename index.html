@@ -4185,6 +4185,106 @@ body{
   word-break:break-word;
 }
 
+/* ===== LAPTOP / DESKTOP LAYOUT =====
+   Telefonda (<=899px) hech narsa o'zgarmaydi.
+   900px dan boshlab sayt ekranning normal kengligini ishlatadi. */
+
+@media (min-width:900px){
+
+  html,
+  body{
+    overflow-x:hidden;
+  }
+
+  .app{
+    max-width:1120px;
+    padding:46px 34px 52px;
+  }
+
+  /* --- KIRISH EKRANI --- */
+
+  #loginScreen.app{
+    max-width:none;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:56px 40px 60px;
+  }
+
+  #loginScreen > .content{
+    width:100%;
+    max-width:560px;
+    margin:0 auto;
+  }
+
+  /* --- DASHBOARD: KO'P USTUNLI GRID --- */
+
+  #dashboard.app{
+    max-width:1180px;
+  }
+
+  #dashboard > .content{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px 22px;
+    align-items:start;
+  }
+
+  #dashboard > .content > *{
+    min-width:0;
+    margin-bottom:0;
+  }
+
+  #dashboard > .content > .top,
+  #dashboard > .content > .trd,
+  #dashboard > .content > .hero-panel,
+  #dashboard > .content > .footer{
+    grid-column:1 / -1;
+  }
+
+  #dashboard > .content > .btn{
+    grid-column:1 / -1;
+    justify-self:center;
+    width:100%;
+    max-width:440px;
+  }
+
+  #dashboard > .content > .panel{
+    height:auto;
+  }
+
+  .modal-card{
+    max-width:460px;
+  }
+
+  #adminPanelModal .modal-card,
+  #adminLoginModal .modal-card{
+    max-width:900px;
+  }
+}
+
+@media (min-width:1400px){
+
+  .app{
+    max-width:1320px;
+  }
+
+  #dashboard.app{
+    max-width:1320px;
+  }
+
+  #dashboard > .content{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px 24px;
+  }
+
+  #dashboard > .content > .hero-panel{
+    grid-column:1 / -1;
+  }
+}
+
+
 /* ANIMATSIYANI KAMAYTIRISH */
 
 @media (prefers-reduced-motion:reduce){
