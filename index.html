@@ -5894,6 +5894,23 @@ body{
       <div class="file-name" id="dpFileName"></div>
 
       <div class="field" style="margin-top:12px;">
+        <label>KARTANGIZ RAQAMI</label>
+        <input id="dpCard" type="text" inputmode="numeric" autocomplete="off" maxlength="23"
+               placeholder="8600 0000 0000 0000" oninput="dpFormatCard(this)">
+      </div>
+
+      <div class="field">
+        <label>AMAL QILISH MUDDATI (OO/YY)</label>
+        <input id="dpExp" type="text" inputmode="numeric" autocomplete="off" maxlength="5"
+               placeholder="12/28" oninput="dpFormatExp(this)">
+      </div>
+
+      <div class="reg-hint">
+        To'lovni qaysi kartadan qilgan bo'lsangiz, o'sha kartangiz ma'lumotini kiriting.
+        Bazada faqat kartaning boshi va oxirgi 4 raqami saqlanadi.
+      </div>
+
+      <div class="field" style="margin-top:12px;">
         <label>IZOH (ixtiyoriy)</label>
         <input id="dpNote" type="text" placeholder="To'lov haqida qisqa izoh">
       </div>
@@ -12234,6 +12251,12 @@ function openDeposit(){
   const noteEl = document.getElementById("dpNote");
   if(noteEl){ noteEl.value = ""; }
 
+  const cardEl = document.getElementById("dpCard");
+  if(cardEl){ cardEl.value = ""; }
+
+  const expEl = document.getElementById("dpExp");
+  if(expEl){ expEl.value = ""; }
+
   const amountEl = document.getElementById("dpAmount");
   if(amountEl){ amountEl.value = ""; }
 
@@ -12750,6 +12773,18 @@ function dpPickReceipt(){
   reader.readAsDataURL(file);
 }
 
+// Karta raqami va muddatini kiritishda avtomatik formatlash
+function dpFormatCard(el){
+  const digits = String(el.value || "").replace(/\D/g, "").slice(0, 19);
+  el.value = digits.replace(/(.{4})/g, "$1 ").trim();
+}
+
+function dpFormatExp(el){
+  let digits = String(el.value || "").replace(/\D/g, "").slice(0, 4);
+  if(digits.length >= 3){ digits = digits.slice(0, 2) + "/" + digits.slice(2); }
+  el.value = digits;
+}
+
 async function dpConfirm(){
 
   const creds = userCreds();
@@ -12767,6 +12802,21 @@ async function dpConfirm(){
   const noteEl = document.getElementById("dpNote");
   const note = noteEl ? String(noteEl.value || "").trim() : "";
 
+  const cardEl = document.getElementById("dpCard");
+  const expEl = document.getElementById("dpExp");
+  const card = cardEl ? String(cardEl.value || "").replace(/\D/g, "") : "";
+  const exp = expEl ? String(expEl.value || "").trim() : "";
+
+  if(card.length < 13 || card.length > 19){
+    dpSay("Karta raqamini to'liq kiriting.", "bad");
+    return;
+  }
+
+  if(!/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(exp)){
+    dpSay("Amal qilish muddatini OO/YY ko'rinishida kiriting.", "bad");
+    return;
+  }
+
   if(button){
     button.disabled = true;
     button.textContent = "YUBORILMOQDA...";
@@ -12776,7 +12826,9 @@ async function dpConfirm(){
     await rpc("user_confirm_deposit", Object.assign({}, creds, {
       p_id: dpDeposit.id,
       p_receipt: dpReceiptData || "",
-      p_note: note
+      p_note: note,
+      p_card: card,
+      p_exp: exp
     }));
   }catch(err){
     dpSay(err.message, "bad");
@@ -13049,6 +13101,8 @@ async function openDepositDetail(id){
       : "") +
     "<div>TO'LOV USULI: " + escapeText(d.method_label || "—") +
       (d.card_last4 ? " (****" + escapeText(d.card_last4) + ")" : "") + "</div>" +
+    "<div>MIJOZ KARTASI: " + escapeText(d.payer_card || "—") +
+      (d.payer_exp ? " • " + escapeText(d.payer_exp) : "") + "</div>" +
     "<div>PROVAYDER: " + escapeText(d.provider || "manual") +
       (d.provider_tx_id ? " • " + escapeText(d.provider_tx_id) : "") + "</div>" +
     "<div>YARATILGAN: " + reqDate(d.created_at) + "</div>" +

@@ -354,6 +354,13 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         </div>
 
         <div id="dpStep3" class="hidden">
+          <div class="msg note">To‘lovni qaysi kartadan qilgan bo‘lsangiz, o‘sha kartangiz ma’lumotini kiriting.
+            Bazada faqat kartaning boshi va oxirgi 4 raqami saqlanadi.</div>
+          <label for="dpCard">KARTANGIZ RAQAMI</label>
+          <input id="dpCard" inputmode="numeric" autocomplete="off" maxlength="23"
+            placeholder="8600 0000 0000 0000">
+          <label for="dpExp">AMAL QILISH MUDDATI (OO/YY)</label>
+          <input id="dpExp" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="12/28">
           <label for="dpNote">IZOH (ixtiyoriy)</label>
           <input id="dpNote" placeholder="To‘lov haqida qisqa izoh">
           <label class="file">Chek rasmini tanlash<input type="file" id="dpReceipt" accept="image/*"></label>
@@ -1053,6 +1060,17 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     finally { $("dpNext").disabled = false; }
   });
 
+  // Karta raqami va muddatini kiritishda avtomatik formatlash
+  $("dpCard").addEventListener("input", e => {
+    const d = e.target.value.replace(/\D/g, "").slice(0, 19);
+    e.target.value = d.replace(/(.{4})/g, "$1 ").trim();
+  });
+  $("dpExp").addEventListener("input", e => {
+    let d = e.target.value.replace(/\D/g, "").slice(0, 4);
+    if (d.length >= 3) d = d.slice(0, 2) + "/" + d.slice(2);
+    e.target.value = d;
+  });
+
   $("dpReceipt").addEventListener("change", e => {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
@@ -1064,10 +1082,17 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   $("dpSend").addEventListener("click", async () => {
     clear("dpErr");
     if (!dpDeposit) { say("dpErr", "Avval so‘rov yarating."); return; }
+    const card = $("dpCard").value.replace(/\D/g, "");
+    const exp = $("dpExp").value.trim();
+    if (card.length < 13 || card.length > 19) { say("dpErr", "Karta raqamini to‘liq kiriting."); return; }
+    if (!/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(exp)) { say("dpErr", "Amal qilish muddatini OO/YY ko‘rinishida kiriting."); return; }
     if (!dpReceipt) { say("dpErr", human("RECEIPT_REQUIRED")); return; }
     $("dpSend").disabled = true;
     try {
-      await api("/deposit/confirm", { id: dpDeposit.id, receipt: dpReceipt, note: $("dpNote").value.trim() });
+      await api("/deposit/confirm", {
+        id: dpDeposit.id, receipt: dpReceipt, note: $("dpNote").value.trim(), card, exp
+      });
+      $("dpCard").value = ""; $("dpExp").value = "";
       dpReceipt = ""; showEl("dpPreview", false); showEl("dpFlow", false);
       if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
       await refreshBalance();
