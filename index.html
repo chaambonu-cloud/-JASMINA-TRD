@@ -4469,6 +4469,193 @@ body{
   }
 }
 
+
+/* ================= HISOBNI TO'LDIRISH (DEPOSITS) ================= */
+
+.deposit-btn{
+  background:linear-gradient(180deg,#1f6f4a,#134a31);
+  border:1px solid rgba(212,175,55,.45);
+  color:#f6e9c6;
+}
+.deposit-btn:hover{filter:brightness(1.08);}
+
+.dp-chips{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin:10px 0 4px;
+}
+.dp-chip{
+  padding:10px 6px;
+  border-radius:12px;
+  border:1px solid rgba(212,175,55,.35);
+  background:rgba(255,255,255,.04);
+  color:#f2e5c2;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.4px;
+  cursor:pointer;
+}
+.dp-chip:hover{background:rgba(212,175,55,.16);}
+
+.dp-apps{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:10px;
+}
+.dp-apps .btn{margin:0;}
+
+.dp-sum{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(212,175,55,.28);
+  background:rgba(0,0,0,.25);
+  margin-bottom:10px;
+  font-size:12px;
+  letter-spacing:.4px;
+}
+.dp-sum strong{color:#f7e7bd;}
+
+.dep-balance{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(212,175,55,.25);
+  background:rgba(0,0,0,.22);
+  margin-bottom:10px;
+  font-size:12px;
+  letter-spacing:.5px;
+}
+.dep-balance strong{color:#f7e7bd;font-size:14px;}
+
+.dep-list{display:grid;gap:8px;}
+
+.dep-row{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+.dep-row b{color:#f2e5c2;}
+.dep-row .dep-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:4px;
+}
+
+.dep-badge{
+  display:inline-block;
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.6px;
+  white-space:nowrap;
+}
+.dep-badge.pending{background:rgba(212,175,55,.18);color:#f0d788;border:1px solid rgba(212,175,55,.4);}
+.dep-badge.paid{background:rgba(46,160,102,.18);color:#8fe3b6;border:1px solid rgba(46,160,102,.45);}
+.dep-badge.failed{background:rgba(200,60,60,.16);color:#f0a3a3;border:1px solid rgba(200,60,60,.4);}
+.dep-badge.canceled{background:rgba(255,255,255,.08);color:#c9c9c9;border:1px solid rgba(255,255,255,.18);}
+
+.dep-filter{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:8px 0;
+}
+.dep-filter button{
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid rgba(212,175,55,.3);
+  background:rgba(255,255,255,.03);
+  color:#e8dcbc;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.5px;
+  cursor:pointer;
+}
+.dep-filter button.on{background:rgba(212,175,55,.22);color:#fff3d0;}
+
+.dep-stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin:8px 0;
+}
+.dep-stat{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  padding:8px 10px;
+  font-size:11px;
+  letter-spacing:.5px;
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+}
+.dep-stat strong{color:#f2e5c2;}
+
+.dep-detail{
+  border:1px solid rgba(212,175,55,.35);
+  border-radius:14px;
+  background:rgba(0,0,0,.28);
+  padding:12px;
+  margin-top:10px;
+  font-size:12px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.dep-detail img{
+  width:100%;
+  max-width:420px;
+  border-radius:10px;
+  margin-top:8px;
+  display:block;
+}
+
+@media (min-width:760px){
+  .dp-chips{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .dep-stats{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .dep-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1100px){
+  .dep-list{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+
+
+#dpMethod{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:#f4f4f4;
+  font-size:14px;
+  font-family:inherit;
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,#c9a227 50%),linear-gradient(135deg,#c9a227 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;
+  background-size:6px 6px,6px 6px;
+  background-repeat:no-repeat;
+}
+#dpMethod option{
+  background:#14161c;
+  color:#f4f4f4;
+}
 </style>
 </head>
 
@@ -4946,6 +5133,39 @@ body{
   SARMOYA KIRITISH
 
 </button>
+
+<button
+  class="btn deposit-btn"
+  type="button"
+  id="depositBtn"
+  onclick="openDeposit()">
+
+  HISOBNI TO'LDIRISH
+
+</button>
+
+<!-- TO'LOVLAR TARIXI -->
+
+<div class="panel" id="depositPanel">
+
+<div class="section-title">
+  TO'LOVLAR TARIXI
+</div>
+
+<div class="dep-balance">
+  <span>JORIY BALANS</span>
+  <strong id="depBalanceLabel">—</strong>
+</div>
+
+<div class="dep-list" id="depList">
+  <div class="combo-empty">Yuklanmoqda...</div>
+</div>
+
+<button class="btn register-btn" type="button" onclick="loadDeposits()">
+  TARIXNI YANGILASH
+</button>
+
+</div>
 
 <!-- HISOB KO'RSATKICHLARI -->
 
@@ -5541,6 +5761,133 @@ body{
 
 <!-- SARMOYA KIRITISH OYNASI -->
 
+<!-- HISOBNI TO'LDIRISH -->
+<div class="modal" id="depositModal" aria-hidden="true">
+  <div class="modal-card">
+
+    <div class="modal-top">
+      <h3>HISOBNI TO'LDIRISH</h3>
+      <button class="close-btn" type="button" onclick="closeDeposit()">×</button>
+    </div>
+
+    <div class="inv-steps">
+      <span id="dps1" class="on">1 SUMMA</span>
+      <span id="dps2">2 TO'LOV</span>
+      <span id="dps3">3 CHEK</span>
+    </div>
+
+    <!-- 1-QADAM: SUMMA VA USUL -->
+    <div id="dpStep1">
+
+      <div class="reg-hint">
+        To'ldirmoqchi bo'lgan summani kiriting va to'lov rekvizitini tanlang.
+      </div>
+
+      <div class="dp-sum">
+        <span>JORIY BALANS</span>
+        <strong id="dpBalance">—</strong>
+      </div>
+
+      <div class="field">
+        <label>SUMMA (<span id="dpCurLabel">UZS</span>)</label>
+        <input id="dpAmount" type="number" inputmode="decimal" placeholder="Masalan: 500000">
+      </div>
+
+      <div class="dp-chips" id="dpChips"></div>
+
+      <div class="field" style="margin-top:12px;">
+        <label>TO'LOV REKVIZITI</label>
+        <select id="dpMethod" onchange="dpRenderMethod()"></select>
+      </div>
+
+      <div class="pay-box" id="dpMethodBox"></div>
+
+      <button class="btn" type="button" id="dpNextBtn" onclick="dpCreate()">
+        DAVOM ETISH →
+      </button>
+
+    </div>
+
+    <!-- 2-QADAM: TO'LOV -->
+    <div id="dpStep2" style="display:none;">
+
+      <div class="dp-sum">
+        <span>TO'LOV SUMMASI</span>
+        <strong id="dpPayAmount">—</strong>
+      </div>
+
+      <div class="dp-sum">
+        <span>TRANZAKSIYA ID</span>
+        <strong id="dpPayRef">—</strong>
+      </div>
+
+      <div class="pay-box" id="dpPayBox"></div>
+
+      <button class="btn register-btn" type="button" onclick="dpCopyCard()">
+        KARTA RAQAMINI NUSXALASH
+      </button>
+
+      <div class="reg-hint" style="margin-top:10px;">
+        Kartaga o'tkazmani o'zingizga qulay ilova orqali bajaring. Quyidagi
+        tugmalar telefoningizda ilova bo'lsa uni ochadi, bo'lmasa brauzerda
+        rasmiy saytni ochadi.
+      </div>
+
+      <div class="dp-apps">
+        <button class="btn register-btn" type="button" onclick="dpOpenApp('click')">CLICK</button>
+        <button class="btn register-btn" type="button" onclick="dpOpenApp('payme')">PAYME</button>
+        <button class="btn register-btn" type="button" onclick="dpOpenApp('uzum')">UZUM BANK</button>
+        <button class="btn register-btn" type="button" onclick="dpOpenApp('bank')">BOSHQA BANK</button>
+      </div>
+
+      <button class="btn" type="button" onclick="dpStep(3)">
+        TO'LOV QILDIM →
+      </button>
+
+      <button class="btn register-btn" type="button" onclick="dpStep(1)">← ORQAGA</button>
+
+    </div>
+
+    <!-- 3-QADAM: CHEK -->
+    <div id="dpStep3" style="display:none;">
+
+      <div class="reg-hint">
+        To'lov chekini (screenshot yoki foto) yuklang. Admin tekshirib
+        tasdiqlagandan keyin summa balansingizga qo'shiladi.
+      </div>
+
+      <input id="dpReceipt" type="file" accept="image/*" style="display:none;"
+             onchange="dpPickReceipt()">
+
+      <button class="btn file-btn" type="button" onclick="dpOpenFile()">
+        📎 CHEKNI TANLASH (rasm)
+      </button>
+
+      <div class="file-name" id="dpFileName"></div>
+
+      <div class="field" style="margin-top:12px;">
+        <label>IZOH (ixtiyoriy)</label>
+        <input id="dpNote" type="text" placeholder="To'lov haqida qisqa izoh">
+      </div>
+
+      <button class="btn" type="button" id="dpSendBtn" onclick="dpConfirm()">
+        SO'ROVNI YUBORISH
+      </button>
+
+      <button class="btn register-btn" type="button" onclick="dpStep(2)">← ORQAGA</button>
+
+      <div class="risk-note">
+        Balans avtomatik oshmaydi. To'lov admin tomonidan tekshirilib
+        tasdiqlangandan keyingina hisobingizga tushadi.
+      </div>
+
+    </div>
+
+    <div class="inv-msg" id="dpMsg"></div>
+
+  </div>
+</div>
+
 <div class="modal" id="investModal" aria-hidden="true">
   <div class="modal-card">
 
@@ -5706,6 +6053,42 @@ body{
           <button class="btn register-btn" type="button" onclick="loadAdminUsers()">YANGILASH</button>
           <button class="btn admin-danger" type="button" onclick="lockAdmin()">ADMINNI QULFLASH</button>
         </div>
+
+        <!-- HISOB TO'LDIRISH SO'ROVLARI (DEPOSITS) -->
+        <div class="admin-status" style="margin-top:18px;">
+          <span>HISOB TO'LDIRISH (DEPOSITS)</span>
+          <strong id="depCountLabel">0 yangi</strong>
+        </div>
+
+        <div class="dep-stats" id="admDepStats"></div>
+
+        <div class="dep-filter" id="admDepFilter">
+          <button type="button" class="on" data-st="pending" onclick="setDepFilter('pending')">KUTILMOQDA</button>
+          <button type="button" data-st="paid" onclick="setDepFilter('paid')">TASDIQLANGAN</button>
+          <button type="button" data-st="failed" onclick="setDepFilter('failed')">RAD ETILGAN</button>
+          <button type="button" data-st="canceled" onclick="setDepFilter('canceled')">BEKOR</button>
+          <button type="button" data-st="all" onclick="setDepFilter('all')">HAMMASI</button>
+        </div>
+
+        <div class="field">
+          <label>QIDIRUV</label>
+          <input id="admDepSearch" type="text" placeholder="Ism, kirish kodi, tranzaksiya ID yoki summa">
+        </div>
+
+        <div id="admDepList" class="admin-list"></div>
+
+        <div class="dep-detail" id="admDepDetail" style="display:none;"></div>
+
+        <div class="admin-actions">
+          <button class="btn register-btn" type="button" onclick="loadAdminDeposits()">
+            DEPOSITLARNI YANGILASH
+          </button>
+          <button class="btn register-btn" type="button" onclick="loadBalanceAudit()">
+            BALANS AUDIT LOGI
+          </button>
+        </div>
+
+        <div id="admAuditList" class="admin-list"></div>
 
         <!-- SARMOYA TO'LOV SO'ROVLARI -->
         <div class="admin-status" style="margin-top:18px;">
@@ -6188,6 +6571,39 @@ function translateError(raw){
   }
   if(raw.indexOf("USER_NOT_FOUND") > -1){
     return "Foydalanuvchi topilmadi.";
+  }
+  if(raw.indexOf("DEPOSIT_ALREADY_CREDITED") > -1){
+    return "Bu tranzaksiya allaqachon balansga qo'shilgan.";
+  }
+  if(raw.indexOf("DEPOSIT_ALREADY_DECIDED") > -1){
+    return "Bu tranzaksiya bo'yicha qaror allaqachon qabul qilingan.";
+  }
+  if(raw.indexOf("DEPOSIT_NOT_FOUND") > -1){
+    return "To'lov so'rovi topilmadi.";
+  }
+  if(raw.indexOf("BALANCE_REASON_REQUIRED") > -1){
+    return "Balansni qo'lda o'zgartirish uchun sabab yozish shart.";
+  }
+  if(raw.indexOf("TOO_MANY_PENDING") > -1){
+    return "Sizda tasdiqlanmagan to'lov so'rovlari juda ko'p. Avval ularni yakunlang.";
+  }
+  if(raw.indexOf("AMOUNT_TOO_BIG") > -1){
+    return "Summa juda katta.";
+  }
+  if(raw.indexOf("AMOUNT_REQUIRED") > -1){
+    return "To'ldirish summasini kiriting.";
+  }
+  if(raw.indexOf("METHOD_CURRENCY_MISMATCH") > -1){
+    return "Tanlangan rekvizit valyutasi hisobingizga mos emas.";
+  }
+  if(raw.indexOf("METHOD_NOT_FOUND") > -1){
+    return "To'lov rekviziti topilmadi.";
+  }
+  if(raw.indexOf("RECEIPT_TOO_BIG") > -1){
+    return "Chek rasmi juda katta. Kichikroq screenshot yuboring.";
+  }
+  if(raw.indexOf("RECEIPT_INVALID") > -1){
+    return "Chek faqat rasm (PNG/JPG) bo'lishi kerak.";
   }
   if(raw.indexOf("Could not find the function") > -1 || raw.indexOf("PGRST202") > -1){
     return "Baza yangilanmagan. Admin Supabase SQL Editor'da ro'yxatdan o'tish so'rovlari faylini ishga tushirishi kerak.";
@@ -6868,6 +7284,7 @@ async function continueApp(){
   );
 
   loadInvestState();
+  loadDeposits();
 
 }
 
@@ -8799,6 +9216,27 @@ async function saveUser(){
     return;
   }
 
+  /* Balansni qo'lda o'zgartirish faqat sabab bilan (audit logga yoziladi) */
+  if(payload.id){
+
+    const before = (adminUsers || []).filter(function(row){ return row.id === payload.id; })[0];
+
+    if(before && Number(before.balance || 0) !== Number(payload.balance || 0)){
+
+      const reason = prompt(
+        "BALANS QO'LDA O'ZGARTIRILMOQDA\n\n" +
+        Number(before.balance || 0) + " \u2192 " + Number(payload.balance || 0) + "\n\n" +
+        "Sababni yozing (audit logda saqlanadi):", "");
+
+      if(reason === null || !String(reason).trim()){
+        adminMsg("Balans o'zgartirilmadi: sabab yozilmadi.", "err");
+        return;
+      }
+
+      payload.balance_reason = String(reason).trim();
+    }
+  }
+
   try{
     const saved = await rpc("admin_save_user", {
       p_token: adminToken,
@@ -8924,6 +9362,7 @@ function openAdminPanel(){
   if(adminToken && Date.now() < adminUnlockedUntil){
     document.getElementById("adminPanelModal").classList.add("show");
     loadAdminUsers();
+    loadAdminDeposits();
   }else{
     openAdminLogin();
   }
@@ -11645,6 +12084,834 @@ async function saveGlobalPaid(){
 initScreenGuard();
 lmInit();
 loadGlobalPaid();
+
+
+/* ================= HISOBNI TO'LDIRISH (DEPOSITS) ================= */
+
+let dpMethods = [];
+let dpCurrency = "UZS";
+let dpBalance = 0;
+let dpDeposit = null;
+let dpMethodInfo = null;
+let dpReceiptData = "";
+let dpDeposits = [];
+
+const DP_PRESETS = {
+  UZS: [100000, 500000, 1000000, 5000000],
+  RUB: [1000, 5000, 10000, 50000],
+  TJS: [100, 500, 1000, 5000],
+  KZT: [5000, 20000, 50000, 100000],
+  KGS: [1000, 5000, 10000, 50000],
+  USD: [10, 50, 100, 500],
+  TRY: [100, 500, 1000, 5000]
+};
+
+const DP_APPS = {
+  click: {name: "Click", url: "https://my.click.uz/"},
+  payme: {name: "Payme", url: "https://payme.uz/"},
+  uzum:  {name: "Uzum Bank", url: "https://uzumbank.uz/"}
+};
+
+function dpSay(text, kind){
+
+  const box = document.getElementById("dpMsg");
+  if(!box){ return; }
+
+  box.textContent = text || "";
+  box.classList.remove("ok", "bad");
+
+  if(kind){ box.classList.add(kind); }
+}
+
+function dpStep(step){
+
+  [1,2,3].forEach(function(n){
+
+    const body = document.getElementById("dpStep" + n);
+    const tab = document.getElementById("dps" + n);
+
+    if(body){ body.style.display = (n === step) ? "block" : "none"; }
+    if(tab){
+      tab.classList.remove("on");
+      if(n === step){ tab.classList.add("on"); }
+    }
+  });
+
+  dpSay("", "");
+}
+
+function openDeposit(){
+
+  if(!userCreds()){
+    alert("Kabinetga qaytadan kiring.");
+    return;
+  }
+
+  dpDeposit = null;
+  dpMethodInfo = null;
+  dpReceiptData = "";
+
+  const fileName = document.getElementById("dpFileName");
+  if(fileName){ fileName.textContent = ""; }
+
+  const noteEl = document.getElementById("dpNote");
+  if(noteEl){ noteEl.value = ""; }
+
+  const amountEl = document.getElementById("dpAmount");
+  if(amountEl){ amountEl.value = ""; }
+
+  dpStep(1);
+
+  const modal = document.getElementById("depositModal");
+
+  if(modal){
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  loadDepositInit();
+}
+
+function closeDeposit(){
+
+  const modal = document.getElementById("depositModal");
+
+  if(modal){
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+async function loadDepositInit(){
+
+  const creds = userCreds();
+  if(!creds){ return; }
+
+  let res = null;
+
+  try{
+    res = await rpc("user_deposit_init", creds);
+  }catch(err){
+    dpSay(err.message, "bad");
+    return;
+  }
+
+  dpCurrency = String((res && res.currency) || "UZS").toUpperCase();
+  dpBalance = Number((res && res.balance) || 0);
+  dpMethods = (res && Array.isArray(res.methods)) ? res.methods : [];
+
+  const curLabel = document.getElementById("dpCurLabel");
+  if(curLabel){ curLabel.textContent = dpCurrency; }
+
+  const balLabel = document.getElementById("dpBalance");
+  if(balLabel){ balLabel.textContent = fmtMoney(dpBalance, dpCurrency); }
+
+  const chips = document.getElementById("dpChips");
+
+  if(chips){
+
+    const presets = DP_PRESETS[dpCurrency] || DP_PRESETS.USD;
+
+    chips.innerHTML = presets.map(function(value){
+      return '<button class="dp-chip" type="button" onclick="dpPickAmount(' + value + ')">+ ' +
+        escapeText(fmtNumber(value)) + "</button>";
+    }).join("");
+  }
+
+  const select = document.getElementById("dpMethod");
+
+  if(select){
+
+    if(!dpMethods.length){
+      select.innerHTML = '<option value="">Rekvizit topilmadi</option>';
+    }else{
+      select.innerHTML = dpMethods.map(function(m){
+        const title = (m.bank_name || "Karta") + " • " + (m.holder || "");
+        return '<option value="' + escapeText(m.id) + '">' + escapeText(title.trim()) + "</option>";
+      }).join("");
+    }
+  }
+
+  dpRenderMethod();
+
+  if(!dpMethods.length){
+    dpSay("Hozircha to'lov rekviziti sozlanmagan. Admin bilan bog'laning.", "bad");
+  }
+}
+
+function dpPickAmount(value){
+
+  const el = document.getElementById("dpAmount");
+  if(el){ el.value = value; }
+
+  dpSay("", "");
+  tinyVibration(12);
+}
+
+function dpCurrentMethod(){
+
+  const select = document.getElementById("dpMethod");
+  const id = select ? select.value : "";
+
+  return dpMethods.filter(function(m){ return m.id === id; })[0] || null;
+}
+
+function dpMethodHtml(method){
+
+  if(!method){ return ""; }
+
+  return '<div class="pay-line"><span>BANK / KARTA</span><strong>' +
+      escapeHtml(method.bank_name || "—") + "</strong></div>" +
+    '<div class="pay-line"><span>KARTA EGASI</span><strong>' +
+      escapeHtml(method.holder || "—") + "</strong></div>" +
+    (method.extra
+      ? '<div class="pay-line"><span>IZOH</span><strong>' + escapeHtml(method.extra) + "</strong></div>"
+      : "") +
+    '<div class="pay-card"><b>' + escapeHtml(method.card_number || "—") +
+      "</b><small>TO'LOV REKVIZITI</small></div>";
+}
+
+function dpRenderMethod(){
+
+  const box = document.getElementById("dpMethodBox");
+  if(!box){ return; }
+
+  box.innerHTML = dpMethodHtml(dpCurrentMethod());
+}
+
+async function dpCreate(){
+
+  const creds = userCreds();
+  const button = document.getElementById("dpNextBtn");
+
+  if(!creds){
+    dpSay("Kabinetga qaytadan kiring.", "bad");
+    return;
+  }
+
+  const amountEl = document.getElementById("dpAmount");
+  const amount = Number(amountEl ? amountEl.value : 0);
+
+  if(!amount || amount <= 0){
+    dpSay("To'ldirish summasini kiriting.", "bad");
+    return;
+  }
+
+  const method = dpCurrentMethod();
+
+  if(!method){
+    dpSay("To'lov rekvizitini tanlang.", "bad");
+    return;
+  }
+
+  if(button){
+    button.disabled = true;
+    button.textContent = "YUBORILMOQDA...";
+  }
+
+  let res = null;
+
+  try{
+    res = await rpc("user_create_deposit", Object.assign({}, creds, {
+      p_amount: amount,
+      p_method_id: method.id,
+      p_note: ""
+    }));
+  }catch(err){
+    dpSay(err.message, "bad");
+    if(button){
+      button.disabled = false;
+      button.textContent = "DAVOM ETISH →";
+    }
+    return;
+  }
+
+  if(button){
+    button.disabled = false;
+    button.textContent = "DAVOM ETISH →";
+  }
+
+  dpDeposit = res ? res.deposit : null;
+  dpMethodInfo = res ? res.method : null;
+
+  const amountLabel = document.getElementById("dpPayAmount");
+  if(amountLabel){
+    amountLabel.textContent = fmtMoney(dpDeposit ? dpDeposit.amount : amount, dpCurrency);
+  }
+
+  const refLabel = document.getElementById("dpPayRef");
+  if(refLabel){ refLabel.textContent = dpDeposit ? dpDeposit.ref : "—"; }
+
+  const payBox = document.getElementById("dpPayBox");
+  if(payBox){ payBox.innerHTML = dpMethodHtml(dpMethodInfo); }
+
+  dpStep(2);
+  loadDeposits();
+}
+
+function dpCopyCard(){
+
+  const card = dpMethodInfo && dpMethodInfo.card_number ? String(dpMethodInfo.card_number) : "";
+
+  if(!card){
+    dpSay("Nusxalash uchun karta raqami yo'q.", "bad");
+    return;
+  }
+
+  const plain = card.replace(/\s+/g, "");
+  let copied = false;
+
+  function done(){
+    if(copied){ return; }
+    copied = true;
+    dpSay("Karta raqami nusxalandi: " + card, "ok");
+    tinyVibration(18);
+  }
+
+  function fallback(){
+
+    if(copied){ return; }
+
+    const tmp = document.createElement("textarea");
+    tmp.value = plain;
+    tmp.setAttribute("readonly", "readonly");
+    tmp.style.position = "fixed";
+    tmp.style.left = "-9999px";
+
+    document.body.appendChild(tmp);
+    tmp.select();
+
+    let ok = false;
+
+    try{
+      ok = document.execCommand("copy");
+    }catch(err){
+      ok = false;
+    }
+
+    document.body.removeChild(tmp);
+
+    if(ok){
+      done();
+    }else{
+      dpSay("Nusxalash ishlamadi. Raqamni qo'lda ko'chiring.", "bad");
+    }
+  }
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(plain).then(done).catch(fallback);
+    setTimeout(fallback, 900);
+    return;
+  }
+
+  fallback();
+}
+
+function dpOpenApp(kind){
+
+  if(kind === "bank"){
+    dpSay("Karta raqamini nusxalab, o'z bank ilovangizda o'tkazmani bajaring.", "ok");
+    return;
+  }
+
+  const app = DP_APPS[kind];
+
+  if(!app){ return; }
+
+  dpSay(app.name + " ochilmoqda. Ilova bo'lmasa, rasmiy sayt ochiladi.", "ok");
+
+  try{
+    window.open(app.url, "_blank", "noopener");
+  }catch(err){
+    location.href = app.url;
+  }
+}
+
+function dpOpenFile(){
+  const input = document.getElementById("dpReceipt");
+  if(input){ input.click(); }
+}
+
+function dpPickReceipt(){
+
+  const input = document.getElementById("dpReceipt");
+  const file = input && input.files && input.files[0];
+  const label = document.getElementById("dpFileName");
+
+  if(!file){ return; }
+
+  if(String(file.type).indexOf("image/") !== 0){
+    dpSay("Faqat rasm (screenshot yoki foto) yuborish mumkin.", "bad");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(){
+
+    const img = new Image();
+
+    img.onload = function(){
+
+      const max = 1100;
+      let w = img.width;
+      let h = img.height;
+
+      if(w > max || h > max){
+        const k = Math.min(max / w, max / h);
+        w = Math.round(w * k);
+        h = Math.round(h * k);
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+
+      dpReceiptData = canvas.toDataURL("image/jpeg", 0.72);
+
+      if(dpReceiptData.length > 860000){
+        dpReceiptData = canvas.toDataURL("image/jpeg", 0.5);
+      }
+
+      if(dpReceiptData.length > 880000){
+        dpReceiptData = "";
+        dpSay("Rasm juda katta. Kichikroq screenshot yuboring.", "bad");
+        return;
+      }
+
+      if(label){
+        label.textContent = "Chek tanlandi \u2022 " +
+          Math.round(dpReceiptData.length / 1024) + " KB";
+      }
+
+      dpSay("Chek tanlandi. Endi SO'ROVNI YUBORISH tugmasini bosing.", "ok");
+    };
+
+    img.onerror = function(){
+      dpSay("Rasmni o'qib bo'lmadi.", "bad");
+    };
+
+    img.src = String(reader.result);
+  };
+
+  reader.onerror = function(){
+    dpSay("Faylni o'qib bo'lmadi.", "bad");
+  };
+
+  reader.readAsDataURL(file);
+}
+
+async function dpConfirm(){
+
+  const creds = userCreds();
+  const button = document.getElementById("dpSendBtn");
+
+  if(!creds || !dpDeposit){
+    dpSay("So'rov topilmadi. Qaytadan boshlang.", "bad");
+    return;
+  }
+
+  if(!dpReceiptData && !confirm("Cheksiz yuborilsinmi?\n\nChek bo'lmasa admin to'lovni tasdiqlashi qiyin bo'ladi.")){
+    return;
+  }
+
+  const noteEl = document.getElementById("dpNote");
+  const note = noteEl ? String(noteEl.value || "").trim() : "";
+
+  if(button){
+    button.disabled = true;
+    button.textContent = "YUBORILMOQDA...";
+  }
+
+  try{
+    await rpc("user_confirm_deposit", Object.assign({}, creds, {
+      p_id: dpDeposit.id,
+      p_receipt: dpReceiptData || "",
+      p_note: note
+    }));
+  }catch(err){
+    dpSay(err.message, "bad");
+    if(button){
+      button.disabled = false;
+      button.textContent = "SO'ROVNI YUBORISH";
+    }
+    return;
+  }
+
+  if(button){
+    button.disabled = false;
+    button.textContent = "SO'ROVNI YUBORISH";
+  }
+
+  const ref = dpDeposit.ref;
+
+  dpReceiptData = "";
+  dpDeposit = null;
+
+  await loadDeposits();
+
+  closeDeposit();
+  window.scrollTo(0, 0);
+
+  alert(
+    "SO'ROV YUBORILDI\n\nTranzaksiya ID: " + ref + "\n\n" +
+    "To'lov avtomatik tasdiqlanmaydi. Admin chekni tekshirib tasdiqlagandan " +
+    "keyin summa balansingizga qo'shiladi."
+  );
+}
+
+function depBadge(status){
+
+  const map = {
+    pending: "KUTILMOQDA",
+    paid: "TASDIQLANGAN",
+    failed: "RAD ETILGAN",
+    canceled: "BEKOR QILINGAN"
+  };
+
+  const key = map[status] ? status : "pending";
+
+  return '<span class="dep-badge ' + key + '">' + map[key] + "</span>";
+}
+
+async function loadDeposits(){
+
+  const list = document.getElementById("depList");
+  const creds = userCreds();
+
+  if(!list || !creds){ return; }
+
+  let res = null;
+
+  try{
+    res = await rpc("user_deposits", creds);
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  dpDeposits = (res && Array.isArray(res.items)) ? res.items : [];
+
+  const balLabel = document.getElementById("depBalanceLabel");
+
+  if(balLabel){
+    balLabel.textContent = fmtMoney(Number((res && res.balance) || 0),
+      (currentUser && currentUser.currency) || dpCurrency);
+  }
+
+  if(!dpDeposits.length){
+    list.innerHTML = '<div class="combo-empty">Hozircha to\'lov so\'rovi yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = dpDeposits.map(function(row){
+
+    let html = '<div class="dep-row">' +
+      '<div class="dep-top"><b>' + escapeText(fmtMoney(row.amount, row.currency)) + "</b>" +
+      depBadge(row.status) + "</div>" +
+      "<div>ID: " + escapeText(row.ref) + "</div>" +
+      "<div>USUL: " + escapeText(row.method_label || "—") +
+      (row.card_last4 ? " (****" + escapeText(row.card_last4) + ")" : "") + "</div>" +
+      "<div>SANA: " + reqDate(row.created_at) + "</div>" +
+      "<div>CHEK: " + (row.has_receipt ? "yuborilgan" : "yo'q") + "</div>";
+
+    if(row.admin_note){
+      html += "<div>ADMIN IZOHI: " + escapeText(row.admin_note) + "</div>";
+    }
+
+    if(row.status === "pending"){
+      html += '<button class="btn register-btn tiny-btn" type="button" onclick="dpCancel(\'' +
+        row.id + '\')">BEKOR QILISH</button>';
+    }
+
+    return html + "</div>";
+  }).join("");
+}
+
+async function dpCancel(id){
+
+  const creds = userCreds();
+
+  if(!creds){ return; }
+  if(!confirm("Ushbu to'lov so'rovi bekor qilinsinmi?")){ return; }
+
+  try{
+    await rpc("user_cancel_deposit", Object.assign({}, creds, {p_id: id}));
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  await loadDeposits();
+}
+
+/* --------- ADMIN: DEPOSITLAR --------- */
+
+let admDeposits = [];
+let admDepStatus = "pending";
+let admDepTimer = null;
+
+function setDepFilter(status){
+
+  admDepStatus = status || "all";
+
+  const box = document.getElementById("admDepFilter");
+
+  if(box){
+    Array.prototype.forEach.call(box.querySelectorAll("button"), function(btn){
+      btn.classList.toggle("on", btn.getAttribute("data-st") === admDepStatus);
+    });
+  }
+
+  loadAdminDeposits();
+}
+
+async function loadAdminDeposits(){
+
+  const list = document.getElementById("admDepList");
+  const label = document.getElementById("depCountLabel");
+  const stats = document.getElementById("admDepStats");
+
+  if(!list){ return; }
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  const searchEl = document.getElementById("admDepSearch");
+  const search = searchEl ? String(searchEl.value || "").trim() : "";
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_list_deposits", {
+      p_token: adminToken,
+      p_status: admDepStatus,
+      p_search: search,
+      p_limit: 200
+    });
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  admDeposits = (res && Array.isArray(res.items)) ? res.items : [];
+
+  const st = (res && res.stats) || {};
+
+  if(label){ label.textContent = (st.pending || 0) + " yangi"; }
+
+  if(stats){
+    stats.innerHTML =
+      '<div class="dep-stat"><span>KUTILMOQDA</span><strong>' + (st.pending || 0) + "</strong></div>" +
+      '<div class="dep-stat"><span>TASDIQLANGAN</span><strong>' + (st.paid || 0) + "</strong></div>" +
+      '<div class="dep-stat"><span>RAD ETILGAN</span><strong>' + (st.failed || 0) + "</strong></div>" +
+      '<div class="dep-stat"><span>BEKOR</span><strong>' + (st.canceled || 0) + "</strong></div>";
+  }
+
+  if(!admDeposits.length){
+    list.innerHTML = '<div class="combo-empty">So\'rov topilmadi.</div>';
+    return;
+  }
+
+  list.innerHTML = admDeposits.map(function(row){
+
+    return '<div class="adm-inv">' +
+      "<h5>" + escapeText((row.user_surname || "") + " " + (row.user_name || "")) + "</h5>" +
+      "<p>" + depBadge(row.status) + "</p>" +
+      "<p>SUMMA: <b>" + escapeText(fmtMoney(row.amount, row.currency)) + "</b></p>" +
+      "<p>MIJOZ KODI: " + escapeText(row.user_code || "—") + "</p>" +
+      "<p>TRANZAKSIYA ID: " + escapeText(row.ref) + "</p>" +
+      "<p>USUL: " + escapeText(row.method_label || "—") +
+        (row.card_last4 ? " (****" + escapeText(row.card_last4) + ")" : "") + "</p>" +
+      "<p>SANA: " + reqDate(row.created_at) + "</p>" +
+      "<p>CHEK: " + (row.has_receipt ? "yuborilgan" : "yo'q") + "</p>" +
+      '<div class="row">' +
+        '<button class="btn register-btn" type="button" onclick="openDepositDetail(\'' +
+          row.id + '\')">BATAFSIL</button>' +
+        (row.status === "pending"
+          ? '<button class="btn req-ok" type="button" onclick="decideDeposit(\'' + row.id +
+              '\', true)">TASDIQLASH</button>' +
+            '<button class="btn req-no" type="button" onclick="decideDeposit(\'' + row.id +
+              '\', false)">RAD ETISH</button>'
+          : "") +
+      "</div>" +
+    "</div>";
+  }).join("");
+}
+
+async function openDepositDetail(id){
+
+  const box = document.getElementById("admDepDetail");
+
+  if(!box || !adminToken){ return; }
+
+  box.style.display = "block";
+  box.innerHTML = "Yuklanmoqda...";
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_deposit_detail", {p_token: adminToken, p_id: id});
+  }catch(err){
+    box.innerHTML = escapeText(err.message);
+    return;
+  }
+
+  const d = (res && res.deposit) || {};
+  const u = (res && res.user) || {};
+
+  let html = "<h4 style=\"margin:0 0 8px;\">TRANZAKSIYA " + escapeText(d.ref || "") + "</h4>" +
+    "<div>" + depBadge(d.status) + "</div>" +
+    "<div>MIJOZ: <b>" + escapeText((u.surname || "") + " " + (u.name || "")) + "</b></div>" +
+    "<div>MIJOZ ID: " + escapeText(u.id || "") + "</div>" +
+    "<div>KIRISH KODI: " + escapeText(u.code || "") + "</div>" +
+    "<div>TELEFON: " + escapeText(u.phone || "—") + "</div>" +
+    "<div>JORIY BALANS: <b>" + escapeText(fmtMoney(u.balance, u.currency)) + "</b></div>" +
+    "<div>SUMMA: <b>" + escapeText(fmtMoney(d.amount, d.currency)) + "</b></div>" +
+    "<div>TO'LOV USULI: " + escapeText(d.method_label || "—") +
+      (d.card_last4 ? " (****" + escapeText(d.card_last4) + ")" : "") + "</div>" +
+    "<div>PROVAYDER: " + escapeText(d.provider || "manual") +
+      (d.provider_tx_id ? " • " + escapeText(d.provider_tx_id) : "") + "</div>" +
+    "<div>YARATILGAN: " + reqDate(d.created_at) + "</div>" +
+    "<div>MIJOZ TASDIQI: " + (d.client_confirmed_at ? reqDate(d.client_confirmed_at) : "—") + "</div>" +
+    "<div>QAROR VAQTI: " + (d.decided_at ? reqDate(d.decided_at) : "—") + "</div>" +
+    "<div>BALANSGA TUSHGAN: " + (d.credited ? reqDate(d.credited_at) : "yo'q") + "</div>" +
+    "<div>MIJOZ IZOHI: " + escapeText(d.client_note || "—") + "</div>" +
+    "<div>ADMIN IZOHI: " + escapeText(d.admin_note || "—") + "</div>";
+
+  if(d.receipt_data){
+    html += '<img src="' + escapeText(d.receipt_data) + '" alt="Chek">';
+  }else{
+    html += "<div>CHEK: yuborilmagan</div>";
+  }
+
+  html += '<div class="row" style="margin-top:10px;">';
+
+  if(d.status === "pending"){
+    html += '<button class="btn req-ok" type="button" onclick="decideDeposit(\'' + d.id +
+        '\', true)">TASDIQLASH</button>' +
+      '<button class="btn req-no" type="button" onclick="decideDeposit(\'' + d.id +
+        '\', false)">RAD ETISH</button>';
+  }
+
+  html += '<button class="btn register-btn" type="button" onclick="closeDepositDetail()">YOPISH</button></div>';
+
+  box.innerHTML = html;
+}
+
+function closeDepositDetail(){
+
+  const box = document.getElementById("admDepDetail");
+
+  if(box){
+    box.style.display = "none";
+    box.innerHTML = "";
+  }
+}
+
+async function decideDeposit(id, approve){
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  const row = admDeposits.filter(function(r){ return r.id === id; })[0];
+  const who = row ? ((row.user_surname || "") + " " + (row.user_name || "")).trim() : "mijoz";
+  const sum = row ? fmtMoney(row.amount, row.currency) : "";
+
+  const question = approve
+    ? (who + " to'lovi tasdiqlansinmi?\n\n" + sum + " mijoz balansiga qo'shiladi.")
+    : (who + " to'lovi rad etilsinmi?");
+
+  if(!confirm(question)){ return; }
+
+  let note = null;
+
+  if(!approve){
+    note = prompt("Rad etish sababi (mijoz ko'radi):", "");
+  }
+
+  try{
+    await rpc("admin_decide_deposit", {
+      p_token: adminToken,
+      p_id: id,
+      p_approve: !!approve,
+      p_note: note
+    });
+  }catch(err){
+    alert(err.message);
+    return;
+  }
+
+  closeDepositDetail();
+  await loadAdminDeposits();
+  await loadAdminUsers();
+
+  adminMsg(approve ? "To'lov tasdiqlandi va balans yangilandi." : "To'lov rad etildi.", "ok");
+}
+
+async function loadBalanceAudit(){
+
+  const list = document.getElementById("admAuditList");
+
+  if(!list){ return; }
+
+  if(!adminToken){
+    openAdminLogin();
+    return;
+  }
+
+  list.innerHTML = '<div class="combo-empty">Yuklanmoqda...</div>';
+
+  let res = null;
+
+  try{
+    res = await rpc("admin_balance_audit", {p_token: adminToken, p_limit: 60});
+  }catch(err){
+    list.innerHTML = '<div class="combo-empty">' + escapeText(err.message) + "</div>";
+    return;
+  }
+
+  const items = (res && Array.isArray(res.items)) ? res.items : [];
+
+  if(!items.length){
+    list.innerHTML = '<div class="combo-empty">Audit yozuvlari yo\'q.</div>';
+    return;
+  }
+
+  list.innerHTML = items.map(function(row){
+
+    const delta = Number(row.delta || 0);
+
+    return '<div class="dep-row">' +
+      '<div class="dep-top"><b>' + (delta >= 0 ? "+" : "") + escapeText(fmtNumber(delta)) + "</b>" +
+        '<span class="dep-badge ' + (row.source === "deposit_approve" ? "paid" : "pending") + '">' +
+        (row.source === "deposit_approve" ? "DEPOSIT" : "QO'LDA") + "</span></div>" +
+      "<div>MIJOZ: " + escapeText((row.surname || "") + " " + (row.name || "")) +
+        (row.code ? " (" + escapeText(row.code) + ")" : "") + "</div>" +
+      "<div>ESKI → YANGI: " + escapeText(fmtNumber(row.old_balance)) + " → " +
+        escapeText(fmtNumber(row.new_balance)) + "</div>" +
+      (row.deposit_ref ? "<div>TRANZAKSIYA: " + escapeText(row.deposit_ref) + "</div>" : "") +
+      "<div>SABAB: " + escapeText(row.reason || "—") + "</div>" +
+      "<div>VAQT: " + reqDate(row.at) + "</div>" +
+    "</div>";
+  }).join("");
+}
+
+const admDepSearchEl = document.getElementById("admDepSearch");
+
+if(admDepSearchEl){
+  admDepSearchEl.addEventListener("input", function(){
+    clearTimeout(admDepTimer);
+    admDepTimer = setTimeout(loadAdminDeposits, 400);
+  });
+}
 
 </script>
 
