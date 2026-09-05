@@ -806,7 +806,9 @@ select{appearance:none;
         return '<option value="' + escapeHtml(c) + '"' + (has ? "" : " disabled") + ">" +
           escapeHtml(c + " — " + curInfo(c).name + (has ? "" : " (rekvizit yo‘q)")) + "</option>";
       }).join("");
-      const first = dpCurrencies.find(c => dpMethods.some(m => String(m.currency || "").toUpperCase() === c));
+      // Avval hisob valyutasi, rekvizit bo'lmasa — rekviziti bor birinchi valyuta
+      const has = c => dpMethods.some(m => String(m.currency || "").toUpperCase() === c);
+      const first = has(dpAccount) ? dpAccount : dpCurrencies.find(has);
       if (first) $("dpCurrency").value = first;
       dpFillMethods();
     } catch (e) { say("dpErr", human(e.message)); }
@@ -927,10 +929,19 @@ select{appearance:none;
     { key: "DOGE", sym: "DOGEUSDT", name: "DOGE" }
   ];
   async function loadMarket() {
+    const q = "/api/v3/ticker/24hr?symbols=" + encodeURIComponent(JSON.stringify(COINS.map(c => c.sym)));
+    const hosts = ["https://api.binance.com", "https://api1.binance.com", "https://data-api.binance.vision"];
     try {
-      const url = "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
-        encodeURIComponent(JSON.stringify(COINS.map(c => c.sym)));
-      const rows = await (await fetch(url)).json();
+      let rows = null;
+      for (const h of hosts) {
+        try {
+          const r = await fetch(h + q);
+          if (!r.ok) continue;
+          rows = await r.json();
+          if (Array.isArray(rows)) break;
+        } catch (err) { /* keyingi manzilni sinaymiz */ }
+      }
+      if (!Array.isArray(rows)) throw new Error("no data");
       const by = {};
       rows.forEach(r => { by[r.symbol] = r; });
       $("coins").innerHTML = COINS.map(c => {
