@@ -159,6 +159,11 @@ body.privacy .wrap,body.privacy .nav{filter:blur(18px)}
 .secret.show{filter:none}
 body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
 @keyframes flick{0%{opacity:1}50%{opacity:.04}100%{opacity:1}}
+/* Skrinshot qora chiqsin: butun ekran qora kadr bilan almashadi */
+#blackout{position:fixed;inset:0;z-index:70;background:#000;pointer-events:none;
+  opacity:0;display:none}
+body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
+@keyframes blk{0%,49.9%{opacity:0}50%,100%{opacity:1}}
 .sec-hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:11px;
   letter-spacing:.06em;font-weight:700;margin:2px 0 10px}
 .switch{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;
@@ -235,7 +240,7 @@ body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
 
       <div class="grid2">
         <div class="stat" style="grid-column:1/-1;padding:0">
-          <div class="sec-hint">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div></div>
+          <div class="sec-hint hidden">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div></div>
         <div class="stat"><div class="label">JORIY BALANS</div><div class="value" id="balanceValue">—</div></div>
         <div class="stat"><div class="label">YUTUQ SUMMASI</div><div class="value gold" id="prizeValue">—</div></div>
         <div class="stat"><div class="label">KOMISSIYA</div><div class="value" id="commissionValue">—</div></div>
@@ -382,7 +387,7 @@ body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
       </div>
       <div class="card">
         <div class="section-title">HISOB</div>
-        <div class="sec-hint">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div>
+        <div class="sec-hint hidden">🔒 SUMMANI KO‘RISH UCHUN BOSIB TURING</div>
         <div class="kv"><span>JORIY BALANS</span><b id="profBalance">—</b></div>
         <div class="kv"><span>YUTUQNI OLISH</span><b id="profPrizeOpen">—</b></div>
         <div class="kv"><span>OXIRGI KIRISH</span><b id="profLastLogin">—</b></div>
@@ -392,15 +397,17 @@ body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
         <div class="switch">
           <span>Summalarni yashirish
             <small>Balans, yutuq va karta raqami xiralashtiriladi. Ko‘rish uchun bosib turasiz.</small></span>
-          <div class="tgl on" id="tglSecret" role="switch"></div>
+          <div class="tgl" id="tglSecret" role="switch"></div>
         </div>
         <div class="switch">
-          <span>Kuchli skrinshot himoyasi
-            <small>Ochilgan summalar tez miltillaydi — skrinshot va ekran yozuvida raqamlar buziladi.</small></span>
+          <span>Skrinshot qora chiqsin
+            <small>Ekran ko‘zga sezilmas darajada qora kadr bilan almashadi — olingan skrinshot va ekran
+              yozuvi asosan qop-qora bo‘lib chiqadi. Miltillashga sezgir bo‘lsangiz yoqmang.</small></span>
           <div class="tgl" id="tglFlick" role="switch"></div>
         </div>
-        <div class="msg note">Telefon tizim skrinshotini veb-ilova to‘liq bloklay olmaydi.
-          Shu sabab ekranda ismingiz yozilgan suv belgisi turadi — tarqatilgan har qanday rasm sizga bog‘lanadi.</div>
+        <div class="msg note">Telefon tizim skrinshotini veb-ilova 100% bloklay olmaydi — buni faqat
+          Telegramdan tashqaridagi native ilova qiladi. Shu sabab ekranda ismingiz va Telegram ID’ingiz
+          yozilgan suv belgisi turadi: tarqatilgan har qanday rasm egasiga bog‘lanadi.</div>
       </div>
       <div class="card">
         <div class="section-title">TELEGRAM</div>
@@ -414,6 +421,7 @@ body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
   </section>
 </main>
 
+<div id="blackout" aria-hidden="true"></div>
 <div id="watermark" aria-hidden="true"></div>
 <div id="privacy" aria-hidden="true">
   <b>MAXFIYLIK REJIMI</b>
@@ -500,7 +508,7 @@ body.flick .secret.show{animation:flick .07s steps(2,end) infinite}
   /* ===== Maxfiy summalar: bosib turilgandagina ko'rinadi ===== */
   const SECRET_IDS = ["balanceValue", "prizeValue", "commissionValue", "investMain", "investAlt",
     "payBalance", "profBalance", "clientCard"];
-  let secretOn = localStorage.getItem("jt_secret") !== "0";
+  let secretOn = localStorage.getItem("jt_secret") === "1";
   let flickOn = localStorage.getItem("jt_flick") === "1";
   let hideTimer = null;
 
