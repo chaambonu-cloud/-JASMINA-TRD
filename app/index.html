@@ -7,31 +7,44 @@
 <title>JASMINA TRD — Mijoz kabineti</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+/* Ranglar saytdagi kabinet bilan bir xil (qora fon + oltin) */
 :root{
-  color-scheme:light dark;
-  --bg:var(--tg-theme-bg-color,#f4f5f7);
-  --card:var(--tg-theme-secondary-bg-color,#ffffff);
-  --text:var(--tg-theme-text-color,#111214);
-  --muted:var(--tg-theme-hint-color,#7b7f86);
-  --accent:var(--tg-theme-button-color,#111214);
-  --accentText:var(--tg-theme-button-text-color,#ffffff);
-  --gold:#c8912f;
-  --ok:#1a9e57;
-  --warn:#c98a00;
-  --bad:#d3383d;
-  --line:color-mix(in srgb,var(--muted) 22%,transparent);
-  --soft:color-mix(in srgb,var(--muted) 10%,transparent);
+  color-scheme:dark;
+  --bg:#050506;
+  --card:#0d0f11;
+  --text:#ffffff;
+  --muted:#858b94;
+  --accent:#14171a;
+  --accentText:#ffffff;
+  --gold:#f5bd35;
+  --ok:#32d28e;
+  --warn:#f5bd35;
+  --bad:#ff5364;
+  --line:rgba(255,255,255,.09);
+  --soft:rgba(255,255,255,.05);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);overflow-wrap:anywhere;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.005em;
   font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:680px;margin:0 auto;padding:16px 14px 96px}
+.wrap{position:relative;max-width:680px;margin:0 auto;padding:16px 14px 96px;min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 3%,rgba(245,189,53,.12),transparent 27%),
+    radial-gradient(circle at 95% 55%,rgba(50,210,142,.06),transparent 30%),
+    linear-gradient(180deg,#090a0b,#020303)}
+.wrap::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:36px 36px}
+.wrap>*{position:relative;z-index:1}
 .head{display:flex;align-items:center;gap:12px;margin:2px 0 16px}
 .avatar{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;
   background:var(--card);font-weight:800;letter-spacing:.5px;color:var(--gold)}
 .hello{font-size:19px;font-weight:800;line-height:1.2}
 .sub{color:var(--muted);font-size:13px}
-.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
 .section-title{font-size:11px;letter-spacing:.14em;color:var(--muted);
   font-weight:700;margin:0 0 12px}
 .hero{background:var(--card);border-radius:18px;padding:18px;margin-bottom:12px;
@@ -54,14 +67,17 @@ body{margin:0;background:var(--bg);color:var(--text);overflow-wrap:anywhere;
 .btn{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--accent);
   color:var(--accentText);font-weight:800;font-size:15px;letter-spacing:.02em;
   margin-top:10px;cursor:pointer;font-family:inherit}
-.btn.gold{background:var(--gold);color:#fff}
+.btn.gold{background:linear-gradient(145deg,#ffe06d,#e9a600);color:#191204;
+  box-shadow:0 10px 24px rgba(245,189,53,.16)}
 .btn.soft{background:var(--soft);color:var(--text)}
 .btn.ghost{background:transparent;color:var(--muted);font-weight:600;min-height:44px}
 .btn[disabled]{opacity:.45}
 label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px;
   letter-spacing:.08em;font-weight:700}
 input,select,textarea{width:100%;min-height:48px;padding:12px 14px;font:inherit;color:var(--text);
-  background:var(--bg);border:1px solid var(--line);border-radius:13px}
+  background:#0a0c0e;border:1px solid var(--line);border-radius:13px}
+input::placeholder{color:#5d636c}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(245,189,53,.55)}
 select{appearance:none;
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
   linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -71,7 +87,7 @@ select{appearance:none;
 .msg.err{background:color-mix(in srgb,var(--bad) 14%,var(--card));color:var(--bad)}
 .msg.ok{background:color-mix(in srgb,var(--ok) 14%,var(--card));color:var(--ok)}
 .msg.note{background:var(--soft);color:var(--muted)}
-.row-item{background:var(--card);border-radius:15px;padding:13px 15px;margin-bottom:8px;
+.row-item{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px 15px;margin-bottom:8px;
   display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .row-item small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
 .right{text-align:right;font-weight:700;white-space:nowrap}
@@ -86,12 +102,12 @@ select{appearance:none;
 .inv-step.now{color:var(--gold);font-weight:700}
 .inv-step.now i{background:var(--gold)}
 .cur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cur{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 8px;
+.cur{background:#0a0c0e;border:1px solid var(--line);border-radius:14px;padding:12px 8px;
   text-align:center;cursor:pointer;font-family:inherit;color:var(--text)}
 .cur b{display:block;font-size:13px;font-weight:800}
 .cur small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
 .cur.active,.cur.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent)}
-.pkg{width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);
+.pkg{width:100%;text-align:left;background:#0a0c0e;border:1px solid var(--line);
   border-radius:15px;padding:14px;margin-bottom:8px;cursor:pointer;font:inherit;color:var(--text)}
 .pkg.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
 .pkg b{display:block;font-size:15px}
@@ -113,7 +129,7 @@ select{appearance:none;
 .file input{display:none}
 .prev{max-width:100%;border-radius:12px;margin-top:10px;display:block}
 .bank-logo{height:26px;margin-top:8px;display:block}
-.copy{background:var(--bg);border:1px solid var(--line);border-radius:10px;
+.copy{background:#0a0c0e;border:1px solid var(--line);border-radius:10px;
   padding:5px 9px;font:inherit;font-size:12px;color:var(--text);cursor:pointer;margin-left:6px}
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;
   background:var(--card);border-top:1px solid var(--line);
@@ -354,7 +370,12 @@ select{appearance:none;
   "use strict";
   const API = "https://nvflfwaykadmgerprbmh.supabase.co/functions/v1/tgapi";
   const tg = window.Telegram && window.Telegram.WebApp;
-  try { tg.ready(); tg.expand(); } catch (e) {}
+  // Telegram oynasi ham saytdagidek qora bo'lsin
+  try {
+    tg.ready(); tg.expand();
+    if (tg.setBackgroundColor) tg.setBackgroundColor("#050506");
+    if (tg.setHeaderColor) tg.setHeaderColor("#050506");
+  } catch (e) {}
   const initData = (tg && tg.initData) || "";
   const $ = id => document.getElementById(id);
   const showEl = (id, on) => $(id).classList.toggle("hidden", !on);
