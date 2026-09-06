@@ -202,6 +202,19 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     display:block;padding:40px;font:16px sans-serif;color:#000}
 }
 .hidden{display:none !important}
+.pa-back{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;display:flex;
+  align-items:flex-end;justify-content:center}
+.pa-sheet{width:100%;max-width:520px;max-height:88vh;overflow:auto;background:#12100d;
+  border:1px solid rgba(255,255,255,.10);border-radius:18px 18px 0 0;padding:16px}
+.pa-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pa-head h3{margin:0;font-size:14px;letter-spacing:.06em}
+.pa-x{background:none;border:0;color:#e9e3d6;font-size:22px;line-height:1;padding:4px 8px}
+.pa-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.pa-app{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 8px;
+  border-radius:14px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);text-align:center}
+.pa-app img{width:112px;height:30px;object-fit:contain}
+.pa-app span{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#e9e3d6}
 .empty{color:var(--muted);font-size:14px}
 .locked{text-align:center;color:var(--muted);font-size:13px;padding:8px 0}
 </style>
@@ -264,7 +277,8 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         <div class="stat"><div class="label">FOYDA</div><div class="value" id="profitValue">—</div></div>
       </div>
 
-      <div class="card">
+      <!-- 2-band: "DAROMAD OLINGAN" bo'limi vaqtincha yashirildi -->
+      <div class="card" style="display:none !important;">
         <div class="section-title">DAROMAD OLINGAN</div>
         <div class="kv"><span>SARMOYA (asosiy)</span><b id="investMain">—</b></div>
         <div class="kv"><span>SARMOYA (qo‘shimcha)</span><b id="investAlt">—</b></div>
@@ -333,6 +347,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
           <input id="ivNote" placeholder="To‘lov haqida qisqa izoh">
           <label class="file">Chek rasmini tanlash<input type="file" id="ivReceipt" accept="image/*"></label>
           <img id="ivPreview" class="prev hidden" alt="chek">
+          <button class="btn gold" id="ivPayNow">TO‘LOV QILISH</button>
           <button class="btn gold" id="ivPaid">TO‘LOV QILDIM</button>
           <button class="btn ghost" id="ivBack2">← ORQAGA</button>
         </div>
@@ -366,6 +381,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
 
         <div id="dpStep2" class="hidden">
           <div id="dpPayBox"></div>
+          <button class="btn gold" id="dpPayNow">TO‘LOV QILISH</button>
           <button class="btn" id="dpToStep3">CHEKNI YUKLASH →</button>
           <button class="btn ghost" id="dpBack1">← ORQAGA</button>
         </div>
@@ -442,10 +458,10 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         <input id="cdBank" placeholder="Avtomatik aniqlanadi" readonly>
 
         <label for="cdHolder">KARTA EGASI</label>
-        <input id="cdHolder" autocomplete="off" maxlength="30" placeholder="Avtomatik yoziladi"
-               style="text-transform:uppercase" readonly>
-        <div class="cd-note" style="margin-top:6px">Hisobingizdagi ism-familiya avtomatik yozildi.
-          <a href="#" id="cdHolderEdit" style="color:var(--gold)">O‘zgartirish</a></div>
+        <input id="cdHolder" autocomplete="off" maxlength="30" placeholder="Kartada yozilganidek"
+               style="text-transform:uppercase">
+        <div class="cd-note" style="margin-top:6px">Karta egasining F.I.Sh.ini o‘zingiz kiriting
+          (lotin harflarida). Bank rasmiy API’si bu ma’lumotni bermaydi.</div>
 
         <button class="btn gold" id="cdAdd" style="margin-top:14px">KARTANI QO‘SHISH</button>
         <div id="cdMsg"></div>
@@ -497,6 +513,16 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   <button data-tab="profile"><i>👤</i>PROFIL</button>
 </nav>
 
+<div id="paBack" class="pa-back hidden">
+  <div class="pa-sheet">
+    <div class="pa-head">
+      <h3>TO‘LOV QILISH</h3>
+      <button class="pa-x" id="paClose" type="button">&times;</button>
+    </div>
+    <div id="paBody"></div>
+    <div id="paMsg"></div>
+  </div>
+</div>
 <script src="shared.js"></script>
 <script>
 (() => {
@@ -865,19 +891,8 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     return out.replace(/\s+/g, " ").trim();
   }
 
-  function cdFillHolder(force){
-    var el = document.getElementById("cdHolder");
-    if(!el || !user) return;
-    if(!force && !el.readOnly && el.value.trim()) return;
-    el.value = cdTranslit((user.name || "") + " " + (user.surname || ""));
-  }
-  document.addEventListener("click", function(ev){
-    if(!ev.target || ev.target.id !== "cdHolderEdit") return;
-    ev.preventDefault();
-    var el = document.getElementById("cdHolder");
-    el.readOnly = false; el.focus(); el.select();
-    ev.target.parentNode.innerHTML = "Kartada yozilganidek yozing (lotin harflarida).";
-  });
+  /* Karta egasi F.I.Sh. qo‘lda kiritiladi — rasmiy bank API’si bermaydi. */
+  function cdFillHolder(force){ return; }
 
   async function cdLoad() {
     let rows = [];
@@ -938,7 +953,6 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
 
     $("cdNumber").value = ""; $("cdExp").value = ""; $("cdCvv").value = "";
     $("cdBank").value = ""; $("cdBrand").innerHTML = "";
-    if ($("cdHolder").readOnly) cdFillHolder(true);
     if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
     cdMsg("KARTANGIZ MUVAFFAQIYATLI QO‘SHILDI ✅", true);
     await cdLoad();
@@ -1044,19 +1058,36 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
     clear("ivErr");
   }
 
+  /* 9-band: valyuta -> davlat (backenddan) */
+  let CC_MAP = {};
+  async function loadCcMap(){
+    if (Object.keys(CC_MAP).length) return CC_MAP;
+    try {
+      const rows = await api("/currency-countries");
+      (Array.isArray(rows) ? rows : []).forEach(r => {
+        CC_MAP[String(r.currency).toUpperCase()] = r.country;
+      });
+    } catch (e) { /* xatoda faqat valyuta ko'rsatiladi */ }
+    return CC_MAP;
+  }
+  const ccCountry = code => CC_MAP[String(code || "").toUpperCase()] || "";
+
   async function openInvest() {
     showEl("invFlow", true);
     ivStep(1);
     ivPackage = null; ivReceipt = "";
     $("ivCurGrid").innerHTML = '<div class="empty">Yuklanmoqda…</div>';
+    await loadCcMap();
     try {
       const rows = await api("/currencies");
       const list = Array.isArray(rows) ? rows : [];
       if (!list.length) { $("ivCurGrid").innerHTML = '<div class="empty">Paketlar topilmadi.</div>'; return; }
       $("ivCurGrid").innerHTML = list.map(r => {
         const it = curInfo(r.currency);
+        const land = ccCountry(it.code);
         return '<button class="cur" data-cur="' + escapeHtml(it.code) + '"><b>' + escapeHtml(it.grid) +
-          "</b><small>" + escapeHtml(r.packages + " ta paket") + "</small></button>";
+          "</b><small>" + escapeHtml(land ? (land + " • " + r.packages + " ta paket")
+                                          : (r.packages + " ta paket")) + "</small></button>";
       }).join("");
       $("ivCurGrid").querySelectorAll("[data-cur]").forEach(b =>
         b.addEventListener("click", () => pickCurrency(b.getAttribute("data-cur"))));
@@ -1107,6 +1138,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         '<option value="' + escapeHtml(m.id) + '">' +
         escapeHtml([m.bank_name, m.holder].filter(Boolean).join(" • ") || m.card_number) + "</option>").join("");
       renderMethodBox("ivMethodBox", ivMethods[0]);
+      $("ivPayNow").textContent = payAmountLabel(ivPackage ? ivPackage.amount : 0, ivCurrency);
       $("ivMethod").onchange = () => renderMethodBox("ivMethodBox", ivMethods.find(m => m.id === $("ivMethod").value));
     } catch (e) { say("ivErr", human(e.message)); }
   }
@@ -1127,6 +1159,128 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
       btn.textContent = "nusxa olindi";
     });
   }
+
+  /* ============ TO'LOV QILISH — ilova tanlash (TZ 4,5,10-15) ============ */
+
+  let paState = { amount: 0, currency: "UZS", method: null, apps: [] };
+
+  const payAmountLabel = (amount, cur) =>
+    String(fmtMoney(amount, cur)).toUpperCase() + " TO\u2018LOV QILISH";
+
+  function paClose(){ showEl("paBack", false); }
+
+  function paGoProfile(){
+    paClose();
+    showEl("invFlow", false);
+    const t = document.querySelector('[data-tab="profile"]');
+    if (t) t.click();
+    setTimeout(() => {
+      const el = $("cdNumber");
+      if (el) { el.scrollIntoView({behavior:"smooth", block:"center"}); el.focus(); }
+    }, 350);
+  }
+
+  function paReqHtml(){
+    const m = paState.method || {};
+    const card = String(m.card_number || "");
+    return '<div class="kv"><span>TO\u2018LOV SUMMASI</span><b>' +
+        escapeHtml(fmtMoney(paState.amount, paState.currency)) + "</b></div>" +
+      '<div class="kv"><span>BANK</span><b>' + escapeHtml(m.bank_name || "\u2014") + "</b></div>" +
+      '<div class="kv"><span>KARTA EGASI</span><b>' + escapeHtml(m.holder || "\u2014") + "</b></div>" +
+      '<div class="kv"><span>KARTA RAQAMI</span><b>' + escapeHtml(card || "\u2014") +
+        '<button class="copy" id="paCopy" data-card="' + escapeHtml(card.replace(/\s/g, "")) +
+        '">nusxa olish</button></b></div>';
+  }
+
+  function paOpenApp(app){
+    const ua = navigator.userAgent;
+    const isIOS = /iphone|ipad|ipod/i.test(ua);
+    const isAndroid = /android/i.test(ua);
+    let url = String(app.deep_link || "").trim();
+    let note = "";
+    if (url) {
+      note = app.title + " ilovasi ochilmoqda.";
+    } else {
+      url = (isIOS && app.store_ios) ? app.store_ios
+          : (isAndroid && app.store_and) ? app.store_and
+          : (app.web_url || app.store_ios || app.store_and || "");
+      note = app.title + " rasmiy sahifasi ochildi. Summa va karta raqamini ilovada " +
+        "qo\u2018lda kiriting \u2014 bu xizmat havola orqali summa uzatishni rasmiy qo\u2018llamaydi.";
+    }
+    if (!url) { say("paMsg", app.title + " uchun rasmiy havola yo\u2018q.", "err"); return; }
+    say("paMsg", note, "note");
+    if (tg && tg.openLink) { tg.openLink(url); return; }
+    window.open(url, "_blank", "noopener");
+  }
+
+  async function paOpen(amount, currency, method){
+    paState = { amount: Number(amount || 0),
+      currency: String(currency || "UZS").toUpperCase(),
+      method: method || null, apps: [] };
+    clear("paMsg");
+    showEl("paBack", true);
+    $("paBody").innerHTML = '<div class="msg note">Tekshirilmoqda\u2026</div>';
+
+    let cards = [];
+    try { cards = await api("/cards"); } catch (e) { cards = []; }
+
+    /* 4-band: karta kiritilmagan bo\u2018lsa to\u2018lov to\u2018xtatiladi */
+    if (!Array.isArray(cards) || !cards.length) {
+      $("paBody").innerHTML =
+        '<div class="msg err">Siz karta raqamingizni kiritmagansiz. ' +
+        "Profil bo\u2018limiga o\u2018tib, karta raqamingizni kiriting.</div>" +
+        '<button class="btn gold" id="paProfile">PROFILGA O\u2018TISH</button>';
+      const b = $("paProfile");
+      if (b) b.addEventListener("click", paGoProfile);
+      return;
+    }
+
+    $("paBody").innerHTML = paReqHtml() +
+      '<div class="msg note">To\u2018lov ilovangizni tanlang. Karta raqamini nusxalab, ' +
+      "ilovada o\u2018tkazmani bajaring.</div>" +
+      '<div class="pa-grid" id="paApps"><div class="msg note">Yuklanmoqda\u2026</div></div>';
+
+    const cp = $("paCopy");
+    if (cp) cp.addEventListener("click", () => {
+      const v = cp.getAttribute("data-card");
+      if (navigator.clipboard) navigator.clipboard.writeText(v);
+      cp.textContent = "nusxa olindi";
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+    });
+
+    let apps = [];
+    try { apps = await api("/pay-apps?currency=" + encodeURIComponent(paState.currency)); }
+    catch (e) { apps = []; }
+    paState.apps = Array.isArray(apps) ? apps : [];
+
+    if (!paState.apps.length) {
+      $("paApps").innerHTML = '<div class="msg note">Bu valyuta uchun ilovalar ro\u2018yxati ' +
+        "kiritilmagan. Karta raqamini nusxalab, bank ilovangizda o\u2018tkazing.</div>";
+      return;
+    }
+
+    $("paApps").innerHTML = paState.apps.map((a, i) =>
+      '<div class="pa-app" data-app="' + i + '">' +
+        (a.logo ? '<img src="../logos/' + escapeHtml(a.logo) + '" alt="' + escapeHtml(a.title) + '">' : "") +
+        "<span>" + escapeHtml(a.title) + "</span></div>").join("");
+
+    $("paApps").querySelectorAll("[data-app]").forEach(el =>
+      el.addEventListener("click", () => paOpenApp(paState.apps[Number(el.getAttribute("data-app"))])));
+  }
+
+  $("paClose").addEventListener("click", paClose);
+  $("paBack").addEventListener("click", e => { if (e.target === $("paBack")) paClose(); });
+
+  $("ivPayNow").addEventListener("click", () => {
+    if (!ivPackage) { say("ivErr", "Paket tanlanmagan."); return; }
+    paOpen(ivPackage.amount, ivCurrency, ivMethods.find(m => m.id === $("ivMethod").value));
+  });
+
+  $("dpPayNow").addEventListener("click", () => {
+    if (!dpDeposit) { say("dpErr", "Avval so\u2018rov yarating."); return; }
+    paOpen(dpDeposit.amount, dpDeposit.currency,
+      dpMethods.find(m => m.id === $("dpMethod").value));
+  });
 
   $("ivReceipt").addEventListener("change", e => {
     const f = e.target.files && e.target.files[0];
@@ -1280,6 +1434,7 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
       renderMethodBox("dpPayMethod", m);
       $("dpPayBox").insertAdjacentHTML("beforeend",
         '<div class="msg note">To‘lovni amalga oshirib, keyingi qadamda chek rasmini yuklang. Balans admin tasdiqlaganidan keyin oshadi.</div>');
+      $("dpPayNow").textContent = payAmountLabel(dpDeposit.amount, dpDeposit.currency);
       dpStep(2);
     } catch (e) { say("dpErr", human(e.message)); }
     finally { $("dpNext").disabled = false; }
@@ -1426,5 +1581,6 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
   boot();
 })();
 </script>
+
 </body>
 </html>
