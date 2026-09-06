@@ -11854,35 +11854,134 @@ async function paLoadApps(){
 
 /* 6, 14-band: faqat rasmiy havola. Rasmiy deep link bo'lmasa — o'zboshimchalik
    bilan link yasalmaydi, foydalanuvchiga tushunarli xabar beriladi. */
+function paPlatform(){
+  const ua = navigator.userAgent || "";
+  const isAndroid = /android/i.test(ua);
+  const isIOS = /iphone|ipad|ipod/i.test(ua) ||
+    (/Macintosh/i.test(ua) && (navigator.maxTouchPoints || 0) > 1);
+  return {isAndroid: isAndroid, isIOS: isIOS, isMobile: isAndroid || isIOS};
+}
+
+/* Android: rasmiy Intent — ilova o'rnatilgan bo'lsa ochiladi,
+   bo'lmasa S.browser_fallback_url orqali Google Play/rasmiy sahifa */
+function paIntentUrl(app){
+  if(!app || !app.and_package){ return ""; }
+  const fb = app.store_and || app.web_url || "";
+  let scheme = "";
+  let rest = "";
+  if(app.ios_scheme){
+    scheme = String(app.ios_scheme).replace("://", "");
+  }else if(app.and_host){
+    scheme = "https";
+    rest = app.and_host + (app.and_path || "/");
+  }else{
+    return "";
+  }
+  return "intent://" + rest + "#Intent;scheme=" + scheme +
+    ";package=" + app.and_package +
+    (fb ? ";S.browser_fallback_url=" + encodeURIComponent(fb) : "") + ";end";
+}
+
+function paStoreUrl(app, p){
+  if(p.isIOS){ return app.store_ios || app.web_url || ""; }
+  if(p.isAndroid){ return app.store_and || app.web_url || ""; }
+  return app.web_url || app.store_ios || app.store_and || "";
+}
+
+function paGo(url, newTab){
+  if(!url){ return false; }
+  if(newTab){
+    try{
+      const w = window.open(url, "_blank");
+      if(w){ return true; }
+    }catch(err){ /* pastda location bilan urinamiz */ }
+  }
+  try{ window.location.href = url; return true; }
+  catch(err){ return false; }
+}
+
+/* iOS: rasmiy URL scheme — ochilmasa rasmiy store/sahifaga qaytadi */
+function paTryScheme(app, store){
+  const title = app.title || "Ilova";
+  paSay(title + " ilovasi ochilmoqda...", "ok");
+  const t0 = Date.now();
+  let done = false;
+  function onHide(){
+    if(document.hidden){ done = true; }
+  }
+  document.addEventListener("visibilitychange", onHide);
+  setTimeout(function(){
+    document.removeEventListener("visibilitychange", onHide);
+    if(done || document.hidden || Date.now() - t0 > 2600){ return; }
+    if(store){
+      paSay(title + " ilovasi topilmadi — rasmiy yuklab olish sahifasi ochildi. " +
+        "Ilovani o'rnatgach, rekvizitni nusxalab to'lovni bajaring.", "bad");
+      paGo(store, true);
+    }else{
+      paSay(title + " ilovasi topilmadi. Rekvizitni nusxalab, ilovada qo'lda kiriting.", "bad");
+    }
+  }, 1500);
+  paGo(app.ios_scheme, false);
+}
+
+/* 6, 14-band: faqat RASMIY havola. Deep link e'lon qilinmagan xizmatda
+   o'zboshimchalik bilan link yasalmaydi — rasmiy store fallback ishlatiladi. */
 function paOpenApp(index){
   const app = paState.apps[index];
   if(!app){ return; }
+  const p = paPlatform();
+  const title = app.title || "Ilova";
+  const store = paStoreUrl(app, p);
 
-  const isAndroid = /android/i.test(navigator.userAgent);
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-  let url = String(app.deep_link || "").trim();
-  let note = "";
-
-  if(url){
-    note = app.title + " ilovasi ochilmoqda.";
-  }else{
-    if(isIOS && app.store_ios){ url = app.store_ios; }
-    else if(isAndroid && app.store_and){ url = app.store_and; }
-    else { url = app.web_url || app.store_ios || app.store_and || ""; }
-    note = app.title + " rasmiy sahifasi ochildi. Ilovada karta raqami va summani " +
-      "qo'lda kiriting — bu xizmat summani havola orqali uzatishni rasmiy qo'llab-quvvatlamaydi.";
-  }
-
-  if(!url){
-    paSay(app.title + " uchun rasmiy havola mavjud emas. Karta raqamini nusxalab, " +
-      "ilovada o'tkazmani bajaring.", "bad");
+  if(!p.isMobile){
+    const web = app.web_url || store;
+    if(web){
+      paGo(web, true);
+      paSay(title + " rasmiy sahifasi ochildi. Ilovaga to'g'ridan-to'g'ri o'tish " +
+        "faqat telefonda (iPhone yoki Android) ishlaydi.", "ok");
+    }else{
+      paSay(title + " uchun rasmiy havola mavjud emas.", "bad");
+    }
     return;
   }
 
-  paSay(note, "ok");
-  try{ window.open(url, "_blank", "noopener"); }
-  catch(err){ location.href = url; }
+  if(p.isAndroid){
+    const intent = paIntentUrl(app);
+    if(intent){
+      paSay(title + " ilovasi ochilmoqda. Ilova o'rnatilmagan bo'lsa, " +
+        "rasmiy yuklab olish sahifasi ochiladi.", "ok");
+      paGo(intent, false);
+      return;
+    }
+    if(store){
+      paGo(store, true);
+      paSay(title + " uchun rasmiy ilova havolasi e'lon qilinmagan — " +
+        "rasmiy yuklab olish sahifasi ochildi.", "bad");
+      return;
+    }
+  }
+
+  if(p.isIOS){
+    if(app.ios_link){
+      paSay(title + " ilovasi ochilmoqda. Ilova o'rnatilmagan bo'lsa, " +
+        "rasmiy sahifa ochiladi.", "ok");
+      paGo(app.ios_link, true);
+      return;
+    }
+    if(app.ios_scheme){
+      paTryScheme(app, store);
+      return;
+    }
+    if(store){
+      paGo(store, true);
+      paSay(title + " rasmiy universal link e'lon qilmagan, shuning uchun App Store " +
+        "ochildi. Ilovani ochib, rekvizitni qo'lda kiriting.", "bad");
+      return;
+    }
+  }
+
+  paSay(title + " uchun rasmiy havola mavjud emas. Karta raqamini nusxalab, " +
+    "ilovada o'tkazmani bajaring.", "bad");
 }
 
 /* Asosiy kirish nuqtasi: summa/valyuta/rekvizit backenddan uzatiladi */

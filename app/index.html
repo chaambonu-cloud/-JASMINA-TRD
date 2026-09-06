@@ -1192,25 +1192,117 @@ body.flick #blackout{display:block;animation:blk .034s steps(1,end) infinite}
         '">nusxa olish</button></b></div>';
   }
 
-  function paOpenApp(app){
-    const ua = navigator.userAgent;
-    const isIOS = /iphone|ipad|ipod/i.test(ua);
+  function paPlatform(){
+    const ua = navigator.userAgent || "";
     const isAndroid = /android/i.test(ua);
-    let url = String(app.deep_link || "").trim();
-    let note = "";
-    if (url) {
-      note = app.title + " ilovasi ochilmoqda.";
-    } else {
-      url = (isIOS && app.store_ios) ? app.store_ios
-          : (isAndroid && app.store_and) ? app.store_and
-          : (app.web_url || app.store_ios || app.store_and || "");
-      note = app.title + " rasmiy sahifasi ochildi. Summa va karta raqamini ilovada " +
-        "qo\u2018lda kiriting \u2014 bu xizmat havola orqali summa uzatishni rasmiy qo\u2018llamaydi.";
+    const isIOS = /iphone|ipad|ipod/i.test(ua) ||
+      (/Macintosh/i.test(ua) && (navigator.maxTouchPoints || 0) > 1);
+    return { isAndroid, isIOS, isMobile: isAndroid || isIOS };
+  }
+
+  function paIntentUrl(app){
+    if (!app || !app.and_package) return "";
+    const fb = app.store_and || app.web_url || "";
+    let scheme = "", rest = "";
+    if (app.ios_scheme) { scheme = String(app.ios_scheme).replace("://", ""); }
+    else if (app.and_host) { scheme = "https"; rest = app.and_host + (app.and_path || "/"); }
+    else return "";
+    return "intent://" + rest + "#Intent;scheme=" + scheme +
+      ";package=" + app.and_package +
+      (fb ? ";S.browser_fallback_url=" + encodeURIComponent(fb) : "") + ";end";
+  }
+
+  function paStoreUrl(app, p){
+    if (p.isIOS) return app.store_ios || app.web_url || "";
+    if (p.isAndroid) return app.store_and || app.web_url || "";
+    return app.web_url || app.store_ios || app.store_and || "";
+  }
+
+  /* Telegram ichida: https bo'lsa tg.openLink, ilova sxemasi/intent bo'lsa
+     to'g'ridan-to'g'ri OS'ga uzatiladi */
+  function paGo(url, httpsLink){
+    if (!url) return false;
+    try {
+      if (httpsLink && tg && tg.openLink) { tg.openLink(url); return true; }
+    } catch (e) { /* pastda zaxira */ }
+    try { window.location.href = url; return true; }
+    catch (e) {
+      try { window.open(url, "_blank"); return true; } catch (e2) { return false; }
     }
-    if (!url) { say("paMsg", app.title + " uchun rasmiy havola yo\u2018q.", "err"); return; }
-    say("paMsg", note, "note");
-    if (tg && tg.openLink) { tg.openLink(url); return; }
-    window.open(url, "_blank", "noopener");
+  }
+
+  function paTryScheme(app, store){
+    const title = app.title || "Ilova";
+    say("paMsg", title + " ilovasi ochilmoqda\u2026", "note");
+    const t0 = Date.now();
+    let done = false;
+    function onHide(){ if (document.hidden) done = true; }
+    document.addEventListener("visibilitychange", onHide);
+    setTimeout(() => {
+      document.removeEventListener("visibilitychange", onHide);
+      if (done || document.hidden || Date.now() - t0 > 2600) return;
+      if (store) {
+        say("paMsg", title + " ilovasi topilmadi \u2014 rasmiy yuklab olish sahifasi ochildi.", "err");
+        paGo(store, true);
+      } else {
+        say("paMsg", title + " ilovasi topilmadi. Rekvizitni nusxalab, ilovada qo\u2018lda kiriting.", "err");
+      }
+    }, 1500);
+    paGo(app.ios_scheme, false);
+  }
+
+  /* 6, 14-band: faqat rasmiy havola; deep link bo'lmasa rasmiy store fallback */
+  function paOpenApp(app){
+    if (!app) return;
+    const p = paPlatform();
+    const title = app.title || "Ilova";
+    const store = paStoreUrl(app, p);
+
+    if (!p.isMobile) {
+      const web = app.web_url || store;
+      if (web) {
+        paGo(web, true);
+        say("paMsg", title + " rasmiy sahifasi ochildi. Ilovaga to\u2018g\u2018ridan-to\u2018g\u2018ri " +
+          "o\u2018tish faqat telefonda ishlaydi.", "note");
+      } else {
+        say("paMsg", title + " uchun rasmiy havola yo\u2018q.", "err");
+      }
+      return;
+    }
+
+    if (p.isAndroid) {
+      const intent = paIntentUrl(app);
+      if (intent) {
+        say("paMsg", title + " ilovasi ochilmoqda. Ilova o\u2018rnatilmagan bo\u2018lsa, " +
+          "rasmiy yuklab olish sahifasi ochiladi.", "note");
+        paGo(intent, false);
+        return;
+      }
+      if (store) {
+        paGo(store, true);
+        say("paMsg", title + " uchun rasmiy ilova havolasi e\u2019lon qilinmagan \u2014 " +
+          "rasmiy yuklab olish sahifasi ochildi.", "err");
+        return;
+      }
+    }
+
+    if (p.isIOS) {
+      if (app.ios_link) {
+        say("paMsg", title + " ilovasi ochilmoqda. Ilova o\u2018rnatilmagan bo\u2018lsa, " +
+          "rasmiy sahifa ochiladi.", "note");
+        paGo(app.ios_link, true);
+        return;
+      }
+      if (app.ios_scheme) { paTryScheme(app, store); return; }
+      if (store) {
+        paGo(store, true);
+        say("paMsg", title + " rasmiy universal link e\u2019lon qilmagan, App Store ochildi.", "err");
+        return;
+      }
+    }
+
+    say("paMsg", title + " uchun rasmiy havola yo\u2018q. Rekvizitni nusxalab, " +
+      "ilovada o\u2018tkazmani bajaring.", "err");
   }
 
   async function paOpen(amount, currency, method){
